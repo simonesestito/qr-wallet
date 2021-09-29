@@ -9,13 +9,15 @@ import 'data.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => GreenPassListData(),
+    child: MyApp(),
+  ));
 }
 
 const APP_NAME = 'Green Pass Keeper';
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,10 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: ChangeNotifierProvider(
-        create: (_) => GreenPassListData(),
-        child: const Home(),
-      ),
+      home: const Home(),
     );
   }
 }
@@ -74,6 +73,7 @@ class Home extends StatelessWidget {
                     viewportFraction: 0.8,
                     aspectRatio: 9 / 12,
                     enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
                   ),
                 );
               }),

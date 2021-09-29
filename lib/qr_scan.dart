@@ -68,20 +68,23 @@ class _QrScanWidgetState extends State<QrScanWidget> {
 
   void _onQRViewCreated(QRViewController controller) {
     this._qrViewController = controller;
-    controller.scannedDataStream.listen((scanData) {
-      if (scanData.format == BarcodeFormat.qrcode) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => PostQrScanWidget(qrData: scanData.code),
-          ),
-        );
-      }
+    controller.scannedDataStream
+        .firstWhere((scan) => scan.format == BarcodeFormat.qrcode)
+        .then((scan) {
+          this._qrViewController?.dispose();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => PostQrScanWidget(qrData: scan.code),
+        ),
+      );
     });
   }
 
   @override
   void dispose() {
-    _qrViewController?.dispose();
+    try {
+      _qrViewController?.dispose();
+    } catch (ignored) { }
     super.dispose();
   }
 }
@@ -116,9 +119,9 @@ class PostQrScanWidget extends StatelessWidget {
               child: Text("SALVA"),
               onPressed: () async {
                 await context.read<GreenPassListData>().addData(GreenPass(
-                  alias: nameFieldController.value.text,
-                  qrData: this.qrData,
-                ));
+                      alias: nameFieldController.value.text,
+                      qrData: this.qrData,
+                    ));
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
             )
