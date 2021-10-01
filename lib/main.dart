@@ -113,6 +113,14 @@ class _NewPassDialogState extends State<NewPassDialog> {
   static const MAX_PDF_PAGES = 3;
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      recoverLostData();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -134,7 +142,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
               source: ImageSource.gallery,
             );
             if (photo != null) {
-              if (!await _handleImageFile(photo.path, context)) {
+              if (!await _handleImageFile(photo.path)) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
@@ -168,10 +176,9 @@ class _NewPassDialogState extends State<NewPassDialog> {
     );
   }
 
-  // FIXME: https://pub.dev/packages/image_picker#handling-mainactivity-destruction-on-android
-  Future<void> getLostData() async {
+  Future<void> recoverLostData() async {
     if (!mounted) {
-      print("_NewPassDialogState#getLostData() called when already unmounted");
+      print("_NewPassDialogState#recoverLostData() called when already unmounted");
       return;
     }
 
@@ -179,13 +186,13 @@ class _NewPassDialogState extends State<NewPassDialog> {
     if (response.isEmpty) return;
 
     if (response.files != null && response.files!.isNotEmpty) {
-      _handleImageFile(response.files!.first.path, context);
+      _handleImageFile(response.files!.first.path);
     } else {
       print(response.exception);
     }
   }
 
-  Future<bool> _handleImageFile(String imagePath, BuildContext context) async {
+  Future<bool> _handleImageFile(String imagePath) async {
     final result = await _barcodeScanner.processImage(InputImage.fromFilePath(imagePath));
 
     if (result.isEmpty) {
@@ -204,7 +211,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
     return true;
   }
 
-  Future<void> _handlePdfFile(String pdfFile) async { //, BuildContext? context) async {
+  Future<void> _handlePdfFile(String pdfFile) async {
     final doc = await PdfDocument.openFile(pdfFile);
 
     if (doc.pageCount > MAX_PDF_PAGES || doc.isEncrypted) {
@@ -225,7 +232,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
         final image = await pageImage.createImageDetached();
         final imageBytes = await image.toByteData(format: ImageByteFormat.png);
         await tempFile.writeAsBytes(imageBytes!.buffer.asUint8List(), flush: true);
-        final successResult = await _handleImageFile(tempFile.path, context);
+        final successResult = await _handleImageFile(tempFile.path);
         image.dispose();
 
         if (successResult)
