@@ -38,6 +38,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
         children: <Widget>[
           QRView(
             key: qrKey,
+            formatsAllowed: [BarcodeFormat.qrcode],
             onQRViewCreated: _onQRViewCreated,
             onPermissionSet: (controller, permission) {
               if (!permission)
@@ -68,10 +69,8 @@ class _QrScanWidgetState extends State<QrScanWidget> {
 
   void _onQRViewCreated(QRViewController controller) {
     this._qrViewController = controller;
-    controller.scannedDataStream
-        .firstWhere((scan) => scan.format == BarcodeFormat.qrcode)
-        .then((scan) {
-          this._qrViewController?.dispose();
+    controller.scannedDataStream.first.then((scan) async {
+      await this._qrViewController?.pauseCamera();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (_) => PostQrScanWidget(qrData: scan.code),
@@ -84,7 +83,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
   void dispose() {
     try {
       _qrViewController?.dispose();
-    } catch (ignored) { }
+    } catch (ignored) {}
     super.dispose();
   }
 }
