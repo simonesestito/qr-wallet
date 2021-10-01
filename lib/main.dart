@@ -1,11 +1,17 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:greenpass/qr_scan.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pdf_render/pdf_render.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'data.dart';
 
@@ -103,13 +109,8 @@ class NewPassDialog extends StatefulWidget {
 class _NewPassDialogState extends State<NewPassDialog> {
   final _imagePicker = ImagePicker();
   final _barcodeScanner =
-  GoogleMlKit.vision.barcodeScanner([BarcodeFormat.qrCode]);
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) => getLostData());
-  }
+      GoogleMlKit.vision.barcodeScanner([BarcodeFormat.qrCode]);
+  static const MAX_PDF_PAGES = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -133,8 +134,15 @@ class _NewPassDialogState extends State<NewPassDialog> {
               source: ImageSource.gallery,
             );
             if (photo != null) {
-              Navigator.pop(context);
-              _handleImageFile(photo);
+              if (!await _handleImageFile(photo.path, context)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      "Nessun QR code trovato, assicurati che la foto sia corretta e ben illuminata",
+                    ),
+                  ),
+                );
+              }
             }
           },
         ),
@@ -143,43 +151,48 @@ class _NewPassDialogState extends State<NewPassDialog> {
           title: Text("Estrai da PDF"),
           subtitle: Text("Usa il documento PDF scaricato"),
           leading: Icon(Icons.picture_as_pdf),
-          onTap: () {
-            // TODO
-            Navigator.pop(context);
+          onTap: () async {
+            final fileResult = await FilePicker.platform.pickFiles(
+              allowMultiple: false,
+              allowedExtensions: ["pdf"],
+              type: FileType.custom,
+            );
+            final fileResultPath = fileResult?.files.single.path;
+
+            if (fileResultPath != null) {
+              await _handlePdfFile(fileResultPath); //, context);
+            }
           },
         ),
       ],
     );
   }
 
+  // FIXME: https://pub.dev/packages/image_picker#handling-mainactivity-destruction-on-android
   Future<void> getLostData() async {
+    if (!mounted) {
+      print("_NewPassDialogState#getLostData() called when already unmounted");
+      return;
+    }
+
     final LostDataResponse response = await _imagePicker.retrieveLostData();
     if (response.isEmpty) return;
 
-    if (response.files != null) {
-      for (final XFile file in response.files ?? []) {
-        if (file.mimeType?.startsWith("image/") == true)
-          _handleImageFile(file);
-        else if (file.name.endsWith(".pdf"))
-          _handlePdfFile(file);
-        else
-          print("Unknown recovered file: ${file.path}");
-      }
+    if (response.files != null && response.files!.isNotEmpty) {
+      _handleImageFile(response.files!.first.path, context);
     } else {
       print(response.exception);
     }
   }
 
-  void _handleImageFile(XFile imageFile) async {
-    final result = await _barcodeScanner
-        .processImage(InputImage.fromFilePath(imageFile.path));
+  Future<bool> _handleImageFile(String imagePath, BuildContext context) async {
+    final result = await _barcodeScanner.processImage(InputImage.fromFilePath(imagePath));
 
     if (result.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Nessun QR code trovato, assicurati che la foto sia corretta e ben illuminata"))
-      );
-    } else {
-      Navigator.push(
+      return false;
+    }
+
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (_) => PostQrScanWidget(
@@ -187,11 +200,41 @@ class _NewPassDialogState extends State<NewPassDialog> {
           ),
         ),
       );
-    }
+
+    return true;
   }
 
-  void _handlePdfFile(XFile pdfFile) {
-    print("PDF: ${pdfFile.path}");
+  Future<void> _handlePdfFile(String pdfFile) async { //, BuildContext? context) async {
+    final doc = await PdfDocument.openFile(pdfFile);
+
+    if (doc.pageCount > MAX_PDF_PAGES || doc.isEncrypted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Il PDF selezionato è troppo grande, riprova.",
+          ),
+        ),
+      );
+    } else {
+      final tempDir = await getTemporaryDirectory();
+      final tempFile = await File(tempDir.path + '/temp_img.tmp.png').create();
+
+      for (int i = 1; i <= doc.pageCount; i++) {
+        final page = await doc.getPage(i);
+        final pageImage = await page.render();
+        final image = await pageImage.createImageDetached();
+        final imageBytes = await image.toByteData(format: ImageByteFormat.png);
+        await tempFile.writeAsBytes(imageBytes!.buffer.asUint8List(), flush: true);
+        final successResult = await _handleImageFile(tempFile.path, context);
+        image.dispose();
+
+        if (successResult)
+          break;
+      }
+
+      await tempFile.delete();
+    }
+
+    doc.dispose();
   }
 }
-
