@@ -156,13 +156,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  google_ml_kit:
-    dependency: "direct main"
-    description:
-      name: google_ml_kit
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.2"
   http:
     dependency: transitive
     description:
@@ -324,6 +317,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.2"
+  qr_code_tools:
+    dependency: "direct main"
+    description:
+      name: qr_code_tools
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   qr_flutter:
     dependency: "direct main"
     description:

@@ -4,14 +4,14 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:greenpass/qr_scan.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf_render/pdf_render.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_code_tools/qr_code_tools.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'data.dart';
 
@@ -108,8 +108,6 @@ class NewPassDialog extends StatefulWidget {
 
 class _NewPassDialogState extends State<NewPassDialog> {
   final _imagePicker = ImagePicker();
-  final _barcodeScanner =
-      GoogleMlKit.vision.barcodeScanner([BarcodeFormat.qrCode]);
   static const MAX_PDF_PAGES = 3;
 
   @override
@@ -178,7 +176,8 @@ class _NewPassDialogState extends State<NewPassDialog> {
 
   Future<void> recoverLostData() async {
     if (!mounted) {
-      print("_NewPassDialogState#recoverLostData() called when already unmounted");
+      print(
+          "_NewPassDialogState#recoverLostData() called when already unmounted");
       return;
     }
 
@@ -193,20 +192,16 @@ class _NewPassDialogState extends State<NewPassDialog> {
   }
 
   Future<bool> _handleImageFile(String imagePath) async {
-    final result = await _barcodeScanner.processImage(InputImage.fromFilePath(imagePath));
+    final qrContent = await QrCodeToolsPlugin.decodeFrom(imagePath);
 
-    if (result.isEmpty) {
+    if (qrContent.isEmpty) {
       return false;
     }
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PostQrScanWidget(
-            qrData: result.first.value.rawValue!,
-          ),
-        ),
-      );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => PostQrScanWidget(qrData: qrContent)),
+    );
 
     return true;
   }
@@ -231,12 +226,12 @@ class _NewPassDialogState extends State<NewPassDialog> {
         final pageImage = await page.render();
         final image = await pageImage.createImageDetached();
         final imageBytes = await image.toByteData(format: ImageByteFormat.png);
-        await tempFile.writeAsBytes(imageBytes!.buffer.asUint8List(), flush: true);
+        await tempFile.writeAsBytes(imageBytes!.buffer.asUint8List(),
+            flush: true);
         final successResult = await _handleImageFile(tempFile.path);
         image.dispose();
 
-        if (successResult)
-          break;
+        if (successResult) break;
       }
 
       await tempFile.delete();
