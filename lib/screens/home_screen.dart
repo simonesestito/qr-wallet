@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
-import 'package:greenpass/widgets/title_headline.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
@@ -111,19 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildList(BuildContext context, List<GreenPass> passList) {
     return CarouselSlider.builder(
       itemCount: passList.length,
-      itemBuilder: (context, i, _) => Card(
-        elevation: 4,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              passList[i].alias,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            QrImage(data: passList[i].qrData),
-          ],
-        ),
-      ),
+      itemBuilder: (context, i, _) => GreenPassCardView(pass: passList[i]),
       options: CarouselOptions(
         autoPlay: false,
         initialPage: passList.length - 1,
