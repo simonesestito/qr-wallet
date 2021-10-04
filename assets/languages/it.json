@@ -17,5 +17,7 @@
     "name": "Nome",
     "save": "Salva",
     "camera_permission_denied": "Permesso negato, riprova o abilitalo manualmente!",
-    "scan_a_code": "Scannerizza un QR code"
+    "qr_title": "Scannerizza QR",
+    "scan_a_code": "Scannerizza un QR code",
+    "settings": "Impostazioni"
 }

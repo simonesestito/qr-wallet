@@ -17,5 +17,7 @@
     "name": "Name",
     "save": "Save",
     "camera_permission_denied": "Permission denied, try again or enable it manually!",
-    "scan_a_code": "Scan a QR code" 
+    "qr_title": "Scan QR",
+    "scan_a_code": "Scan a QR code",
+    "settings": "Settings"
 }

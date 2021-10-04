@@ -7,6 +7,7 @@ import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
 import 'package:greenpass/utils/standard_dialogs.dart';
 import 'package:greenpass/widgets/button_wide_outlined.dart';
+import 'package:greenpass/widgets/title_headline.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,11 @@ class _QrScanWidgetState extends State<QrScanWidget> {
     return Scaffold(
       body: Column(
         children: [
+          // TODO Maybe put a trailing button to better explain the screen, alignment problem
+          TitleHeadline(
+            title: Localization.of(context)!.translate('qr_title')!,
+            backBtn: true,
+          ),
           Expanded(
             flex: 15,
             child: _buildQrView(context),

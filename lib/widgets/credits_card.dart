@@ -49,11 +49,18 @@ class CreditsCard extends StatelessWidget {
             children: [
               Text(
                 description,
-                style: Theme.of(context).textTheme.bodyText2,
+                style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
-              image,
+              CircleAvatar(
+                radius: Globals.avatarRadius + 4,
+                backgroundColor: Theme.of(context).colorScheme.onSurface,
+                child: CircleAvatar(
+                  child: ClipOval(child: image),
+                  radius: Globals.avatarRadius,
+                ),
+              ),
             ],
           ),
         ),
