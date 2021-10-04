@@ -123,6 +123,9 @@ class MyApp extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
+        snackBarTheme: SnackBarThemeData(
+          backgroundColor: Color(0xFF323232),
+        ),
       ),
       darkTheme: ThemeData(
         highlightColor: Color(0x2fB2753F),
