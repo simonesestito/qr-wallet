@@ -19,5 +19,7 @@
     "camera_permission_denied": "Permission denied, try again or enable it manually!",
     "qr_title": "Scan QR",
     "scan_a_code": "Scan a QR code",
-    "settings": "Settings"
+    "settings": "Settings",
+    "pass_item_delete": "Delete",
+    "pass_item_rename": "Rename"
 }
