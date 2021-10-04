@@ -59,6 +59,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Text(Localization.of(context)!.translate('take_photo_title')!),
             subtitle: Text(
                 Localization.of(context)!.translate('take_photo_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.camera_alt),
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => QrScanWidget())),
@@ -69,21 +70,22 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Text(Localization.of(context)!.translate('pick_photo_title')!),
             subtitle: Text(
                 Localization.of(context)!.translate('pick_photo_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.photo),
             onTap: () async {
               final photo = await _imagePicker.pickImage(
                 source: ImageSource.gallery,
               );
-              if (photo != null) {
-                if (!await _handleImageFile(photo.path)) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        Localization.of(context)!.translate('no_qr_found')!,
-                      ),
+
+              if (photo != null && !await _handleImageFile(photo.path)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      Localization.of(context)!.translate('no_qr_found')!,
                     ),
-                  );
-                }
+                  ),
+                );
+                Navigator.pop(context);
               }
             },
           ),
@@ -93,6 +95,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Localization.of(context)!.translate('extract_from_pdf_title')!),
             subtitle: Text(Localization.of(context)!
                 .translate('extract_from_pdf_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.picture_as_pdf),
             onTap: () async {
               final fileResult = await FilePicker.platform.pickFiles(
@@ -103,7 +106,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
               final fileResultPath = fileResult?.files.single.path;
 
               if (fileResultPath != null) {
-                await _handlePdfFile(fileResultPath); //, context);
+                await _handlePdfFile(fileResultPath);
               }
             },
           ),
@@ -130,9 +133,10 @@ class _NewPassDialogState extends State<NewPassDialog> {
   }
 
   Future<bool> _handleImageFile(String imagePath) async {
-    final qrContent = await QrCodeToolsPlugin.decodeFrom(imagePath);
-
-    if (qrContent.isEmpty) {
+    final qrContent;
+    try {
+      qrContent = await QrCodeToolsPlugin.decodeFrom(imagePath);
+    } catch (err) {
       return false;
     }
 
@@ -155,6 +159,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
           ),
         ),
       );
+      Navigator.pop(context);
     } else {
       final tempDir = await getTemporaryDirectory();
       final tempFile = await File(tempDir.path + '/temp_img.tmp.png').create();
