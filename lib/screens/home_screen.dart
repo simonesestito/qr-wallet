@@ -17,7 +17,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double _originalBrightness = 0;
+  double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
 
   @override
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
     if (_maxBright)
       Screen.setBrightness(1);
-    else
+    else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
 
     return Scaffold(
