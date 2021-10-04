@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
+import 'package:greenpass/widgets/green_pass_card.dart';
+import 'package:greenpass/widgets/title_headline.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screen/screen.dart';
 
 import 'new_pass_dialog.dart';
