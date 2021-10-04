@@ -5,8 +5,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:greenpass/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'models/data.dart';
 import 'lang/localization.dart';
+import 'models/data.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: APP_NAME,
       supportedLocales: [
-        const Locale('en', 'US'),
+        const Locale('en', 'US'), // Default locale, since it's the first one
         const Locale('it', 'IT'),
       ],
       localizationsDelegates: [
@@ -34,19 +34,20 @@ class MyApp extends StatelessWidget {
         Localization.delegate,
       ],
       localeResolutionCallback: (locale, supportedLocales) {
-        for (Locale supportedLocale in supportedLocales) {
-          if (supportedLocale.languageCode == locale?.languageCode ||
-              supportedLocale.countryCode == locale?.countryCode) {
-            return supportedLocale;
-          }
-        }
-        return supportedLocales.last;
+        return supportedLocales.firstWhere(
+          (supportedLocale) =>
+              supportedLocale.languageCode == locale?.languageCode ||
+              supportedLocale.countryCode == locale?.countryCode,
+          orElse: () => supportedLocales.first,
+        );
       },
 
       themeMode: ThemeMode.system,
       theme: ThemeData(
-        highlightColor: Color(0x2fB2753F), // Selection color
-        splashColor: Color(0x2fB2753F), // Ripple color
+        highlightColor: Color(0x2fB2753F),
+        // Selection color
+        splashColor: Color(0x2fB2753F),
+        // Ripple color
         primaryColor: Color(0xff1A753F),
         primaryColorDark: Color(0xff2ECB6D),
         // Main colors
@@ -124,8 +125,10 @@ class MyApp extends StatelessWidget {
             ),
       ),
       darkTheme: ThemeData(
-        highlightColor: Color(0x2fB2753F), // Selection color
-        splashColor: Color(0x2fB2753F), // Ripple color
+        highlightColor: Color(0x2fB2753F),
+        // Selection color
+        splashColor: Color(0x2fB2753F),
+        // Ripple color
         primaryColor: Color(0xff2ECB6D),
         primaryColorDark: Color(0xff1A753F),
         // Main colors
