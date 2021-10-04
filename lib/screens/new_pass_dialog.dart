@@ -59,6 +59,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Text(Localization.of(context)!.translate('take_photo_title')!),
             subtitle: Text(
                 Localization.of(context)!.translate('take_photo_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.camera_alt),
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => QrScanWidget())),
@@ -69,6 +70,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Text(Localization.of(context)!.translate('pick_photo_title')!),
             subtitle: Text(
                 Localization.of(context)!.translate('pick_photo_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.photo),
             onTap: () async {
               final photo = await _imagePicker.pickImage(
@@ -93,6 +95,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
                 Localization.of(context)!.translate('extract_from_pdf_title')!),
             subtitle: Text(Localization.of(context)!
                 .translate('extract_from_pdf_description')!),
+            isThreeLine: true,
             leading: Icon(Icons.picture_as_pdf),
             onTap: () async {
               final fileResult = await FilePicker.platform.pickFiles(
