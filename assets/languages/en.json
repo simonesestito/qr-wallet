@@ -1,5 +1,7 @@
 {
     "app_title": "QuasaR - Green Pass Keeper",
+    "author_back": "Simone Sestito",
+    "author_front": "m.i.n.a.r.",
     "scan": "Scan",
     "caution": "Caution",
     "no_pass_placeholder": "Press the button button below to add your pass",

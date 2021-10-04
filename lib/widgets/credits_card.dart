@@ -6,11 +6,13 @@ class CreditsCard extends StatelessWidget {
   final String description;
   final String url;
   final Image image;
+  final Color? rippleColor;
 
   CreditsCard({
     required this.description,
     required this.url,
     required this.image,
+    this.rippleColor,
   });
 
   // Launch an url inside the browser (use forceWebView: true for in app launch)
@@ -31,8 +33,10 @@ class CreditsCard extends StatelessWidget {
       ),
       elevation: 4,
       child: InkWell(
-        splashColor: Theme.of(context).splashColor,
-        highlightColor: Theme.of(context).splashColor,
+        splashColor:
+            rippleColor != null ? Theme.of(context).splashColor : rippleColor,
+        highlightColor:
+            rippleColor != null ? Theme.of(context).splashColor : rippleColor,
         borderRadius: BorderRadius.circular(Globals.borderRadius),
         onTap: () {
           // Open the required site

@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:greenpass/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'models/data.dart';
 import 'lang/localization.dart';
+import 'screens/settings_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,29 @@ const APP_NAME = 'Green Pass Keeper';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Set the statusbar color depending on the theme
+    if (Theme.of(context).brightness == Brightness.dark) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color(0xff313131),
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color(0xffffffff),
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
+    }
+
     return MaterialApp(
       title: APP_NAME,
       supportedLocales: [
@@ -203,8 +228,18 @@ class MyApp extends StatelessWidget {
             ),
       ),
       // Route of every possible screen
-      routes: {},
+      routes: {
+        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+      },
       home: HomeScreen(),
     );
+  }
+}
+
+// Check if dark mode is enabled
+extension DarkMode on BuildContext {
+  bool isDarkMode() {
+    final brightness = MediaQuery.of(this).platformBrightness;
+    return brightness == Brightness.dark;
   }
 }

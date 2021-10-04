@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 class TitleHeadline extends StatelessWidget {
   final String title;
   final bool backBtn;
+  final IconData? backBtnCustomIcon;
   final VoidCallback? backBtnCustomAction;
   final IconData? trailingBtn;
   final VoidCallback? trailingBtnAction;
@@ -12,6 +13,7 @@ class TitleHeadline extends StatelessWidget {
   TitleHeadline({
     required this.title,
     this.backBtn = false,
+    this.backBtnCustomIcon,
     this.backBtnCustomAction,
     this.trailingBtn,
     this.trailingBtnAction,
@@ -29,29 +31,35 @@ class TitleHeadline extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-              // Avoid overlapping between long texts and buttons
-              padding: (trailingBtn == null && !backBtn)
-                  ? const EdgeInsets.symmetric(horizontal: 8)
-                  : const EdgeInsets.symmetric(horizontal: 42),
-              alignment: Alignment.center,
-              // Fittedbox resizes the text on overflow, useful for small screens
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-              )),
+            // Avoid overlapping between long texts and buttons
+            padding: (trailingBtn == null && !backBtn)
+                ? const EdgeInsets.symmetric(horizontal: 8)
+                : const EdgeInsets.symmetric(horizontal: 42),
+            alignment: Alignment.center,
+            // Fittedbox resizes the text on overflow, useful for small screens
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                title,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ),
+          ),
           Row(
             children: [
               backBtn
                   ? IconButton(
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      icon: backBtnCustomIcon != null
+                          ? Icon(
+                              backBtnCustomIcon,
+                              color: Theme.of(context).primaryColor,
+                            )
+                          : Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).primaryColor,
+                            ),
                       onPressed: backBtnCustomAction != null
                           ? backBtnCustomAction
                           : () => Navigator.of(context).pop(),

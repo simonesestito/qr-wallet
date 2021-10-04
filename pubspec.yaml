@@ -41,6 +41,7 @@ dependencies:
   path_provider: ^2.0.5
   qr_code_tools: ^0.0.7
   url_launcher: ^6.0.12
+  settings_ui: ^1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -73,6 +74,8 @@ flutter:
     - assets/images/logo.png
     - assets/images/logo_no_bg.png
     - assets/images/no_qr_placeholder.png
+    - assets/images/author_back.jpg
+    - assets/images/author_front.jpg
     # Supported languages
     - assets/languages/it.json
     - assets/languages/en.json
