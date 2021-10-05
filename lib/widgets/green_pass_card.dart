@@ -33,13 +33,7 @@ class GreenPassCardView extends StatelessWidget {
                   pass.alias,
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                QrImage(
-                  data: pass.qrData,
-                  backgroundColor: Color(max(
-                    Theme.of(context).colorScheme.background.value,
-                    Theme.of(context).colorScheme.onBackground.value,
-                  )),
-                ),
+                QrBackgroundImage(pass.qrData),
               ],
             ),
             Align(
@@ -68,6 +62,29 @@ class GreenPassCardView extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+///
+/// A QrImage with an adaptive (white) background
+///
+class QrBackgroundImage extends StatelessWidget {
+  final String data;
+
+  const QrBackgroundImage(this.data, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final backgroundColor = max(
+      colorScheme.background.value,
+      colorScheme.onBackground.value,
+    );
+
+    return QrImage(
+      data: data,
+      backgroundColor: Color(backgroundColor),
     );
   }
 }
