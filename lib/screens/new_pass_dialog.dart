@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,7 @@ import 'package:greenpass/screens/qr_scan.dart';
 import 'package:greenpass/utils/globals.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf_render/pdf_render.dart';
+import 'package:printing/printing.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
 
 class NewPassDialog extends StatefulWidget {
@@ -138,6 +137,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
     try {
       qrContent = await QrCodeToolsPlugin.decodeFrom(imagePath);
     } catch (err) {
+      print(err);
       return false;
     }
 
@@ -150,37 +150,21 @@ class _NewPassDialogState extends State<NewPassDialog> {
   }
 
   Future<void> _handlePdfFile(String pdfFile) async {
-    final doc = await PdfDocument.openFile(pdfFile);
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = await File(tempDir.path + '/temp_img.tmp.png').create();
 
-    if (doc.pageCount > MAX_PDF_PAGES || doc.isEncrypted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            Localization.of(context)!.translate('pdf_too_big')!,
-          ),
-        ),
-      );
-      Navigator.pop(context);
-    } else {
-      final tempDir = await getTemporaryDirectory();
-      final tempFile = await File(tempDir.path + '/temp_img.tmp.png').create();
+    final docPages = Printing.raster(
+      await File(pdfFile).readAsBytes(),
+      dpi: 140,
+    );
 
-      for (int i = 1; i <= doc.pageCount; i++) {
-        final page = await doc.getPage(i);
-        final pageImage = await page.render();
-        final image = await pageImage.createImageDetached();
-        final imageBytes = await image.toByteData(format: ImageByteFormat.png);
-        await tempFile.writeAsBytes(imageBytes!.buffer.asUint8List(),
-            flush: true);
-        final successResult = await _handleImageFile(tempFile.path);
-        image.dispose();
-
-        if (successResult) break;
-      }
-
-      await tempFile.delete();
+    await for (final docPage in docPages) {
+      final docPageBytes = await docPage.toPng();
+      await tempFile.writeAsBytes(docPageBytes, flush: true);
+      final successResult = await _handleImageFile(tempFile.path);
+      if (successResult) break;
     }
 
-    doc.dispose();
+    //await tempFile.delete();
   }
 }
