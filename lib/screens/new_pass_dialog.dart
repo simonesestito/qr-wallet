@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
+import 'package:greenpass/screens/post_qr_form.dart';
 import 'package:greenpass/screens/qr_scan.dart';
 import 'package:greenpass/utils/globals.dart';
 import 'package:image_picker/image_picker.dart';
@@ -142,7 +143,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => PostQrScanWidget(qrData: qrContent)),
+      MaterialPageRoute(builder: (_) => PostQrForm(qrData: qrContent)),
     );
 
     return true;

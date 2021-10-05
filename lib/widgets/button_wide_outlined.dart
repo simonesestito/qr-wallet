@@ -23,7 +23,8 @@ class ButtonWideOutlined extends StatelessWidget {
       ),
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          side: BorderSide(width: 2, color: Color(0xffaaaaaa)),
+          side:
+              BorderSide(width: Globals.borderWidth, color: Color(0xffaaaaaa)),
           primary: Theme.of(context).colorScheme.secondary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Globals.borderRadius),

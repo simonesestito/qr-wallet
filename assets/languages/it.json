@@ -15,6 +15,7 @@
   "no_qr_found": "Nessun QR code trovato, assicurati che la foto sia corretta e ben illuminata",
   "qr_found": "QR trovato!",
   "name": "Nome",
+  "name_error": "Specificare un nome",
   "save": "Salva",
   "camera_permission_denied": "Permesso negato, riprova o abilitalo manualmente!",
   "qr_title": "Scannerizza QR",

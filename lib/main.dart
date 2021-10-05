@@ -23,29 +23,6 @@ const APP_NAME = 'Green Pass Keeper';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Set the statusbar color depending on the theme
-    if (Theme.of(context).brightness == Brightness.dark) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color(0xff313131),
-          statusBarIconBrightness: Brightness.light,
-          systemNavigationBarIconBrightness: Brightness.light,
-          systemNavigationBarDividerColor: Colors.transparent,
-        ),
-      );
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color(0xffffffff),
-          statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarDividerColor: Colors.transparent,
-        ),
-      );
-    }
-
     return MaterialApp(
       title: APP_NAME,
       supportedLocales: [
@@ -87,7 +64,7 @@ class MyApp extends StatelessWidget {
           onPrimary: Color(0xffeeeeee),
           onSecondary: Color(0xff313131),
           onSurface: Color(0xffdddddd),
-          onBackground: Color(0xfff0f0f0),
+          onBackground: Color(0xff333333),
           onError: Color(0xffB2753F),
           brightness: Brightness.light,
         ),
@@ -171,7 +148,7 @@ class MyApp extends StatelessWidget {
           onPrimary: Color(0xffeeeeee),
           onSecondary: Color(0xff313131),
           onSurface: Color(0xff919191),
-          onBackground: Color(0xff3f3f3f),
+          onBackground: Color(0xffdddddd),
           onError: Color(0xffB2753F),
           brightness: Brightness.dark,
         ),

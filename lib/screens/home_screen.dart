@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
@@ -38,9 +39,32 @@ class _HomeScreenState extends State<HomeScreen> {
     else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
 
+    if (Theme.of(context).brightness == Brightness.dark) {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color(0xff313131),
+          statusBarIconBrightness: Brightness.light,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Color(0xffffffff),
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          systemNavigationBarDividerColor: Colors.transparent,
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             TitleHeadline(
               title: Localization.of(context)!.translate('app_title')!,
@@ -56,11 +80,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).pushNamed('/settings');
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 96),
-              child: passList.isEmpty
-                  ? buildEmptyView(context)
-                  : buildList(context, passList),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 42),
+                child: passList.isEmpty
+                    ? buildEmptyView(context)
+                    : buildList(context, passList),
+              ),
             ),
           ],
         ),
@@ -83,31 +110,28 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Build the placeholder
   Widget buildEmptyView(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/no_qr_placeholder.png',
-            height: 96,
-            alignment: Alignment.center,
-            color:
-                Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.4),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(
-            Localization.of(context)!.translate('no_pass_placeholder')!,
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 48),
+        Image.asset(
+          'assets/images/no_qr_placeholder.png',
+          height: 96,
+          alignment: Alignment.center,
+          color: Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.4),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          Localization.of(context)!.translate('no_pass_placeholder')!,
+        ),
+      ],
     );
   }
 
+  // Build the list of passes
   Widget buildList(BuildContext context, List<GreenPass> passList) {
     return CarouselSlider.builder(
       itemCount: passList.length,

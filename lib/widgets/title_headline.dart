@@ -22,7 +22,7 @@ class TitleHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: 64,
       padding: const EdgeInsets.only(
         top: 4,
         left: 8,
