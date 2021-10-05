@@ -111,9 +111,8 @@ class DeletePass extends StatelessWidget {
         ),
         const SizedBox(width: 16),
         ElevatedButton(
-          onPressed: () {
-            final dataManager = context.read<GreenPassListData>();
-            dataManager.storeData(dataManager.passes.toList()..remove(pass));
+          onPressed: () async {
+            await context.read<GreenPassListData>().deletePass(pass);
             Navigator.pop(context);
           },
           child: Text("Elimina"),
@@ -142,11 +141,9 @@ class PassEditForm extends StatelessWidget {
       PassForm(
           inputData: PassFormData(name: pass.alias),
           onSave: (data) async {
-            final dataManager = context.read<GreenPassListData>();
-            final newPasses = dataManager.passes.toList()
-              ..remove(pass)
-              ..add(pass.copyWith(alias: data.name));
-            await dataManager.storeData(newPasses);
+            await context
+                .read<GreenPassListData>()
+                .replacePass(pass, pass.copyWith(alias: data.name));
             Navigator.pop(context);
           }),
     ]);

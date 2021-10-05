@@ -62,6 +62,21 @@ class GreenPassListData extends ChangeNotifier {
     _updatePersistenceAndNotify();
   }
 
+  Future<void> replacePass(GreenPass toReplace, GreenPass newPass) async {
+    if (!_passesList.contains(toReplace)) {
+      return addData(newPass);
+    }
+
+    final oldPassIndex = _passesList.indexOf(toReplace);
+    _passesList.replaceRange(oldPassIndex, oldPassIndex + 1, [newPass]);
+    _updatePersistenceAndNotify();
+  }
+
+  Future<void> deletePass(GreenPass toDelete) async {
+    _passesList.remove(toDelete);
+    _updatePersistenceAndNotify();
+  }
+
   Future<void> addData(GreenPass greenPass) async {
     _passesList.add(greenPass);
     _updatePersistenceAndNotify();
