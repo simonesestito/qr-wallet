@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/screens/post_qr_form.dart';
 import 'package:greenpass/screens/qr_scan.dart';
-import 'package:greenpass/utils/globals.dart';
+import 'package:greenpass/widgets/bottomsheet_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
@@ -20,7 +20,6 @@ class NewPassDialog extends StatefulWidget {
 
 class _NewPassDialogState extends State<NewPassDialog> {
   final _imagePicker = ImagePicker();
-  static const MAX_PDF_PAGES = 3;
 
   @override
   void initState() {
@@ -32,87 +31,62 @@ class _NewPassDialogState extends State<NewPassDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(
-              Globals.borderRadius,
-            ),
-            child: Container(
-              height: 4,
-              width: 30,
-              color: Theme.of(context)
-                  .textTheme
-                  .bodyText2!
-                  .color!
-                  .withOpacity(0.4),
-            ),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          ListTile(
-            title:
-                Text(Localization.of(context)!.translate('take_photo_title')!),
-            subtitle: Text(
-                Localization.of(context)!.translate('take_photo_description')!),
-            isThreeLine: true,
-            leading: Icon(Icons.camera_alt),
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => QrScanWidget())),
-          ),
-          const Divider(height: 1),
-          ListTile(
-            title:
-                Text(Localization.of(context)!.translate('pick_photo_title')!),
-            subtitle: Text(
-                Localization.of(context)!.translate('pick_photo_description')!),
-            isThreeLine: true,
-            leading: Icon(Icons.photo),
-            onTap: () async {
-              final photo = await _imagePicker.pickImage(
-                source: ImageSource.gallery,
-              );
-
-              if (photo != null && !await _handleImageFile(photo.path)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      Localization.of(context)!.translate('no_qr_found')!,
-                    ),
-                  ),
-                );
-                Navigator.pop(context);
-              }
-            },
-          ),
-          const Divider(height: 1),
-          ListTile(
-            title: Text(
-                Localization.of(context)!.translate('extract_from_pdf_title')!),
-            subtitle: Text(Localization.of(context)!
-                .translate('extract_from_pdf_description')!),
-            isThreeLine: true,
-            leading: Icon(Icons.picture_as_pdf),
-            onTap: () async {
-              final fileResult = await FilePicker.platform.pickFiles(
-                allowMultiple: false,
-                allowedExtensions: ["pdf"],
-                type: FileType.custom,
-              );
-              final fileResultPath = fileResult?.files.single.path;
-
-              if (fileResultPath != null) {
-                await _handlePdfFile(fileResultPath);
-              }
-            },
-          ),
-        ],
+    return BottomSheetContainer(children: [
+      ListTile(
+        title: Text(Localization.of(context)!.translate('take_photo_title')!),
+        subtitle: Text(
+            Localization.of(context)!.translate('take_photo_description')!),
+        isThreeLine: true,
+        leading: Icon(Icons.camera_alt),
+        onTap: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (_) => QrScanWidget())),
       ),
-    );
+      const Divider(height: 1),
+      ListTile(
+        title: Text(Localization.of(context)!.translate('pick_photo_title')!),
+        subtitle: Text(
+            Localization.of(context)!.translate('pick_photo_description')!),
+        isThreeLine: true,
+        leading: Icon(Icons.photo),
+        onTap: () async {
+          final photo = await _imagePicker.pickImage(
+            source: ImageSource.gallery,
+          );
+
+          if (photo != null && !await _handleImageFile(photo.path)) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  Localization.of(context)!.translate('no_qr_found')!,
+                ),
+              ),
+            );
+            Navigator.pop(context);
+          }
+        },
+      ),
+      const Divider(height: 1),
+      ListTile(
+        title: Text(
+            Localization.of(context)!.translate('extract_from_pdf_title')!),
+        subtitle: Text(Localization.of(context)!
+            .translate('extract_from_pdf_description')!),
+        isThreeLine: true,
+        leading: Icon(Icons.picture_as_pdf),
+        onTap: () async {
+          final fileResult = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            allowedExtensions: ["pdf"],
+            type: FileType.custom,
+          );
+          final fileResultPath = fileResult?.files.single.path;
+
+          if (fileResultPath != null) {
+            await _handlePdfFile(fileResultPath);
+          }
+        },
+      ),
+    ]);
   }
 
   Future<void> recoverLostData() async {
