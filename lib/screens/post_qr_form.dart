@@ -26,7 +26,7 @@ class _PostQrFormState extends State<PostQrForm> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            // FIXME mainAxisSize: MainAxisSize.min,
             children: [
               TitleHeadline(
                 title: Localization.of(context)!.translate('qr_found')!,

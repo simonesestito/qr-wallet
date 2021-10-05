@@ -22,5 +22,6 @@
   "scan_a_code": "Scannerizza un QR code",
   "settings": "Impostazioni",
   "pass_item_delete": "Elimina",
-  "pass_item_rename": "Rinomina"
+  "pass_item_rename": "Rinomina",
+  "pass_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?"
 }

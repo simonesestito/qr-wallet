@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
+import 'package:greenpass/utils/standard_dialogs.dart';
+import 'package:greenpass/widgets/bottomsheet_container.dart';
+import 'package:greenpass/widgets/pass_form.dart';
+import 'package:greenpass/widgets/title_headline.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class GreenPassCardView extends StatelessWidget {
@@ -38,31 +43,113 @@ class GreenPassCardView extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: PopupMenuButton(itemBuilder: (context) {
-                return [
-                  PopupMenuItem(
-                    onTap: () {
-                      // TODO
-                    },
-                    child: Text(
-                      Localization.of(context)!.translate("pass_item_delete")!,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    onTap: () {
-                      // TODO
-                    },
-                    child: Text(
-                      Localization.of(context)!.translate("pass_item_rename")!,
-                    ),
-                  ),
-                ];
-              }),
+              child: PopupMenuButton<void Function()>(
+                  // Instead of using onTap() on the PopupMenuItem,
+                  // return the callback with value:,
+                  // then call the callback here.
+                  //
+                  // Using onTap and showing a bottomsheet,
+                  // it'll be discarded when trying to close the PopupMenuButton.
+                  onSelected: (action) => action(),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: () {
+                          showAppModalBottomSheet(
+                            context: context,
+                            builder: () => DeletePass(pass: pass),
+                          );
+                        },
+                        child: Text(
+                          Localization.of(context)!.translate(
+                            "pass_item_delete",
+                          )!,
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: () {
+                          showAppModalBottomSheet(
+                            context: context,
+                            builder: () => PassEditForm(pass: pass),
+                          );
+                        },
+                        child: Text(
+                          Localization.of(context)!
+                              .translate("pass_item_rename")!,
+                        ),
+                      ),
+                    ];
+                  }),
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class DeletePass extends StatelessWidget {
+  final GreenPass pass;
+
+  const DeletePass({
+    required this.pass,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetContainer(children: [
+      TitleHeadline(
+          title: Localization.of(context)!.translate("pass_item_delete")!),
+      Text(Localization.of(context)!
+          .translate("pass_item_delete_confirmation")!),
+      const SizedBox(height: 16),
+      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        OutlinedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text("Annulla"),
+        ),
+        const SizedBox(width: 16),
+        ElevatedButton(
+          onPressed: () {
+            final dataManager = context.read<GreenPassListData>();
+            dataManager.storeData(dataManager.passes.toList()..remove(pass));
+            Navigator.pop(context);
+          },
+          child: Text("Elimina"),
+        ),
+        const SizedBox(width: 16),
+      ]),
+      const SizedBox(height: 16),
+    ]);
+  }
+}
+
+class PassEditForm extends StatelessWidget {
+  final GreenPass pass;
+
+  const PassEditForm({
+    required this.pass,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomSheetContainer(children: [
+      TitleHeadline(
+        title: Localization.of(context)!.translate("pass_item_rename")!,
+      ),
+      PassForm(
+          inputData: PassFormData(name: pass.alias),
+          onSave: (data) async {
+            final dataManager = context.read<GreenPassListData>();
+            final newPasses = dataManager.passes.toList()
+              ..remove(pass)
+              ..add(pass.copyWith(alias: data.name));
+            await dataManager.storeData(newPasses);
+            Navigator.pop(context);
+          }),
+    ]);
   }
 }
 

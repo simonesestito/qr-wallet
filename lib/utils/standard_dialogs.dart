@@ -54,3 +54,25 @@ class CommonDialogs {
     );
   }
 }
+
+///
+/// Show a modal bottom sheet with default values for the app.
+///
+void showAppModalBottomSheet({
+  required BuildContext context,
+  required Widget Function() builder,
+}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (_) => builder(),
+    enableDrag: true,
+    isScrollControlled: true,
+    elevation: 4,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(Globals.borderRadius),
+        topRight: Radius.circular(Globals.borderRadius),
+      ),
+    ),
+  );
+}

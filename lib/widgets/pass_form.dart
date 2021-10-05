@@ -10,13 +10,17 @@ import 'button_wide.dart';
 ///
 class PassForm extends StatelessWidget {
   final PassFormOnSave onSave;
+  final PassFormData? inputData;
   final _nameController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   PassForm({
     required this.onSave,
+    this.inputData,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key) {
+    _nameController.text = inputData?.name ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {

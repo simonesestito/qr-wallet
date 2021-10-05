@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
-import 'package:greenpass/utils/globals.dart';
+import 'package:greenpass/utils/standard_dialogs.dart';
 import 'package:greenpass/widgets/green_pass_card.dart';
 import 'package:greenpass/widgets/title_headline.dart';
 import 'package:provider/provider.dart';
@@ -63,8 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
+        child: ListView(
           children: [
             TitleHeadline(
               title: Localization.of(context)!.translate('app_title')!,
@@ -94,17 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.qr_code_2_rounded),
-        onPressed: () => showModalBottomSheet(
-          enableDrag: true,
-          elevation: 4,
+        onPressed: () => showAppModalBottomSheet(
           context: context,
-          builder: (_) => NewPassDialog(),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(Globals.borderRadius),
-              topRight: Radius.circular(Globals.borderRadius),
-            ),
-          ),
+          builder: () => NewPassDialog(),
         ),
       ),
     );
@@ -134,6 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build the list of passes
   Widget buildList(BuildContext context, List<GreenPass> passList) {
     return CarouselSlider.builder(
+      key: ValueKey(passList.length == 1),
+      // Fix enlarged center page when deleted first pass
       itemCount: passList.length,
       itemBuilder: (context, i, _) => GreenPassCardView(pass: passList[i]),
       options: CarouselOptions(

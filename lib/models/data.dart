@@ -22,6 +22,16 @@ class GreenPass {
         'alias': alias,
         'qrData': qrData,
       };
+
+  GreenPass copyWith({
+    String? alias,
+    String? qrData,
+  }) {
+    return GreenPass(
+      alias: alias ?? this.alias,
+      qrData: qrData ?? this.qrData,
+    );
+  }
 }
 
 ///
