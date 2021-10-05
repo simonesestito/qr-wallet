@@ -165,6 +165,6 @@ class _NewPassDialogState extends State<NewPassDialog> {
       if (successResult) break;
     }
 
-    //await tempFile.delete();
+    await tempFile.delete();
   }
 }
