@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
@@ -31,7 +33,13 @@ class GreenPassCardView extends StatelessWidget {
                   pass.alias,
                   style: Theme.of(context).textTheme.headline5,
                 ),
-                QrImage(data: pass.qrData),
+                QrImage(
+                  data: pass.qrData,
+                  backgroundColor: Color(max(
+                    Theme.of(context).colorScheme.background.value,
+                    Theme.of(context).colorScheme.onBackground.value,
+                  )),
+                ),
               ],
             ),
             Align(
