@@ -36,8 +36,8 @@ class GreenPassDecoder {
     }
 
     return GreenPassData(
-      name: data['nam']['gn'].toString().capitalize(),
-      surname: data['nam']['fn'].toString().capitalize(),
+      name: data['nam']['gn'].toString().capitalizeWords(),
+      surname: data['nam']['fn'].toString().capitalizeWords(),
       issueDate: issueDate,
       type: passType,
     );
