@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:greenpass/lang/localization.dart';
 import 'package:greenpass/models/data.dart';
 import 'package:greenpass/utils/globals.dart';
+import 'package:greenpass/utils/green_pass_decoder.dart';
 import 'package:greenpass/widgets/green_pass_card.dart';
 import 'package:greenpass/widgets/pass_form.dart';
 import 'package:greenpass/widgets/title_headline.dart';
@@ -22,11 +23,11 @@ class PostQrForm extends StatefulWidget {
 class _PostQrFormState extends State<PostQrForm> {
   @override
   Widget build(BuildContext context) {
+    final qrData = GreenPassDecoder().tryDecode(widget.qrData);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            // FIXME mainAxisSize: MainAxisSize.min,
             children: [
               TitleHeadline(
                 title: Localization.of(context)!.translate('qr_found')!,
@@ -55,18 +56,22 @@ class _PostQrFormState extends State<PostQrForm> {
                   ),
                 ),
               ),
-              PassForm(onSave: (data) async {
-                await context.read<GreenPassListData>().addData(
-                      GreenPass(
-                        alias: data.name,
-                        qrData: this.widget.qrData,
-                      ),
+              PassForm(
+                  inputData: PassFormData(
+                    name: qrData?.displayDescription ?? '',
+                  ),
+                  onSave: (data) async {
+                    await context.read<GreenPassListData>().addData(
+                          GreenPass(
+                            alias: data.name,
+                            qrData: this.widget.qrData,
+                          ),
+                        );
+                    Navigator.popUntil(
+                      context,
+                      (route) => route.isFirst,
                     );
-                Navigator.popUntil(
-                  context,
-                  (route) => route.isFirst,
-                );
-              })
+                  })
             ],
           ),
         ),

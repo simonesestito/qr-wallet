@@ -7,8 +7,8 @@ import 'package:greenpass/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'lang/localization.dart';
-import 'screens/settings_screen.dart';
 import 'models/data.dart';
+import 'screens/settings_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
