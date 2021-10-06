@@ -176,11 +176,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildCardForType(SimpleQr qr) {
-    // TODO Differentiate Widget based on QR type
     if (qr is GreenPass) {
-      return GreenPassCardView(pass: qr);
+      // TODO Differentiate Widget based on QR type
+      return SimpleQrCardView(qr: qr);
     } else {
-      return Text("TODO");
+      return SimpleQrCardView(qr: qr);
     }
   }
 

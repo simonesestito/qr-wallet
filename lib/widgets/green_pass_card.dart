@@ -9,14 +9,14 @@ import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/widgets/pass_form.dart';
+import 'package:qrwallet/widgets/qr_form.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 
-class GreenPassCardView extends StatelessWidget {
-  final GreenPass pass;
+class SimpleQrCardView extends StatelessWidget {
+  final SimpleQr qr;
 
-  const GreenPassCardView({
-    required this.pass,
+  const SimpleQrCardView({
+    required this.qr,
     Key? key,
   }) : super(key: key);
 
@@ -35,32 +35,32 @@ class GreenPassCardView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              pass.alias,
+              qr.alias,
               style: Theme.of(context).textTheme.headline5,
             ),
-            QrBackgroundImage(pass.qrData),
+            QrBackgroundImage(qr.qrData),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               IconButton(
                 icon: Icon(Icons.delete),
                 tooltip: Localization.of(context)!.translate(
-                  "pass_item_delete",
+                  "qr_item_delete",
                 )!,
                 onPressed: () {
                   showAppModalBottomSheet(
                     context: context,
-                    builder: () => DeletePass(pass: pass),
+                    builder: () => DeleteQr(qr: qr),
                   );
                 },
               ),
               IconButton(
                 icon: Icon(Icons.edit),
                 tooltip: Localization.of(context)!.translate(
-                  "pass_item_rename",
+                  "qr_item_rename",
                 )!,
                 onPressed: () {
                   showAppModalBottomSheet(
                     context: context,
-                    builder: () => PassEditForm(pass: pass),
+                    builder: () => QrEditForm(qr: qr),
                   );
                 },
               ),
@@ -72,11 +72,11 @@ class GreenPassCardView extends StatelessWidget {
   }
 }
 
-class DeletePass extends StatelessWidget {
-  final GreenPass pass;
+class DeleteQr extends StatelessWidget {
+  final SimpleQr qr;
 
-  const DeletePass({
-    required this.pass,
+  const DeleteQr({
+    required this.qr,
     Key? key,
   }) : super(key: key);
 
@@ -84,10 +84,10 @@ class DeletePass extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomSheetContainer(children: [
       TitleHeadline(
-        title: Localization.of(context)!.translate("pass_item_delete")!,
+        title: Localization.of(context)!.translate("qr_item_delete")!,
       ),
       Text(
-        Localization.of(context)!.translate("pass_item_delete_confirmation")!,
+        Localization.of(context)!.translate("qr_item_delete_confirmation")!,
       ),
       const SizedBox(height: 16),
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -98,10 +98,10 @@ class DeletePass extends StatelessWidget {
         const SizedBox(width: 16),
         ElevatedButton(
           onPressed: () async {
-            await context.read<QrListData>().deleteQr(pass);
+            await context.read<QrListData>().deleteQr(qr);
             Navigator.pop(context);
           },
-          child: Text(Localization.of(context)!.translate("pass_item_delete")!),
+          child: Text(Localization.of(context)!.translate("qr_item_delete")!),
         ),
         const SizedBox(width: 16),
       ]),
@@ -110,11 +110,11 @@ class DeletePass extends StatelessWidget {
   }
 }
 
-class PassEditForm extends StatelessWidget {
-  final GreenPass pass;
+class QrEditForm extends StatelessWidget {
+  final SimpleQr qr;
 
-  const PassEditForm({
-    required this.pass,
+  const QrEditForm({
+    required this.qr,
     Key? key,
   }) : super(key: key);
 
@@ -122,14 +122,14 @@ class PassEditForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomSheetContainer(children: [
       TitleHeadline(
-        title: Localization.of(context)!.translate("pass_item_rename")!,
+        title: Localization.of(context)!.translate("qr_item_rename")!,
       ),
-      PassForm(
-          inputData: PassFormData(name: pass.alias),
+      QrForm(
+          inputData: QrFormData(name: qr.alias),
           onSave: (data) async {
             await context
                 .read<QrListData>()
-                .replaceQr(pass, pass.copyWith(alias: data.name));
+                .replaceQr(qr, qr.copyWith(alias: data.name));
             Navigator.pop(context);
           }),
       SizedBox.fromSize(

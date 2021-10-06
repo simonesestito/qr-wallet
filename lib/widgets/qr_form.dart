@@ -8,21 +8,21 @@ import 'button_wide.dart';
 ///
 /// The single form elements when adding a new QR or editing an existing one.
 ///
-class PassForm extends StatefulWidget {
+class QrForm extends StatefulWidget {
   final PassFormOnSave onSave;
-  final PassFormData? inputData;
+  final QrFormData? inputData;
 
-  PassForm({
+  QrForm({
     required this.onSave,
     this.inputData,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<PassForm> createState() => _PassFormState();
+  State<QrForm> createState() => _QrFormState();
 }
 
-class _PassFormState extends State<PassForm> {
+class _QrFormState extends State<QrForm> {
   final _nameController = TextEditingController();
   final _textKey = ValueKey('name_field');
   final _formKey = GlobalKey<FormState>();
@@ -120,7 +120,7 @@ class _PassFormState extends State<PassForm> {
               text: Localization.of(context)!.translate('save')!,
               action: () async {
                 if (_formKey.currentState?.validate() == true) {
-                  widget.onSave(PassFormData(name: _nameController.text));
+                  widget.onSave(QrFormData(name: _nameController.text));
                 }
               },
               icon: Icons.save_outlined,
@@ -132,10 +132,10 @@ class _PassFormState extends State<PassForm> {
   }
 }
 
-typedef PassFormOnSave = Future<void> Function(PassFormData);
+typedef PassFormOnSave = Future<void> Function(QrFormData);
 
-class PassFormData {
+class QrFormData {
   final String name;
 
-  PassFormData({required this.name});
+  QrFormData({required this.name});
 }

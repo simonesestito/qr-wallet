@@ -7,7 +7,7 @@ import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/utils.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
 import 'package:qrwallet/widgets/green_pass_card.dart';
-import 'package:qrwallet/widgets/pass_form.dart';
+import 'package:qrwallet/widgets/qr_form.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 
 ///
@@ -100,8 +100,8 @@ class _PostQrFormState extends State<PostQrForm> {
 
   Widget buildAddQrForm(BuildContext context) {
     final passData = GreenPassDecoder().tryDecode(widget.qrData);
-    return PassForm(
-        inputData: PassFormData(
+    return QrForm(
+        inputData: QrFormData(
           name: passData?.displayDescription ?? '',
         ),
         onSave: (data) async {

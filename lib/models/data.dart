@@ -23,6 +23,16 @@ class SimpleQr {
         'alias': alias,
         'qrData': qrData,
       };
+
+  SimpleQr copyWith({
+    String? alias,
+    String? qrData,
+  }) {
+    return SimpleQr(
+      alias: alias ?? this.alias,
+      qrData: qrData ?? this.qrData,
+    );
+  }
 }
 
 class GreenPass extends SimpleQr {
