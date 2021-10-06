@@ -9,7 +9,7 @@ class ButtonWideOutlined extends StatelessWidget {
   ButtonWideOutlined({
     required this.action,
     required this.text,
-    this.padding = 24,
+    this.padding = Globals.buttonPadding,
   });
 
   @override

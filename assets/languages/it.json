@@ -4,6 +4,7 @@
   "author_back": "Simone Sestito",
   "author_front": "m.i.n.a.r.",
   "scan": "Scannerizza",
+  "cancel_action": "Annulla",
   "caution": "Attenzione",
   "no_pass_placeholder": "Premi il bottone qui sotto per aggiungere il tuo pass",
   "take_photo_title": "Scatta foto",
@@ -24,5 +25,6 @@
   "settings": "Impostazioni",
   "pass_item_delete": "Elimina",
   "pass_item_rename": "Rinomina",
-  "pass_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?"
+  "pass_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?",
+  "pass_duplicate_message": "Hai già inserito questo codice QR"
 }

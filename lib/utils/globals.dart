@@ -4,4 +4,5 @@ class Globals {
   static const double avatarRadius = 42;
   static const double borderWidth = 2;
   static const String appVersion = '1.0.0';
+  static const double buttonPadding = 24;
 }

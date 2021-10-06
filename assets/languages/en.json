@@ -4,6 +4,7 @@
   "author_back": "Simone Sestito",
   "author_front": "m.i.n.a.r.",
   "scan": "Scan",
+  "cancel_action": "Cancel",
   "caution": "Caution",
   "no_pass_placeholder": "Press the button button below to add your pass",
   "take_photo_title": "Take picture",
@@ -24,5 +25,6 @@
   "settings": "Settings",
   "pass_item_delete": "Delete",
   "pass_item_rename": "Rename",
-  "pass_item_delete_confirmation": "Are you sure to delete this pass?"
+  "pass_item_delete_confirmation": "Are you sure to delete this pass?",
+  "pass_duplicate_message": "You've already scanned this QR code"
 }

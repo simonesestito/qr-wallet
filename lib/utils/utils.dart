@@ -9,3 +9,12 @@ extension StringExtension on String {
     return this.split(" ").map((s) => s.capitalize()).join(" ");
   }
 }
+
+extension ListExtension<E> on List<E> {
+  E? firstWhereOrNull(bool test(E element)) {
+    for (E element in this) {
+      if (test(element)) return element;
+    }
+    return null;
+  }
+}
