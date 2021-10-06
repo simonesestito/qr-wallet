@@ -44,6 +44,7 @@ dependencies:
   printing: ^5.6.0
   cbor: ^4.1.0
   dart_base45: ^1.0.1
+  google_mobile_ads: ^0.13.5
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/green_pass_card.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
-import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
 import 'new_pass_dialog.dart';
@@ -19,6 +21,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final bannerAd = BannerAd(
+    adUnitId: Globals.bannerAdsUnitId,
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
+
   double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
 
@@ -27,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Screen.brightness.then((brightness) {
       _originalBrightness = brightness;
     });
+    bannerAd.load();
     super.initState();
   }
 
@@ -89,6 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     : buildList(context, passList),
               ),
             ),
+            Container(
+              alignment: Alignment.center,
+              child: AdWidget(ad: bannerAd),
+              width: bannerAd.size.width.toDouble(),
+              height: bannerAd.size.height.toDouble(),
+            ),
           ],
         ),
       ),
@@ -140,5 +156,11 @@ class _HomeScreenState extends State<HomeScreen> {
         enableInfiniteScroll: false,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    bannerAd.dispose();
+    super.dispose();
   }
 }

@@ -100,7 +100,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
             MediaQuery.of(context).size.height < 400)
         ? 200.0
         : 300.0;
-    // Ensure the Scanner view is properly sized after rotation (the app won'r rotate tho)
+    // Ensure the Scanner view is properly sized after rotation (the app won't rotate tho)
     return QRView(
       key: qrKey,
       formatsAllowed: [BarcodeFormat.qrcode],

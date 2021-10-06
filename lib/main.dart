@@ -3,8 +3,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:qrwallet/screens/home_screen.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:qrwallet/screens/home_screen.dart';
 
 import 'lang/localization.dart';
 import 'models/data.dart';
@@ -12,6 +13,7 @@ import 'screens/settings_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   runApp(ChangeNotifierProvider(
     create: (_) => GreenPassListData(),
     child: MyApp(),
