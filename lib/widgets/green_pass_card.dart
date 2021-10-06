@@ -30,58 +30,41 @@ class GreenPassCardView extends StatelessWidget {
       elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Stack(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  pass.alias,
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                QrBackgroundImage(pass.qrData),
-              ],
+            Text(
+              pass.alias,
+              style: Theme.of(context).textTheme.headline5,
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: PopupMenuButton<void Function()>(
-                  // Instead of using onTap() on the PopupMenuItem,
-                  // return the callback with value:,
-                  // then call the callback here.
-                  //
-                  // Using onTap and showing a bottomsheet,
-                  // it'll be discarded when trying to close the PopupMenuButton.
-                  onSelected: (action) => action(),
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: () {
-                          showAppModalBottomSheet(
-                            context: context,
-                            builder: () => DeletePass(pass: pass),
-                          );
-                        },
-                        child: Text(
-                          Localization.of(context)!.translate(
-                            "pass_item_delete",
-                          )!,
-                        ),
-                      ),
-                      PopupMenuItem(
-                        value: () {
-                          showAppModalBottomSheet(
-                            context: context,
-                            builder: () => PassEditForm(pass: pass),
-                          );
-                        },
-                        child: Text(
-                          Localization.of(context)!
-                              .translate("pass_item_rename")!,
-                        ),
-                      ),
-                    ];
-                  }),
-            ),
+            QrBackgroundImage(pass.qrData),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              IconButton(
+                icon: Icon(Icons.delete),
+                tooltip: Localization.of(context)!.translate(
+                  "pass_item_delete",
+                )!,
+                onPressed: () {
+                  showAppModalBottomSheet(
+                    context: context,
+                    builder: () => DeletePass(pass: pass),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.edit),
+                tooltip: Localization.of(context)!.translate(
+                  "pass_item_rename",
+                )!,
+                onPressed: () {
+                  showAppModalBottomSheet(
+                    context: context,
+                    builder: () => PassEditForm(pass: pass),
+                  );
+                },
+              ),
+            ]),
           ],
         ),
       ),
