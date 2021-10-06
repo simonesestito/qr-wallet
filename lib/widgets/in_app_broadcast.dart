@@ -13,7 +13,7 @@ class InAppBroadcast extends InheritedWidget {
 
   InAppBroadcast({
     required WidgetBuilder child,
-  }) : super(child: _InAppBroadcastData(child: child));
+  }) : super(child: _InAppBroadcastData(child: child, key: _inAppDataKey));
 
   void emitEventType(InAppEvent type) {
     _inAppListeners[type]!.forEach((callback) => callback());
@@ -75,7 +75,7 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
 
   Future<List<ProductDetails>> _productDetails() async {
     final details = await InAppPurchase.instance.queryProductDetails({
-      '', // TODO: Add in-app product SKUs
+      'remove_ads',
     });
     return details.productDetails;
   }
@@ -91,6 +91,10 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchaseDetailsList) {
     purchaseDetailsList.forEach((PurchaseDetails purchaseDetails) async {
+      print(purchaseDetails.productID);
+      print(purchaseDetails.status);
+      print(purchaseDetails.pendingCompletePurchase);
+
       if (purchaseDetails.status == PurchaseStatus.error) {
         print(purchaseDetails.error);
         InAppBroadcast.of(context).emitEventType(InAppEvent.ERROR);
@@ -109,6 +113,8 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
   }
 
   Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
+    print(purchaseDetails.verificationData.localVerificationData);
+    print(purchaseDetails.verificationData.source);
     return true; // TODO: Validate in-app purchase
   }
 }

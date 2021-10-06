@@ -2,14 +2,15 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/screens/post_qr_form.dart';
-import 'package:qrwallet/screens/qr_scan.dart';
-import 'package:qrwallet/widgets/bottomsheet_container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
+import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/screens/post_qr_form.dart';
+import 'package:qrwallet/screens/qr_scan.dart';
+import 'package:qrwallet/utils/standard_dialogs.dart';
+import 'package:qrwallet/widgets/bottomsheet_container.dart';
 
 class NewPassDialog extends StatefulWidget {
   const NewPassDialog({Key? key}) : super(key: key);
@@ -54,12 +55,9 @@ class _NewPassDialogState extends State<NewPassDialog> {
           );
 
           if (photo != null && !await _handleImageFile(photo.path)) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  Localization.of(context)!.translate('no_qr_found')!,
-                ),
-              ),
+            CommonDialogs.showSnackbar(
+              context,
+              Localization.of(context)!.translate('no_qr_found')!,
             );
             Navigator.pop(context);
           }

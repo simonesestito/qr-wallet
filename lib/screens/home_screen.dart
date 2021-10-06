@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
@@ -43,12 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _disposeInAppSubscription =
           InAppBroadcast.of(context).listenForEvent(InAppEvent.ERROR, () {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              Localization.of(context)!.translate("in_app_purchase_error")!,
-            ),
-          ),
+        CommonDialogs.showSnackbar(
+          context,
+          Localization.of(context)!.translate("in_app_purchase_error")!,
         );
       });
     });
@@ -99,7 +97,18 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              // TODO Reenable when settings is complete
+              // TODO Remove this (test only!)
+              backBtn: true,
+              backBtnCustomIcon: Icons.star,
+              backBtnCustomAction: () async {
+                final products =
+                    await InAppBroadcast.of(context).productDetails;
+                print(products.first.id);
+                InAppPurchase.instance.buyNonConsumable(
+                  purchaseParam: PurchaseParam(productDetails: products.first),
+                );
+              },
+              // TODO Re-enable when settings is complete
               //backBtn: true,
               //backBtnCustomIcon: Icons.settings_outlined,
               //backBtnCustomAction: () {
