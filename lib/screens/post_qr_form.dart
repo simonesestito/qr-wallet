@@ -79,7 +79,7 @@ class _PostQrFormState extends State<PostQrForm> {
           padding: const EdgeInsets.all(12),
           child: Column(children: [
             Text(
-              Localization.of(context)!.translate("pass_duplicate_message")!,
+              Localization.of(context)!.translate("qr_duplicate_message")!,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(pass.alias),

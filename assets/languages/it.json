@@ -23,9 +23,9 @@
   "qr_title": "Scannerizza QR",
   "scan_a_code": "Scannerizza un QR code",
   "settings": "Impostazioni",
-  "pass_item_delete": "Elimina",
-  "pass_item_rename": "Rinomina",
-  "pass_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?",
-  "pass_duplicate_message": "Hai già inserito questo codice QR",
+  "qr_item_delete": "Elimina",
+  "qr_item_rename": "Rinomina",
+  "qr_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?",
+  "qr_duplicate_message": "Hai già inserito questo codice QR",
   "in_app_purchase_error": "Acquisto fallito, per favore riprova."
 }
