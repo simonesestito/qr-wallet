@@ -115,6 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     : buildList(context, passList),
               ),
             ),
+            // TODO: check if in-app is purchased from InAppBroadcast class
             Container(
               alignment: Alignment.center,
               child: AdWidget(ad: _bannerAd),

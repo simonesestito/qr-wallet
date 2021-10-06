@@ -7,7 +7,8 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 class InAppBroadcast extends InheritedWidget {
   final Map<InAppEvent, List<Runnable>> _inAppListeners = Map.fromEntries(
-      InAppEvent.values.map((e) => MapEntry(e, List.empty(growable: true))));
+    InAppEvent.values.map((e) => MapEntry(e, List.empty(growable: true))),
+  );
   static final _inAppDataKey = GlobalKey<_InAppBroadcastDataState>();
 
   InAppBroadcast({
@@ -23,7 +24,7 @@ class InAppBroadcast extends InheritedWidget {
     return () => _inAppListeners[type]!.remove(runnable);
   }
 
-  Stream<List<ProductDetails>> get productDetails =>
+  Future<List<ProductDetails>> get productDetails =>
       _inAppDataKey.currentState!.productDetails!;
 
   @override
@@ -54,7 +55,7 @@ class _InAppBroadcastData extends StatefulWidget {
 
 class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
   StreamSubscription<List<PurchaseDetails>>? _subscription;
-  Stream<List<ProductDetails>>? productDetails;
+  Future<List<ProductDetails>>? productDetails;
 
   @override
   void initState() {
@@ -72,11 +73,11 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
     super.initState();
   }
 
-  Stream<List<ProductDetails>> _productDetails() async* {
+  Future<List<ProductDetails>> _productDetails() async {
     final details = await InAppPurchase.instance.queryProductDetails({
       '', // TODO: Add in-app product SKUs
     });
-    yield details.productDetails;
+    return details.productDetails;
   }
 
   @override
@@ -103,6 +104,7 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
       if (purchaseDetails.pendingCompletePurchase) {
         await InAppPurchase.instance.completePurchase(purchaseDetails);
       }
+      // TODO: Find already purchased items, maybe it's from this list?
     });
   }
 
