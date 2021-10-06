@@ -1,6 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
@@ -8,8 +11,6 @@ import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
 import 'package:qrwallet/widgets/pass_form.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
-import 'package:provider/provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class GreenPassCardView extends StatelessWidget {
   final GreenPass pass;
@@ -146,6 +147,8 @@ class PassEditForm extends StatelessWidget {
                 .replacePass(pass, pass.copyWith(alias: data.name));
             Navigator.pop(context);
           }),
+      SizedBox.fromSize(
+          size: Size.fromHeight(MediaQuery.of(context).viewInsets.bottom)),
     ]);
   }
 }
