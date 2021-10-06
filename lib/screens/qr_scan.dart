@@ -41,7 +41,6 @@ class _QrScanWidgetState extends State<QrScanWidget> {
       body: SafeArea(
         child: Column(
           children: [
-            // TODO Maybe put a trailing button to better explain the screen, alignment problem
             TitleHeadline(
               title: Localization.of(context)!.translate('qr_title')!,
               backBtn: true,
