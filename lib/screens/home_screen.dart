@@ -63,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
 
+    // TODO Works, but gets broken by the license page when using the light theme
     if (Theme.of(context).brightness == Brightness.dark) {
       SystemChrome.setSystemUIOverlayStyle(
         SystemUiOverlayStyle(
@@ -121,7 +122,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 42),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
-                    : buildList(context, passList),
+                    : passList.length == 1
+                        // TODO Build large layout for single QR
+                        ? buildList(context, passList)
+                        : buildList(context, passList),
               ),
             ),
             // TODO: check if in-app is purchased from InAppBroadcast class
@@ -162,6 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
           Localization.of(context)!.translate('no_pass_placeholder')!,
         ),
       ],
+    );
+  }
+
+  // Build the expanded layout for a single item
+  Widget buildSingleQR(BuildContext context, SimpleQr qr) {
+    return Column(
+      children: [],
     );
   }
 
