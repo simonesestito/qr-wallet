@@ -26,5 +26,6 @@
   "pass_item_delete": "Elimina",
   "pass_item_rename": "Rinomina",
   "pass_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?",
-  "pass_duplicate_message": "Hai già inserito questo codice QR"
+  "pass_duplicate_message": "Hai già inserito questo codice QR",
+  "in_app_purchase_error": "Acquisto fallito, per favore riprova."
 }

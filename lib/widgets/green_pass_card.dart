@@ -84,14 +84,16 @@ class DeletePass extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomSheetContainer(children: [
       TitleHeadline(
-          title: Localization.of(context)!.translate("pass_item_delete")!),
-      Text(Localization.of(context)!
-          .translate("pass_item_delete_confirmation")!),
+        title: Localization.of(context)!.translate("pass_item_delete")!,
+      ),
+      Text(
+        Localization.of(context)!.translate("pass_item_delete_confirmation")!,
+      ),
       const SizedBox(height: 16),
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         OutlinedButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Annulla"),
+          child: Text(Localization.of(context)!.translate("cancel_action")!),
         ),
         const SizedBox(width: 16),
         ElevatedButton(
@@ -99,7 +101,7 @@ class DeletePass extends StatelessWidget {
             await context.read<QrListData>().deleteQr(pass);
             Navigator.pop(context);
           },
-          child: Text("Elimina"),
+          child: Text(Localization.of(context)!.translate("pass_item_delete")!),
         ),
         const SizedBox(width: 16),
       ]),

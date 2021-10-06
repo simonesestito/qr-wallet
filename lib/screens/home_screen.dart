@@ -8,6 +8,7 @@ import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/green_pass_card.dart';
+import 'package:qrwallet/widgets/in_app_broadcast.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
 
@@ -21,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final bannerAd = BannerAd(
+  final _bannerAd = BannerAd(
     adUnitId: Globals.bannerAdsUnitId,
     size: AdSize.banner,
     request: AdRequest(),
@@ -30,13 +31,28 @@ class _HomeScreenState extends State<HomeScreen> {
 
   double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
+  Runnable? _disposeInAppSubscription;
 
   @override
   void initState() {
     Screen.brightness.then((brightness) {
       _originalBrightness = brightness;
     });
-    bannerAd.load();
+    _bannerAd.load();
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _disposeInAppSubscription =
+          InAppBroadcast.of(context).listenForEvent(InAppEvent.ERROR, () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              Localization.of(context)!.translate("in_app_purchase_error")!,
+            ),
+          ),
+        );
+      });
+    });
+
     super.initState();
   }
 
@@ -101,9 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               alignment: Alignment.center,
-              child: AdWidget(ad: bannerAd),
-              width: bannerAd.size.width.toDouble(),
-              height: bannerAd.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd),
+              width: _bannerAd.size.width.toDouble(),
+              height: _bannerAd.size.height.toDouble(),
             ),
           ],
         ),
@@ -169,7 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    bannerAd.dispose();
+    _bannerAd.dispose();
+    _disposeInAppSubscription?.call();
     super.dispose();
   }
 }

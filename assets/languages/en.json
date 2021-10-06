@@ -26,5 +26,6 @@
   "pass_item_delete": "Delete",
   "pass_item_rename": "Rename",
   "pass_item_delete_confirmation": "Are you sure to delete this pass?",
-  "pass_duplicate_message": "You've already scanned this QR code"
+  "pass_duplicate_message": "You've already scanned this QR code",
+  "in_app_purchase_error": "Purchase failed, please retry again."
 }
