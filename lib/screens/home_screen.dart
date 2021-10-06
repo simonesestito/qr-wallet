@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final passList = context.watch<GreenPassListData>().passes;
+    final passList = context.watch<QrListData>().passes;
     final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
     if (_maxBright)
       Screen.setBrightness(1);
@@ -140,12 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build the list of passes
-  Widget buildList(BuildContext context, List<GreenPass> passList) {
+  Widget buildList(BuildContext context, List<SimpleQr> passList) {
     return CarouselSlider.builder(
       key: ValueKey(passList.length == 1),
       // Fix enlarged center page when deleted first pass
       itemCount: passList.length,
-      itemBuilder: (context, i, _) => GreenPassCardView(pass: passList[i]),
+      itemBuilder: (context, i, _) => buildCardForType(passList[i]),
       options: CarouselOptions(
         autoPlay: false,
         initialPage: passList.length - 1,
@@ -156,6 +156,15 @@ class _HomeScreenState extends State<HomeScreen> {
         enableInfiniteScroll: false,
       ),
     );
+  }
+
+  Widget buildCardForType(SimpleQr qr) {
+    // TODO Differentiate Widget based on QR type
+    if (qr is GreenPass) {
+      return GreenPassCardView(pass: qr);
+    } else {
+      return Text("TODO");
+    }
   }
 
   @override

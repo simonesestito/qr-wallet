@@ -96,7 +96,7 @@ class DeletePass extends StatelessWidget {
         const SizedBox(width: 16),
         ElevatedButton(
           onPressed: () async {
-            await context.read<GreenPassListData>().deletePass(pass);
+            await context.read<QrListData>().deleteQr(pass);
             Navigator.pop(context);
           },
           child: Text("Elimina"),
@@ -126,8 +126,8 @@ class PassEditForm extends StatelessWidget {
           inputData: PassFormData(name: pass.alias),
           onSave: (data) async {
             await context
-                .read<GreenPassListData>()
-                .replacePass(pass, pass.copyWith(alias: data.name));
+                .read<QrListData>()
+                .replaceQr(pass, pass.copyWith(alias: data.name));
             Navigator.pop(context);
           }),
       SizedBox.fromSize(

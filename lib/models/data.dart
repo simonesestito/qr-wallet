@@ -2,34 +2,60 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class GreenPass {
+class SimpleQr {
   final String alias;
   final String qrData;
 
-  GreenPass({
+  SimpleQr({
     required this.alias,
     required this.qrData,
   });
 
-  factory GreenPass.fromMap(Map<String, dynamic> data) => GreenPass(
+  factory SimpleQr.fromMap(Map<String, dynamic> data) => SimpleQr(
         alias: data['alias']!,
         qrData: data['qrData']!,
       );
 
-  Map<String, String> toMap() => {
+  Map<String, dynamic> toMap() => {
         'alias': alias,
         'qrData': qrData,
+      };
+}
+
+class GreenPass extends SimpleQr {
+  final GreenPassData greenPassData;
+
+  GreenPass({
+    required String alias,
+    required String qrData,
+    required this.greenPassData,
+  }) : super(alias: alias, qrData: qrData);
+
+  factory GreenPass.fromMap(Map<String, dynamic> data) => GreenPass(
+        alias: data['alias']!,
+        qrData: data['qrData']!,
+        greenPassData: GreenPassData.fromMap(data['greenPassData']),
+      );
+
+  @override
+  Map<String, dynamic> toMap() => {
+        'alias': alias,
+        'qrData': qrData,
+        'greenPassData': greenPassData.toMap(),
       };
 
   GreenPass copyWith({
     String? alias,
     String? qrData,
+    GreenPassData? passData,
   }) {
     return GreenPass(
       alias: alias ?? this.alias,
       qrData: qrData ?? this.qrData,
+      greenPassData: passData ?? greenPassData,
     );
   }
 }
@@ -37,53 +63,59 @@ class GreenPass {
 ///
 /// https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple
 ///
-class GreenPassListData extends ChangeNotifier {
-  final List<GreenPass> _passesList = List.empty(growable: true);
+class QrListData extends ChangeNotifier {
+  final List<SimpleQr> _qrList = List.empty(growable: true);
 
-  GreenPassListData() {
+  QrListData() {
     _getData().then((passes) {
-      _passesList.addAll(passes);
+      _qrList.addAll(passes);
       notifyListeners();
     });
   }
 
-  Future<List<GreenPass>> _getData() async {
+  Future<List<SimpleQr>> _getData() async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    final data = jsonDecode(sharedPrefs.getString("data") ?? "[]") as List;
-    return data.map((e) => GreenPass.fromMap(e)).toList();
+    final data = jsonDecode(sharedPrefs.getString("data") ?? "[]")
+        as List<Map<String, dynamic>>;
+    return data.map<SimpleQr>((e) {
+      if (e.containsKey('greenPassData')) {
+        return GreenPass.fromMap(e);
+      } else {
+        return SimpleQr.fromMap(e);
+      }
+    }).toList();
   }
 
-  UnmodifiableListView<GreenPass> get passes =>
-      UnmodifiableListView(_passesList);
+  UnmodifiableListView<SimpleQr> get passes => UnmodifiableListView(_qrList);
 
   Future<void> storeData(List<GreenPass> passes) async {
-    _passesList.clear();
-    _passesList.addAll(passes);
+    _qrList.clear();
+    _qrList.addAll(passes);
     _updatePersistenceAndNotify();
   }
 
-  Future<void> replacePass(GreenPass toReplace, GreenPass newPass) async {
-    if (!_passesList.contains(toReplace)) {
-      return addData(newPass);
+  Future<void> replaceQr(SimpleQr toReplace, SimpleQr newQr) async {
+    if (!_qrList.contains(toReplace)) {
+      return addQr(newQr);
     }
 
-    final oldPassIndex = _passesList.indexOf(toReplace);
-    _passesList.replaceRange(oldPassIndex, oldPassIndex + 1, [newPass]);
+    final oldPassIndex = _qrList.indexOf(toReplace);
+    _qrList.replaceRange(oldPassIndex, oldPassIndex + 1, [newQr]);
     _updatePersistenceAndNotify();
   }
 
-  Future<void> deletePass(GreenPass toDelete) async {
-    _passesList.remove(toDelete);
+  Future<void> deleteQr(SimpleQr toDelete) async {
+    _qrList.remove(toDelete);
     _updatePersistenceAndNotify();
   }
 
-  Future<void> addData(GreenPass greenPass) async {
-    _passesList.add(greenPass);
+  Future<void> addQr(SimpleQr qr) async {
+    _qrList.add(qr);
     _updatePersistenceAndNotify();
   }
 
   Future<void> _updatePersistenceAndNotify() async {
-    final rawData = jsonEncode(_passesList.map((e) => e.toMap()).toList());
+    final rawData = jsonEncode(_qrList.map((e) => e.toMap()).toList());
     final sharedPrefs = await SharedPreferences.getInstance();
     await sharedPrefs.setString("data", rawData);
     notifyListeners();

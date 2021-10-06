@@ -26,7 +26,7 @@ class _PostQrFormState extends State<PostQrForm> {
   @override
   Widget build(BuildContext context) {
     final duplicatePass = context
-        .read<GreenPassListData>()
+        .read<QrListData>()
         .passes
         .firstWhereOrNull((pass) => pass.qrData == widget.qrData);
     return Scaffold(
@@ -67,7 +67,7 @@ class _PostQrFormState extends State<PostQrForm> {
     );
   }
 
-  List<Widget> buildDuplicateQrMessage(BuildContext context, GreenPass pass) {
+  List<Widget> buildDuplicateQrMessage(BuildContext context, SimpleQr pass) {
     return [
       Padding(
         padding: const EdgeInsets.all(Globals.buttonPadding),
@@ -99,17 +99,20 @@ class _PostQrFormState extends State<PostQrForm> {
   }
 
   Widget buildAddQrForm(BuildContext context) {
-    final qrData = GreenPassDecoder().tryDecode(widget.qrData);
+    final passData = GreenPassDecoder().tryDecode(widget.qrData);
     return PassForm(
         inputData: PassFormData(
-          name: qrData?.displayDescription ?? '',
+          name: passData?.displayDescription ?? '',
         ),
         onSave: (data) async {
-          await context.read<GreenPassListData>().addData(
-                GreenPass(
-                  alias: data.name,
-                  qrData: this.widget.qrData,
-                ),
+          await context.read<QrListData>().addQr(
+                passData == null
+                    ? SimpleQr(alias: data.name, qrData: widget.qrData)
+                    : GreenPass(
+                        alias: data.name,
+                        qrData: widget.qrData,
+                        greenPassData: passData,
+                      ),
               );
           Navigator.popUntil(
             context,

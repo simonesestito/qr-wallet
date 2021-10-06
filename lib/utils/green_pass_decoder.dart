@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cbor/cbor.dart';
 import 'package:dart_base45/dart_base45.dart';
+import 'package:flutter/foundation.dart';
 import 'package:qrwallet/utils/utils.dart';
 
 class GreenPassDecoder {
@@ -65,6 +66,21 @@ class GreenPassData {
     required this.issueDate,
     required this.type,
   });
+
+  factory GreenPassData.fromMap(Map<dynamic, dynamic> data) => GreenPassData(
+        name: data['name'],
+        surname: data['surname'],
+        issueDate: data['issueDate'],
+        type: GreenPassType.values
+            .firstWhere((e) => describeEnum(e) == data['type']),
+      );
+
+  Map<String, String> toMap() => {
+        'name': name,
+        'surname': surname,
+        'issueDate': issueDate,
+        'type': describeEnum(type),
+      };
 
   String get displayDescription => "$name $surname ($issueDate)";
 }

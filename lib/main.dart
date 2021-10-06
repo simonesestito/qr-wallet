@@ -16,7 +16,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   runApp(ChangeNotifierProvider(
-    create: (_) => GreenPassListData(),
+    create: (_) => QrListData(),
     child: MyApp(),
   ));
 }
