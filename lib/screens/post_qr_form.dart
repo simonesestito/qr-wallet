@@ -31,76 +31,71 @@ class _PostQrFormState extends State<PostQrForm> {
         .firstWhereOrNull((pass) => pass.qrData == widget.qrData);
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              TitleHeadline(
-                title: Localization.of(context)!.translate('qr_found')!,
+        child: Column(
+          children: [
+            TitleHeadline(
+              title: Localization.of(context)!.translate('qr_found')!,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 96,
+                vertical: 20,
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 96,
-                  vertical: 20,
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(Globals.borderRadius),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(.1),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        width: Globals.borderWidth * 2,
-                      ),
-                      borderRadius: BorderRadius.circular(Globals.borderRadius),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(Globals.borderRadius),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.onSurface.withOpacity(.1),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      width: Globals.borderWidth * 2,
                     ),
-                    padding: const EdgeInsets.all(20),
-                    child: QrBackgroundImage(widget.qrData),
+                    borderRadius: BorderRadius.circular(Globals.borderRadius),
                   ),
+                  padding: const EdgeInsets.all(20),
+                  child: QrBackgroundImage(widget.qrData),
                 ),
               ),
-              duplicatePass == null
-                  ? buildAddQrForm(context)
-                  : buildDuplicateQrMessage(context, duplicatePass),
-            ],
-          ),
+            ),
+            ...(duplicatePass == null
+                ? [buildAddQrForm(context)]
+                : buildDuplicateQrMessage(context, duplicatePass)),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildDuplicateQrMessage(BuildContext context, GreenPass pass) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(Globals.buttonPadding),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Globals.borderRadius),
-              color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+  List<Widget> buildDuplicateQrMessage(BuildContext context, GreenPass pass) {
+    return [
+      Padding(
+        padding: const EdgeInsets.all(Globals.buttonPadding),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(Globals.borderRadius),
+            color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+          ),
+          padding: const EdgeInsets.all(12),
+          child: Column(children: [
+            Text(
+              Localization.of(context)!.translate("pass_duplicate_message")!,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            padding: const EdgeInsets.all(12),
-            child: Column(children: [
-              Text(
-                Localization.of(context)!.translate("pass_duplicate_message")!,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(pass.alias),
-            ]),
-          ),
+            Text(pass.alias),
+          ]),
         ),
-        ButtonWideOutlined(
-          action: () => Navigator.popUntil(
-            context,
-            (route) => route.isFirst,
-          ),
-          text: Localization.of(context)!.translate("cancel_action")!,
+      ),
+      // Put the button at the bottom, but cannot do that with PassForm
+      // --> Spacer(),
+      ButtonWideOutlined(
+        action: () => Navigator.popUntil(
+          context,
+          (route) => route.isFirst,
         ),
-      ],
-    );
+        text: Localization.of(context)!.translate("cancel_action")!,
+      ),
+    ];
   }
 
   Widget buildAddQrForm(BuildContext context) {

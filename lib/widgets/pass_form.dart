@@ -113,6 +113,7 @@ class _PassFormState extends State<PassForm> {
             child: const SizedBox(height: 16),
             fit: FlexFit.loose,
           ),
+          //Spacer(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: ButtonWide(
