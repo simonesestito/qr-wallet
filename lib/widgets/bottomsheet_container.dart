@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:greenpass/utils/globals.dart';
+import 'package:qrwallet/utils/globals.dart';
 
 ///
 /// Wrap the contents of a BottomSheet applying all the layout it needs

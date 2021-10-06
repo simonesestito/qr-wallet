@@ -1,4 +1,4 @@
-package com.exos.greenpass
+package com.exos.qrwallet
 
 import io.flutter.embedding.android.FlutterActivity
 

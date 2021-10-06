@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:greenpass/lang/localization.dart';
-import 'package:greenpass/models/data.dart';
-import 'package:greenpass/utils/standard_dialogs.dart';
-import 'package:greenpass/widgets/green_pass_card.dart';
-import 'package:greenpass/widgets/title_headline.dart';
+import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/utils/standard_dialogs.dart';
+import 'package:qrwallet/widgets/green_pass_card.dart';
+import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:provider/provider.dart';
 import 'package:screen/screen.dart';
 
@@ -73,11 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              backBtn: true,
-              backBtnCustomIcon: Icons.settings_outlined,
-              backBtnCustomAction: () {
-                Navigator.of(context).pushNamed('/settings');
-              },
+              // TODO Reenable when settings is complete
+              //backBtn: true,
+              //backBtnCustomIcon: Icons.settings_outlined,
+              //backBtnCustomAction: () {
+              //  Navigator.of(context).pushNamed('/settings');
+              //},
             ),
             Align(
               alignment: Alignment.center,

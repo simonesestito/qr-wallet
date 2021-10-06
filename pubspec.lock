@@ -181,7 +181,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.4"
   http_parser:
     dependency: transitive
     description:
@@ -195,7 +195,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.7"
+    version: "3.0.8"
   image_picker:
     dependency: "direct main"
     description:
@@ -308,13 +308,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.6.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
@@ -335,7 +328,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   printing:
     dependency: "direct main"
     description:
@@ -405,7 +398,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -550,7 +543,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.5"
+    version: "2.2.9"
   xdg_directories:
     dependency: transitive
     description:

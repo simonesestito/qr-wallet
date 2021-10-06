@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cbor/cbor.dart';
 import 'package:dart_base45/dart_base45.dart';
-import 'package:greenpass/utils/utils.dart';
+import 'package:qrwallet/utils/utils.dart';
 
 class GreenPassDecoder {
   GreenPassData decode(String stringData) {

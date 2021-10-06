@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:greenpass/screens/home_screen.dart';
+import 'package:qrwallet/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'lang/localization.dart';

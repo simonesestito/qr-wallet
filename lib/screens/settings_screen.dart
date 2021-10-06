@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:greenpass/lang/localization.dart';
-import 'package:greenpass/utils/globals.dart';
-import 'package:greenpass/widgets/credits_card.dart';
-import 'package:greenpass/widgets/title_headline.dart';
+import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/utils/globals.dart';
+import 'package:qrwallet/widgets/credits_card.dart';
+import 'package:qrwallet/widgets/title_headline.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';

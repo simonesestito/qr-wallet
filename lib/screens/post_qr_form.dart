@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:greenpass/lang/localization.dart';
-import 'package:greenpass/models/data.dart';
-import 'package:greenpass/utils/globals.dart';
-import 'package:greenpass/utils/green_pass_decoder.dart';
-import 'package:greenpass/widgets/green_pass_card.dart';
-import 'package:greenpass/widgets/pass_form.dart';
-import 'package:greenpass/widgets/title_headline.dart';
+import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/utils/globals.dart';
+import 'package:qrwallet/utils/green_pass_decoder.dart';
+import 'package:qrwallet/widgets/green_pass_card.dart';
+import 'package:qrwallet/widgets/pass_form.dart';
+import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:provider/src/provider.dart';
 
 ///
