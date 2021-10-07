@@ -40,8 +40,7 @@ const APP_NAME = 'QRWallet';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AdmobConsent()
-        .show(); // FIXME: Check if Admob consent dialog actually works (?!)
+    AdmobConsent().show();
 
     return MaterialApp(
       title: APP_NAME,
