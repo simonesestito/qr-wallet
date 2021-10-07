@@ -117,6 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
               //  Navigator.of(context).pushNamed('/settings');
               //},
             ),
+
+            // TODO: check if in-app is purchased from InAppBroadcast class
+            Container(
+              alignment: Alignment.topCenter,
+              child: AdWidget(ad: _bannerAd),
+              width: _bannerAd.size.width.toDouble(),
+              height: _bannerAd.size.height.toDouble(),
+            ),
+
             Expanded(
               child: Container(
                 alignment: Alignment.center,
@@ -127,13 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ? buildSingleQR(passList.first)
                         : buildList(context, passList),
               ),
-            ),
-            // TODO: check if in-app is purchased from InAppBroadcast class
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: AdWidget(ad: _bannerAd),
-              width: _bannerAd.size.width.toDouble(),
-              height: _bannerAd.size.height.toDouble(),
             ),
           ],
         ),
