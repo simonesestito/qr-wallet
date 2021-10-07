@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
@@ -76,21 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 _maxBrightClicked = !_maxBright;
               }),
               // TODO Remove this (test only!)
-              backBtn: true,
-              backBtnCustomIcon: Icons.star,
-              backBtnCustomAction: () async {
-                final products =
-                    await InAppBroadcast.of(context).productDetails;
-                InAppPurchase.instance.buyNonConsumable(
-                  purchaseParam: PurchaseParam(productDetails: products.first),
-                );
-              },
-              // TODO Re-enable when settings is complete
               //backBtn: true,
-              //backBtnCustomIcon: Icons.settings_outlined,
-              //backBtnCustomAction: () {
-              //  Navigator.of(context).pushNamed('/settings');
+              //backBtnCustomIcon: Icons.star,
+              //backBtnCustomAction: () async {
+              //  final products =
+              //      await InAppBroadcast.of(context).productDetails;
+              //  InAppPurchase.instance.buyNonConsumable(
+              //    purchaseParam: PurchaseParam(productDetails: products.first),
+              //  );
               //},
+              // TODO Re-enable when settings is complete
+              backBtn: true,
+              backBtnCustomIcon: Icons.settings_outlined,
+              backBtnCustomAction: () {
+                Navigator.of(context).pushNamed('/settings');
+              },
             ),
 
             // TODO: check if in-app is purchased from InAppBroadcast class

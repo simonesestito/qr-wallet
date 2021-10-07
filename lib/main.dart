@@ -228,9 +228,10 @@ class MyApp extends StatelessWidget {
       ),
       // Route of every possible screen
       routes: {
+        '/': (ctx) => _decorate(HomeScreen()),
         SettingsScreen.routeName: (ctx) => _decorate(SettingsScreen()),
       },
-      home: HomeScreen(),
+      initialRoute: '/',
     );
   }
 
