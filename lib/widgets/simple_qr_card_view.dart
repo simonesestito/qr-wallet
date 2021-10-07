@@ -4,11 +4,10 @@ import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
+import 'package:qrwallet/widgets/qr_edit_form.dart';
 
-import 'button_round_mini.dart';
 import 'delete_qr.dart';
 import 'qr_background_image.dart';
-import 'qr_edit_form.dart';
 
 abstract class QrCardView<T extends SimpleQr> extends StatelessWidget {
   final T qr;
@@ -59,7 +58,7 @@ class SimpleQrView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
@@ -72,31 +71,35 @@ class SimpleQrView extends StatelessWidget {
           child: QrBackgroundImage(qr.qrData),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            ButtonRoundMini(
-              action: () {
+            TextButton.icon(
+              onPressed: () {
                 showAppModalBottomSheet(
                   context: context,
                   builder: () => DeleteQr(qr: qr),
                 );
               },
-              icon: Icons.delete,
-              label: Localization.of(context)!.translate(
-                "qr_item_delete",
-              )!,
+              icon: Icon(Icons.delete),
+              label: Text(Localization.of(context)!
+                  .translate(
+                    "qr_item_delete",
+                  )!
+                  .toUpperCase()),
             ),
-            ButtonRoundMini(
-              action: () {
+            TextButton.icon(
+              onPressed: () {
                 showAppModalBottomSheet(
                   context: context,
                   builder: () => QrEditForm(qr: qr),
                 );
               },
-              icon: Icons.edit,
-              label: Localization.of(context)!.translate(
-                "qr_item_rename",
-              )!,
+              icon: Icon(Icons.edit),
+              label: Text(Localization.of(context)!
+                  .translate(
+                    "qr_item_rename",
+                  )!
+                  .toUpperCase()),
             ),
           ],
         ),
