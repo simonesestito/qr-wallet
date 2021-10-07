@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:qrwallet/utils/google_play_verification.dart';
 
 class InAppBroadcast extends InheritedWidget {
   final Map<InAppEvent, List<Runnable>> _inAppListeners = Map.fromEntries(
@@ -95,7 +96,7 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
         InAppBroadcast.of(context).emitEventType(InAppEvent.ERROR);
       } else if (purchaseDetails.status == PurchaseStatus.purchased ||
           purchaseDetails.status == PurchaseStatus.restored) {
-        if (await _verifyPurchase(purchaseDetails)) {
+        if (await PurchaseVerification.verify(purchaseDetails)) {
           print(purchaseDetails.productID);
           InAppBroadcast.of(context).emitEventType(InAppEvent.SUCCESS);
         }
@@ -105,11 +106,5 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
       }
       // TODO: Find already purchased items, maybe it's from this list?
     });
-  }
-
-  Future<bool> _verifyPurchase(PurchaseDetails purchaseDetails) async {
-    print(purchaseDetails.verificationData.localVerificationData);
-    print(purchaseDetails.verificationData.source);
-    return true; // TODO: Validate in-app purchase
   }
 }
