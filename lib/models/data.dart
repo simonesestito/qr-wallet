@@ -88,7 +88,7 @@ class QrListData extends ChangeNotifier {
     final rawData = sharedPrefs.getString("data");
     return jsonDecode(rawData ?? "[]")
         .map((e) => e as Map<dynamic, dynamic>)
-        .map((e) {
+        .map<SimpleQr>((e) {
       if (e.containsKey('greenPassData')) {
         return GreenPass.fromMap(e);
       } else {
