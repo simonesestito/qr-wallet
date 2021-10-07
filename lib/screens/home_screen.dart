@@ -8,7 +8,12 @@ import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
-import 'package:qrwallet/widgets/green_pass_card.dart';
+import 'package:qrwallet/widgets/button_round_mini.dart';
+import 'package:qrwallet/widgets/delete_qr.dart';
+import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
+import 'package:qrwallet/widgets/qr_background_image.dart';
+import 'package:qrwallet/widgets/qr_edit_form.dart';
+import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
@@ -88,13 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       body: SafeArea(
-        child: ListView(
+        child: Column(
           children: [
             TitleHeadline(
               title: Localization.of(context)!.translate('app_title')!,
               trailingBtn: _maxBright
                   ? Icons.brightness_7_outlined
-                  : Icons.brightness_5_outlined,
+                  : Icons.brightness_4_outlined,
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
@@ -116,21 +121,20 @@ class _HomeScreenState extends State<HomeScreen> {
               //  Navigator.of(context).pushNamed('/settings');
               //},
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 42),
+            Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 20),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
-                        // TODO Build large layout for single QR
-                        ? buildList(context, passList)
+                        ? buildSingleQR(context, passList.first)
                         : buildList(context, passList),
               ),
             ),
             // TODO: check if in-app is purchased from InAppBroadcast class
             Container(
-              alignment: Alignment.center,
+              alignment: Alignment.bottomCenter,
               child: AdWidget(ad: _bannerAd),
               width: _bannerAd.size.width.toDouble(),
               height: _bannerAd.size.height.toDouble(),
@@ -162,8 +166,13 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.4),
         ),
         const SizedBox(height: 20),
-        Text(
-          Localization.of(context)!.translate('no_pass_placeholder')!,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 42),
+          child: Text(
+            Localization.of(context)!.translate('no_pass_placeholder')!,
+            style: Theme.of(context).textTheme.headline5,
+            textAlign: TextAlign.center,
+          ),
         ),
       ],
     );
@@ -172,7 +181,47 @@ class _HomeScreenState extends State<HomeScreen> {
   // Build the expanded layout for a single item
   Widget buildSingleQR(BuildContext context, SimpleQr qr) {
     return Column(
-      children: [],
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          qr.alias,
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
+          child: QrBackgroundImage(qr.qrData),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ButtonRoundMini(
+              action: () {
+                showAppModalBottomSheet(
+                  context: context,
+                  builder: () => DeleteQr(qr: qr),
+                );
+              },
+              icon: Icons.delete,
+              label: Localization.of(context)!.translate(
+                "qr_item_delete",
+              )!,
+            ),
+            ButtonRoundMini(
+              action: () {
+                showAppModalBottomSheet(
+                  context: context,
+                  builder: () => QrEditForm(qr: qr),
+                );
+              },
+              icon: Icons.edit,
+              label: Localization.of(context)!.translate(
+                "qr_item_rename",
+              )!,
+            ),
+          ],
+        ),
+      ],
     );
   }
 
@@ -197,8 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildCardForType(SimpleQr qr) {
     if (qr is GreenPass) {
-      // TODO Differentiate Widget based on QR type
-      return SimpleQrCardView(qr: qr);
+      return GreenPassQrCardView(qr: qr);
     } else {
       return SimpleQrCardView(qr: qr);
     }

@@ -6,7 +6,8 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/utils.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
-import 'package:qrwallet/widgets/green_pass_card.dart';
+import 'package:qrwallet/widgets/qr_background_image.dart';
+import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/qr_form.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 
