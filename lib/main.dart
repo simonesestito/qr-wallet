@@ -24,9 +24,13 @@ void main() {
   }
 
   runApp(InAppBroadcast(
-    child: (_) => ChangeNotifierProvider(
+    child: (context) => ChangeNotifierProvider(
       create: (_) => QrListData(),
-      child: MyApp(),
+      child: StreamProvider(
+        create: (_) => InAppBroadcast.of(context).isUserPremium,
+        initialData: PremiumStatus.UNKNOWN,
+        child: MyApp(),
+      ),
     ),
   ));
 }

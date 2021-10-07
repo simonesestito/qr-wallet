@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/utils/custom_icons.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
@@ -38,24 +40,33 @@ class _HomeScreenState extends State<HomeScreen> {
     Screen.brightness.then((brightness) {
       _originalBrightness = brightness;
     });
-    _bannerAd.load();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _disposeInAppSubscription =
-          InAppBroadcast.of(context).listenForEvent(InAppEvent.ERROR, () {
-        CommonDialogs.showSnackbar(
-          context,
-          Localization.of(context)!.translate("in_app_purchase_error")!,
-        );
-      });
+          InAppBroadcast.of(context).listenAll(_handlePurchaseEvent);
     });
 
     super.initState();
   }
 
+  void _handlePurchaseEvent(InAppEvent event) {
+    final messageId = {
+      InAppEvent.SUCCESS: 'in_app_purchase_success',
+      InAppEvent.ERROR: 'in_app_purchase_error',
+      InAppEvent.PENDING: 'in_app_purchase_pending',
+    }[event]!;
+
+    CommonDialogs.showSnackbar(
+      context,
+      Localization.of(context)!.translate(messageId)!,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final userStatus = context.watch<PremiumStatus>();
     final passList = context.watch<QrListData>().passes;
+
     final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
     if (_maxBright)
       Screen.setBrightness(1);
@@ -74,32 +85,23 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              // TODO Remove this (test only!)
-              //backBtn: true,
-              //backBtnCustomIcon: Icons.star,
-              //backBtnCustomAction: () async {
-              //  final products =
-              //      await InAppBroadcast.of(context).productDetails;
-              //  InAppPurchase.instance.buyNonConsumable(
-              //    purchaseParam: PurchaseParam(productDetails: products.first),
-              //  );
-              //},
-              // TODO Re-enable when settings is complete
-              backBtn: true,
-              backBtnCustomIcon: Icons.settings_outlined,
-              backBtnCustomAction: () {
-                Navigator.of(context).pushNamed('/settings');
+              backBtn: userStatus == PremiumStatus.BASIC,
+              backBtnCustomIcon: CustomIcons.ads_off,
+              backBtnCustomAction: () async {
+                final products =
+                    await InAppBroadcast.of(context).productDetails;
+                InAppPurchase.instance.buyNonConsumable(
+                  purchaseParam: PurchaseParam(productDetails: products.first),
+                );
               },
+              // TODO Re-enable when settings is complete
+              // backBtn: true,
+              // backBtnCustomIcon: Icons.settings_outlined,
+              // backBtnCustomAction: () {
+              //   Navigator.of(context).pushNamed('/settings');
+              // },
             ),
-
-            // TODO: check if in-app is purchased from InAppBroadcast class
-            Container(
-              alignment: Alignment.topCenter,
-              child: AdWidget(ad: _bannerAd),
-              width: _bannerAd.size.width.toDouble(),
-              height: _bannerAd.size.height.toDouble(),
-            ),
-
+            _buildAdBanner(userStatus),
             Expanded(
               child: Container(
                 alignment: Alignment.center,
@@ -122,6 +124,20 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildAdBanner(PremiumStatus userStatus) {
+    if (userStatus == PremiumStatus.BASIC) {
+      return Container(
+        alignment: Alignment.topCenter,
+        child: AdWidget(ad: _bannerAd..load()),
+        width: _bannerAd.size.width.toDouble(),
+        height: _bannerAd.size.height.toDouble(),
+      );
+    }
+
+    //if (userStatus == PremiumStatus.PREMIUM)
+    return SizedBox.shrink();
   }
 
   // Build the placeholder

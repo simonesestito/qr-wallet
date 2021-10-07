@@ -27,5 +27,7 @@
   "qr_item_rename": "Rename",
   "qr_item_delete_confirmation": "Are you sure to delete this pass?",
   "qr_duplicate_message": "You've already scanned this QR code",
-  "in_app_purchase_error": "Purchase failed, please retry again."
+  "in_app_purchase_error": "Purchase failed, please retry again",
+  "in_app_purchase_pending": "Your purchase is pending, please come back later",
+  "in_app_purchase_success": "Hurray, ads are over!"
 }

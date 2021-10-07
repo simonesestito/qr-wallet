@@ -16,7 +16,6 @@ class GreenPassDecoder {
     cbor.decodeFromList(cborData);
 
     final data = cbor.getDecodedData()![0][-260][1] as Map<dynamic, dynamic>;
-    print(data);
 
     final String issueDate;
     final GreenPassType passType;

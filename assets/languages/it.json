@@ -27,5 +27,7 @@
   "qr_item_rename": "Rinomina",
   "qr_item_delete_confirmation": "Sei sicuro di voler eliminare questo pass?",
   "qr_duplicate_message": "Hai già inserito questo codice QR",
-  "in_app_purchase_error": "Acquisto fallito, per favore riprova."
+  "in_app_purchase_error": "Acquisto fallito, per favore riprova.",
+  "in_app_purchase_pending": "Il tuo acquisto è in elaborazione, torna tra poco",
+  "in_app_purchase_success": "Urrà, niente più pubblicità!"
 }
