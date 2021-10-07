@@ -178,11 +178,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Build the expanded layout for a single item
   Widget buildSingleQR(SimpleQr qr) {
+    final qrView;
     if (qr is GreenPass) {
-      return GreenPassQrView(pass: qr);
+      qrView = GreenPassQrView(pass: qr);
     } else {
-      return SimpleQrView(qr: qr);
+      qrView = SimpleQrView(qr: qr);
     }
+
+    return SingleChildScrollView(child: qrView);
   }
 
   // Build the list of passes

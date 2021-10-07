@@ -70,8 +70,9 @@ class SimpleQrView extends StatelessWidget {
           padding: qrPadding,
           child: QrBackgroundImage(qr.qrData),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        Wrap(
+          direction: Axis.horizontal,
+          alignment: WrapAlignment.spaceEvenly,
           children: [
             TextButton.icon(
               onPressed: () {
