@@ -8,13 +8,9 @@ import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
-import 'package:qrwallet/widgets/button_round_mini.dart';
-import 'package:qrwallet/widgets/delete_qr.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
-import 'package:qrwallet/widgets/qr_background_image.dart';
-import 'package:qrwallet/widgets/qr_edit_form.dart';
-import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
+import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
 
@@ -128,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
-                        ? buildSingleQR(context, passList.first)
+                        ? buildSingleQR(passList.first)
                         : buildList(context, passList),
               ),
             ),
@@ -179,50 +175,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build the expanded layout for a single item
-  Widget buildSingleQR(BuildContext context, SimpleQr qr) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          qr.alias,
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-          child: QrBackgroundImage(qr.qrData),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ButtonRoundMini(
-              action: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  builder: () => DeleteQr(qr: qr),
-                );
-              },
-              icon: Icons.delete,
-              label: Localization.of(context)!.translate(
-                "qr_item_delete",
-              )!,
-            ),
-            ButtonRoundMini(
-              action: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  builder: () => QrEditForm(qr: qr),
-                );
-              },
-              icon: Icons.edit,
-              label: Localization.of(context)!.translate(
-                "qr_item_rename",
-              )!,
-            ),
-          ],
-        ),
-      ],
-    );
+  Widget buildSingleQR(SimpleQr qr) {
+    if (qr is GreenPass) {
+      return GreenPassQrView(pass: qr);
+    } else {
+      return SimpleQrView(qr: qr);
+    }
   }
 
   // Build the list of passes
@@ -246,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildCardForType(SimpleQr qr) {
     if (qr is GreenPass) {
-      return GreenPassQrCardView(qr: qr);
+      return GreenPassCardView(qr: qr);
     } else {
       return SimpleQrCardView(qr: qr);
     }

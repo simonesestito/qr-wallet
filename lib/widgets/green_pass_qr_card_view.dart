@@ -1,72 +1,32 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
-import 'package:qrwallet/utils/globals.dart';
-import 'package:qrwallet/utils/standard_dialogs.dart';
-import 'package:qrwallet/widgets/qr_edit_form.dart';
+import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 
-import 'button_round_mini.dart';
-import 'delete_qr.dart';
-import 'qr_background_image.dart';
-
-class GreenPassQrCardView extends StatelessWidget {
-  final SimpleQr qr;
-
-  const GreenPassQrCardView({
-    required this.qr,
+///
+/// At the moment, they are the same
+///
+class GreenPassCardView extends QrCardView<GreenPass> {
+  GreenPassCardView({
+    required GreenPass qr,
     Key? key,
-  }) : super(key: key);
+  }) : super(key: key, qr: qr);
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Globals.borderRadius),
-        side: BorderSide(width: Globals.borderWidth, color: Color(0xffaaaaaa)),
-      ),
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              qr.alias,
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            QrBackgroundImage(qr.qrData),
-            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              ButtonRoundMini(
-                action: () {
-                  showAppModalBottomSheet(
-                    context: context,
-                    builder: () => DeleteQr(qr: qr),
-                  );
-                },
-                icon: Icons.delete,
-                label: Localization.of(context)!.translate(
-                  "qr_item_delete",
-                )!,
-              ),
-              ButtonRoundMini(
-                action: () {
-                  showAppModalBottomSheet(
-                    context: context,
-                    builder: () => QrEditForm(qr: qr),
-                  );
-                },
-                icon: Icons.edit,
-                label: Localization.of(context)!.translate(
-                  "qr_item_rename",
-                )!,
-              ),
-            ]),
-          ],
-        ),
-      ),
-    );
+  Widget buildInnerView(BuildContext context, GreenPass qr) {
+    return GreenPassQrView(pass: qr, qrPadding: const EdgeInsets.all(16));
   }
+}
+
+class GreenPassQrView extends SimpleQrView {
+  final GreenPass pass;
+
+  const GreenPassQrView({
+    required this.pass,
+    EdgeInsetsGeometry qrPadding = const EdgeInsets.symmetric(
+      vertical: 8,
+      horizontal: 24,
+    ),
+    Key? key,
+  }) : super(key: key, qr: pass, qrPadding: qrPadding);
 }
