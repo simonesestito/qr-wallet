@@ -61,10 +61,13 @@ class SimpleQrView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          qr.alias,
-          style: Theme.of(context).textTheme.headline5,
-          textAlign: TextAlign.center,
+        Padding(
+          padding: qrPadding,
+          child: Text(
+            qr.alias,
+            style: Theme.of(context).textTheme.headline5,
+            textAlign: TextAlign.center,
+          ),
         ),
         Padding(
           padding: qrPadding,
