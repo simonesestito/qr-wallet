@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 class InAppBroadcast extends InheritedWidget {
   final Map<InAppEvent, List<Runnable>> _inAppListeners = Map.fromEntries(
@@ -59,24 +58,20 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
 
   @override
   void initState() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
-    }
-    InAppPurchase.instance.restorePurchases();
-
+    super.initState();
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () => _subscription?.cancel(),
       onError: (error) => print(error),
     );
     productDetails = _productDetails();
-    super.initState();
   }
 
   Future<List<ProductDetails>> _productDetails() async {
     final details = await InAppPurchase.instance.queryProductDetails({
       'remove_ads',
     });
+    await InAppPurchase.instance.restorePurchases();
     return details.productDetails;
   }
 

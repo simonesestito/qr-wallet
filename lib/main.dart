@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:admob_consent/admob_consent.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/screens/home_screen.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
@@ -16,6 +18,10 @@ import 'screens/settings_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
+  }
 
   runApp(InAppBroadcast(
     child: (_) => ChangeNotifierProvider(
