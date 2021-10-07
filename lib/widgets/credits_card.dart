@@ -8,7 +8,7 @@ class CreditsCard extends StatelessWidget {
   final String url;
   final Image image;
   final String? github;
-  final String? playstore;
+  final String? playStore;
   final String? linkedin;
   final String? youtube;
   final String? site;
@@ -22,7 +22,7 @@ class CreditsCard extends StatelessWidget {
     required this.url,
     required this.image,
     this.github,
-    this.playstore,
+    this.playStore,
     this.linkedin,
     this.youtube,
     this.site,
@@ -112,14 +112,14 @@ class CreditsCard extends StatelessWidget {
       );
     }
     // Play Store
-    if (playstore != null &&
-        playstore!.isNotEmpty &&
+    if (playStore != null &&
+        playStore!.isNotEmpty &&
         _linksRendered < _maxLinks) {
       _linksRendered++;
       _links.add(
         IconButton(
           onPressed: () {
-            _launchURL(playstore!);
+            _launchURL(playStore!);
           },
           icon: Icon(CustomIcons.google_play),
           iconSize: Globals.linksIconSize,

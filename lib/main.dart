@@ -228,17 +228,34 @@ class MyApp extends StatelessWidget {
       ),
       // Route of every possible screen
       routes: {
-        SettingsScreen.routeName: (ctx) => SettingsScreen(),
+        SettingsScreen.routeName: (ctx) => _decorate(SettingsScreen()),
       },
       home: HomeScreen(),
     );
   }
-}
 
-// Check if dark mode is enabled
-extension DarkMode on BuildContext {
-  bool isDarkMode() {
-    final brightness = MediaQuery.of(this).platformBrightness;
-    return brightness == Brightness.dark;
+  Widget _decorate(Widget route) {
+    return Builder(builder: (context) {
+      final systemUiStyle = Theme.of(context).brightness == Brightness.dark
+          ? SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Color(0xff313131),
+              statusBarIconBrightness: Brightness.light,
+              systemNavigationBarIconBrightness: Brightness.light,
+              systemNavigationBarDividerColor: Colors.transparent,
+            )
+          : SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              systemNavigationBarColor: Color(0xffffffff),
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarIconBrightness: Brightness.dark,
+              systemNavigationBarDividerColor: Colors.transparent,
+            );
+
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        child: route,
+        value: systemUiStyle,
+      );
+    });
   }
 }

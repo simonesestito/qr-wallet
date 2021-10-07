@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 extension StringExtension on String {
   String capitalize() {
     if (this.length == 0) return this;
@@ -16,5 +19,13 @@ extension ListExtension<E> on List<E> {
       if (test(element)) return element;
     }
     return null;
+  }
+}
+
+// Check if dark mode is enabled
+extension DarkMode on BuildContext {
+  bool isDarkMode() {
+    final brightness = MediaQuery.of(this).platformBrightness;
+    return brightness == Brightness.dark;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +15,7 @@ import 'package:screen/screen.dart';
 
 import 'new_pass_dialog.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatefulWidget with RouteAware {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -64,29 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
     else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
 
-    // TODO Works, but gets broken by the license page when using the light theme
-    if (Theme.of(context).brightness == Brightness.dark) {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color(0xff313131),
-          statusBarIconBrightness: Brightness.light,
-          systemNavigationBarIconBrightness: Brightness.light,
-          systemNavigationBarDividerColor: Colors.transparent,
-        ),
-      );
-    } else {
-      SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          systemNavigationBarColor: Color(0xffffffff),
-          statusBarIconBrightness: Brightness.dark,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          systemNavigationBarDividerColor: Colors.transparent,
-        ),
-      );
-    }
-
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -105,7 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnCustomAction: () async {
                 final products =
                     await InAppBroadcast.of(context).productDetails;
-                print(products.first.id);
                 InAppPurchase.instance.buyNonConsumable(
                   purchaseParam: PurchaseParam(productDetails: products.first),
                 );
