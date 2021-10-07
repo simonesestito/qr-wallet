@@ -8,4 +8,16 @@ class Globals {
   static const int maxLinksNumber = 4;
   static const String bannerAdsUnitId =
       'ca-app-pub-3883344461454437/5943921896';
+
+  // Developers sites
+  static const String authorBackGithub = "https://github.com/simonesestito";
+  static const String authorBackPlayStore =
+      "https://play.google.com/store/apps/dev?id=6582390767433501974";
+  static const String authorBackSite = "https://simonesestito.com/";
+  static const String authorFrontGithub = "https://github.com/m-i-n-a-r";
+  static const String authorFrontPlayStore =
+      "https://play.google.com/store/apps/dev?id=7720251761301594831";
+  static const String authorFrontSite = "https://minar.ml/";
+  static const String authorFrontInstagram =
+      "https://www.instagram.com/minar.tastic/";
 }

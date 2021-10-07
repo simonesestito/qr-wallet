@@ -81,7 +81,8 @@ class GreenPassData {
         'type': describeEnum(type),
       };
 
-  String get displayDescription => "$name $surname ($issueDate)";
+  // TODO Is "Green Pass" an european name? And if not, use the context and translate
+  String get displayDescription => 'Green Pass - $name';
 }
 
 enum GreenPassType {

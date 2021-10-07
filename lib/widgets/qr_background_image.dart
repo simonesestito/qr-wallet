@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qrwallet/utils/globals.dart';
 
 ///
 /// A QrImage with an adaptive (white) background
@@ -19,9 +20,12 @@ class QrBackgroundImage extends StatelessWidget {
       colorScheme.onBackground.value,
     );
 
-    return QrImage(
-      data: data,
-      backgroundColor: Color(backgroundColor),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(Globals.borderRadius),
+      child: QrImage(
+        data: data,
+        backgroundColor: Color(backgroundColor),
+      ),
     );
   }
 }

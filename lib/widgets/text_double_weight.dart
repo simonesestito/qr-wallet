@@ -11,7 +11,8 @@ class TextDoubleWeight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -27,12 +28,14 @@ class TextDoubleWeight extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          Expanded(
-            child: Text(
-              regularEnd,
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
+          // TODO Expanded and flex break the single qr view
+          Text(
+            regularEnd,
+            textAlign: TextAlign.start,
+            style: Theme.of(context).textTheme.bodyText2,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
           ),
         ],
       ),
