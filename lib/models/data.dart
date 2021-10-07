@@ -14,7 +14,7 @@ class SimpleQr {
     required this.qrData,
   });
 
-  factory SimpleQr.fromMap(Map<String, dynamic> data) => SimpleQr(
+  factory SimpleQr.fromMap(Map<dynamic, dynamic> data) => SimpleQr(
         alias: data['alias']!,
         qrData: data['qrData']!,
       );
@@ -44,7 +44,7 @@ class GreenPass extends SimpleQr {
     required this.greenPassData,
   }) : super(alias: alias, qrData: qrData);
 
-  factory GreenPass.fromMap(Map<String, dynamic> data) => GreenPass(
+  factory GreenPass.fromMap(Map<dynamic, dynamic> data) => GreenPass(
         alias: data['alias']!,
         qrData: data['qrData']!,
         greenPassData: GreenPassData.fromMap(data['greenPassData']),
@@ -85,9 +85,10 @@ class QrListData extends ChangeNotifier {
 
   Future<List<SimpleQr>> _getData() async {
     final sharedPrefs = await SharedPreferences.getInstance();
-    final data = jsonDecode(sharedPrefs.getString("data") ?? "[]")
-        as List<Map<String, dynamic>>;
-    return data.map<SimpleQr>((e) {
+    final rawData = sharedPrefs.getString("data");
+    return jsonDecode(rawData ?? "[]")
+        .map((e) => e as Map<dynamic, dynamic>)
+        .map((e) {
       if (e.containsKey('greenPassData')) {
         return GreenPass.fromMap(e);
       } else {
