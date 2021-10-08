@@ -81,7 +81,6 @@ class GreenPassData {
         'type': describeEnum(type),
       };
 
-  // TODO Is "Green Pass" an european name? And if not, use the context and translate
   String get displayDescription => 'Green Pass - $name';
 }
 
@@ -94,9 +93,9 @@ enum GreenPassType {
 extension GreenPassToString on GreenPassType {
   String get translationKey =>
       {
-        GreenPassType.RECOVERY: 'recovery',
-        GreenPassType.TEST: 'test',
-        GreenPassType.VACCINATION: 'vaccination',
+        GreenPassType.RECOVERY: 'green_pass_recovery',
+        GreenPassType.TEST: 'green_pass_test',
+        GreenPassType.VACCINATION: 'green_pass_vaccination',
       }[this] ??
-      'unknown';
+      'green_pass_unknown';
 }
