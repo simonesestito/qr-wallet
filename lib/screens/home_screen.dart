@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -80,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnCustomIcon: CustomIcons.ads_off,
               backBtnCustomAction: () async {
                 final products =
-                    await InAppBroadcast.of(context).productDetails;
+                await InAppBroadcast.of(context).productDetails;
                 InAppPurchase.instance.buyNonConsumable(
                   purchaseParam: PurchaseParam(productDetails: products.first),
                 );
@@ -101,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ? buildEmptyView(context)
                     : passList.length == 1
                         ? buildSingleQR(passList.first)
-                        : buildList(context, passList),
+                        : buildList(passList),
               ),
             ),
           ],
@@ -169,23 +171,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build the list of passes
-  Widget buildList(BuildContext context, List<SimpleQr> passList) {
-    return CarouselSlider.builder(
-      key: ValueKey(passList.length == 1),
-      // Fix enlarged center page when deleted first pass
-      itemCount: passList.length,
-      itemBuilder: (context, i, _) => buildCardForType(passList[i]),
-      options: CarouselOptions(
-        autoPlay: false,
-        initialPage: passList.length - 1,
-        reverse: true,
-        viewportFraction: 0.8,
-        aspectRatio: 9 / 14,
-        enlargeCenterPage: true,
-        enableInfiniteScroll: false,
-        scrollPhysics: BouncingScrollPhysics(),
-      ),
-    );
+  Widget buildList(List<SimpleQr> passList) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return CarouselSlider.builder(
+        key: ValueKey(passList.length == 1),
+        // Fix enlarged center page when deleted first pass
+        itemCount: passList.length,
+        itemBuilder: (context, i, _) => buildCardForType(passList[i]),
+        options: CarouselOptions(
+          aspectRatio: max(constraints.biggest.aspectRatio, 9 / 14),
+          autoPlay: false,
+          initialPage: passList.length - 1,
+          reverse: true,
+          enlargeCenterPage: true,
+          enableInfiniteScroll: false,
+          scrollPhysics: BouncingScrollPhysics(),
+        ),
+      );
+    });
   }
 
   Widget buildCardForType(SimpleQr qr) {
