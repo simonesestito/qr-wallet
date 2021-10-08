@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:qrwallet/utils/completable_future.dart';
 import 'package:qrwallet/utils/google_play_verification.dart';
 
@@ -151,6 +153,20 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
         }
 
         final isValid = await PurchaseVerification.verify(purchase);
+
+        // Handle slow card, expired purchase test case
+        if (isValid && purchase is GooglePlayPurchaseDetails) {
+          final payload = jsonDecode(
+            purchase.billingClientPurchase.originalJson,
+          ) as Map<dynamic, dynamic>;
+          if (payload['purchaseState'] == 4 &&
+              purchase.pendingCompletePurchase) {
+            // Slow card failing test case
+            // Ignore this purchase.
+            continue;
+          }
+        }
+
         eventEmitted = true;
         _isUserPremium.add(isValid);
 
