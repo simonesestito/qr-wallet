@@ -5,6 +5,7 @@ import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
+import 'package:qrwallet/widgets/expanded_scroll_column.dart';
 import 'package:qrwallet/widgets/text_double_weight.dart';
 
 import 'delete_qr.dart';
@@ -47,25 +48,13 @@ class GreenPassQrView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: qrPadding,
-      child: LayoutBuilder(builder: (context, constraints) {
-        return SingleChildScrollView(
-          child: SizedBox(
-            height: constraints.maxHeight,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ..._buildQrHeader(context),
-                const SizedBox(height: 6),
-                _buildPassDetails(context),
-                const SizedBox(height: 6),
-                _buildActionButtons(context),
-              ],
-            ),
-          ),
-        );
-      }),
+      child: ExpandedScrollColumn(
+        children: [
+          ..._buildQrHeader(context),
+          _buildPassDetails(context),
+          _buildActionButtons(context),
+        ],
+      ),
     );
   }
 
@@ -86,19 +75,16 @@ class GreenPassQrView extends StatelessWidget {
       children: [
         TextWithIcon(
           icon: Icons.person,
-          //Localization.of(context)!.translate('name')! + ':',
           text: '${pass.greenPassData.name} ${pass.greenPassData.surname}',
         ),
         const SizedBox(height: 6),
         TextWithIcon(
           icon: Icons.event_available,
-          //Localization.of(context)!.translate('issue_date')! + ':',
           text: '${pass.greenPassData.issueDate}',
         ),
         const SizedBox(height: 6),
         TextWithIcon(
           icon: Icons.receipt_long,
-          //Localization.of(context)!.translate('type')! + ':',
           text: Localization.of(context)!.translate(
             pass.greenPassData.type.translationKey,
           )!,
