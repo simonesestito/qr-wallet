@@ -44,6 +44,9 @@ class _QrScanWidgetState extends State<QrScanWidget> {
             TitleHeadline(
               title: Localization.of(context)!.translate('qr_title')!,
               backBtn: true,
+              trailingBtn: Icons.info,
+              trailingBtnAction: () =>
+                  StandardDialogs.showQrInfoDialog(context),
             ),
             Expanded(
               flex: 15,

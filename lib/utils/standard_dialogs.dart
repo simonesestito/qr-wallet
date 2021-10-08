@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qrwallet/lang/localization.dart';
 
 import 'globals.dart';
 
@@ -58,6 +59,39 @@ class StandardDialogs {
               color: Theme.of(context).colorScheme.secondary),
         ),
         dismissDirection: DismissDirection.horizontal,
+      ),
+    );
+  }
+
+  // Show a dialog to explain how to obtain a QR code to scan
+  static void showQrInfoDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Globals.borderRadius),
+        ),
+        title: Text(
+          Localization.of(context)!.translate('camera_qr_dialog_title')!,
+          style: Theme.of(context).textTheme.subtitle2,
+        ),
+        content: Text(
+          Localization.of(context)!.translate('camera_qr_dialog_description')!,
+          style: Theme.of(context).textTheme.bodyText2,
+        ),
+        actions: [
+          TextButton(
+              style: ButtonStyle(
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).primaryColor.withOpacity(0.2)),
+              ),
+              child: Text(
+                'OK',
+                style: TextStyle(color: Theme.of(context).accentColor),
+              ),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop())
+        ],
       ),
     );
   }
