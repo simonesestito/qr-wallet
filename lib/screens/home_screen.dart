@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnCustomIcon: CustomIcons.ads_off,
               backBtnCustomAction: () async {
                 final products =
-                await InAppBroadcast.of(context).productDetails;
+                    await InAppBroadcast.of(context).productDetails;
                 InAppPurchase.instance.buyNonConsumable(
                   purchaseParam: PurchaseParam(productDetails: products.first),
                 );
@@ -160,14 +160,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Build the expanded layout for a single item
   Widget buildSingleQR(SimpleQr qr) {
-    final qrView;
     if (qr is GreenPass) {
-      qrView = GreenPassQrView(pass: qr);
-    } else {
-      qrView = SimpleQrView(qr: qr);
+      return GreenPassQrView(pass: qr);
     }
-
-    return SingleChildScrollView(child: qrView);
+    return SimpleQrView(qr: qr);
   }
 
   // Build the list of passes
