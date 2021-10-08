@@ -91,7 +91,7 @@ class _PostQrFormState extends State<PostQrForm> {
       // --> Spacer(),
       ButtonWideOutlined(
         action: () async {
-          await InterstitialAdLoader.showAdIfAvailable();
+          await InterstitialAdLoader.showAdIfAvailable(context);
           Navigator.popUntil(
             context,
             (route) => route.isFirst,
@@ -118,7 +118,7 @@ class _PostQrFormState extends State<PostQrForm> {
                         greenPassData: passData,
                       ),
               );
-          await InterstitialAdLoader.showAdIfAvailable();
+          await InterstitialAdLoader.showAdIfAvailable(context);
           Navigator.popUntil(
             context,
             (route) => route.isFirst,
