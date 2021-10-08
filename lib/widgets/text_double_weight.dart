@@ -1,44 +1,32 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TextDoubleWeight extends StatelessWidget {
-  final String boldStart;
-  final String regularEnd;
+class TextWithIcon extends StatelessWidget {
+  final IconData icon;
+  final String text;
 
-  TextDoubleWeight({
-    required this.boldStart,
-    required this.regularEnd,
+  TextWithIcon({
+    required this.icon,
+    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            constraints: BoxConstraints(maxWidth: 116),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(icon),
+        const SizedBox(width: 4),
+        Expanded(
             child: Text(
-              boldStart,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
-            ),
-          ),
-          const SizedBox(width: 4),
-          // TODO Expanded and flex break the single qr view
-          Text(
-            regularEnd,
-            textAlign: TextAlign.start,
-            style: Theme.of(context).textTheme.bodyText2,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            softWrap: false,
-          ),
-        ],
-      ),
+          text,
+          style: Theme.of(context).textTheme.bodyText2,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+        )),
+      ],
     );
   }
 }

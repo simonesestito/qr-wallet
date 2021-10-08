@@ -42,24 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _disposeInAppSubscription =
-          InAppBroadcast.of(context).listenAll(_handlePurchaseEvent);
+      _disposeInAppSubscription = InAppBroadcast.of(context).listenAll((event) {
+        CommonDialogs.showSnackbar(
+          context,
+          Localization.of(context)!.translate(event.translationKey)!,
+        );
+      });
     });
 
     super.initState();
-  }
-
-  void _handlePurchaseEvent(InAppEvent event) {
-    final messageId = {
-      InAppEvent.SUCCESS: 'in_app_purchase_success',
-      InAppEvent.ERROR: 'in_app_purchase_error',
-      InAppEvent.PENDING: 'in_app_purchase_pending',
-    }[event]!;
-
-    CommonDialogs.showSnackbar(
-      context,
-      Localization.of(context)!.translate(messageId)!,
-    );
   }
 
   @override
@@ -105,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 30),
+                padding: const EdgeInsets.only(bottom: 48),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
@@ -146,7 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const SizedBox(height: 48),
         Image.asset(
           'assets/images/no_qr_placeholder.png',
           height: 96,
@@ -162,7 +152,6 @@ class _HomeScreenState extends State<HomeScreen> {
             textAlign: TextAlign.center,
           ),
         ),
-        const SizedBox(height: 20),
       ],
     );
   }
@@ -191,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
         initialPage: passList.length - 1,
         reverse: true,
         viewportFraction: 0.8,
-        aspectRatio: 9 / 12,
+        aspectRatio: 9 / 14,
         enlargeCenterPage: true,
         enableInfiniteScroll: false,
         scrollPhysics: BouncingScrollPhysics(),
@@ -201,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildCardForType(SimpleQr qr) {
     if (qr is GreenPass) {
-      return GreenPassCardView(qr: qr);
+      return GreenPassCardView(pass: qr);
     } else {
       return SimpleQrCardView(qr: qr);
     }

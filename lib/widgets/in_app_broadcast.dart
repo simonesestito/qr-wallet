@@ -60,6 +60,14 @@ enum InAppEvent {
   PENDING,
 }
 
+extension InAppEventString on InAppEvent {
+  String get translationKey => {
+        InAppEvent.SUCCESS: 'in_app_purchase_success',
+        InAppEvent.ERROR: 'in_app_purchase_error',
+        InAppEvent.PENDING: 'in_app_purchase_pending',
+      }[this]!;
+}
+
 enum PremiumStatus {
   PREMIUM,
   BASIC,

@@ -19,7 +19,7 @@
   "name": "Nome",
   "name_error": "Specificare un nome",
   "type": "Tipo",
-  "issue_date": "Scadenza",
+  "issue_date": "Emissione",
   "recovery": "Guarigione",
   "test": "Tampone",
   "vaccination": "Vaccino",

@@ -90,3 +90,13 @@ enum GreenPassType {
   TEST,
   RECOVERY,
 }
+
+extension GreenPassToString on GreenPassType {
+  String get translationKey =>
+      {
+        GreenPassType.RECOVERY: 'recovery',
+        GreenPassType.TEST: 'test',
+        GreenPassType.VACCINATION: 'vaccination',
+      }[this] ??
+      'unknown';
+}
