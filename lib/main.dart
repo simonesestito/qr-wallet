@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:admob_consent/admob_consent.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,8 +39,6 @@ const APP_NAME = 'QRWallet';
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AdmobConsent().show();
-
     return MaterialApp(
       title: APP_NAME,
       supportedLocales: [
