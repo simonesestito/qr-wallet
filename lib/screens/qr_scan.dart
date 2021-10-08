@@ -72,7 +72,11 @@ class _QrScanWidgetState extends State<QrScanWidget> {
                         flashOn = (await _qrViewController?.getFlashStatus())!;
                         setState(() {});
                       },
-                      text: flashOn ? 'Spegni flash' : 'Accendi flash',
+                      text: flashOn
+                          ? Localization.of(context)!
+                              .translate('turn_flash_off')!
+                          : Localization.of(context)!
+                              .translate('turn_flash_on')!,
                     ),
                   ),
                   Flexible(
@@ -82,7 +86,8 @@ class _QrScanWidgetState extends State<QrScanWidget> {
                         await _qrViewController?.flipCamera();
                         setState(() {});
                       },
-                      text: 'Cambia fotocamera',
+                      text:
+                          Localization.of(context)!.translate('switch_camera')!,
                     ),
                   ),
                 ],
