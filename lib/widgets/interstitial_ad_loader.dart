@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 
 class InterstitialAdLoader {
+  static const unitId = 'ca-app-pub-3883344461454437/6606121084';
   static InterstitialAd? _loadedAd;
   static bool _isLoading = false;
 
@@ -17,8 +18,7 @@ class InterstitialAdLoader {
 
     _isLoading = true;
     InterstitialAd.load(
-        adUnitId: 'ca-app-pub-3940256099942544/1033173712',
-        // FIXME: Create real unit
+        adUnitId: unitId,
         request: AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
