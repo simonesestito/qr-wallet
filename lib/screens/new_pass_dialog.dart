@@ -57,7 +57,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
           );
 
           if (photo != null && !await _handleImageFile(photo.path)) {
-            CommonDialogs.showSnackbar(
+            StandardDialogs.showSnackbar(
               context,
               Localization.of(context)!.translate('no_qr_found')!,
             );

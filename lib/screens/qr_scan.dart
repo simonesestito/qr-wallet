@@ -118,7 +118,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
       // Define what happens when the permission is not granted
       onPermissionSet: (ctrl, granted) {
         if (!granted) {
-          CommonDialogs.showSnackbar(context,
+          StandardDialogs.showSnackbar(context,
               Localization.of(context)!.translate('camera_permission_denied')!);
           Navigator.of(context).pop();
         }

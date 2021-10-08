@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'globals.dart';
 
-class CommonDialogs {
+class StandardDialogs {
   // Show a dialog to confirm the profile deletion
   static void showGenericErrorDialog(BuildContext context) {
     showDialog(
@@ -44,12 +44,20 @@ class CommonDialogs {
         content: Text(
           message,
           textAlign: TextAlign.center,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Globals.borderRadius),
+          side: BorderSide(
+              width: Globals.borderWidth,
+              color: Theme.of(context).colorScheme.secondary),
         ),
+        dismissDirection: DismissDirection.horizontal,
       ),
     );
   }

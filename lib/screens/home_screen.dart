@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _disposeInAppSubscription = InAppBroadcast.of(context).listenAll((event) {
-        CommonDialogs.showSnackbar(
+        StandardDialogs.showSnackbar(
           context,
           Localization.of(context)!.translate(event.translationKey)!,
         );

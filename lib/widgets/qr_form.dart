@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/utils/globals.dart';
+import 'package:qrwallet/utils/standard_dialogs.dart';
 
 import 'button_wide.dart';
 
@@ -120,6 +121,10 @@ class _QrFormState extends State<QrForm> {
               text: Localization.of(context)!.translate('save')!,
               action: () async {
                 if (_formKey.currentState?.validate() == true) {
+                  StandardDialogs.showSnackbar(
+                    context,
+                    Localization.of(context)!.translate('item_saved')!,
+                  );
                   widget.onSave(QrFormData(name: _nameController.text));
                 }
               },

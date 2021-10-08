@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/utils/standard_dialogs.dart';
 
 import 'bottomsheet_container.dart';
 import 'title_headline.dart';
@@ -33,6 +34,10 @@ class DeleteQr extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             await context.read<QrListData>().deleteQr(qr);
+            StandardDialogs.showSnackbar(
+              context,
+              Localization.of(context)!.translate('item_deleted')!,
+            );
             Navigator.pop(context);
           },
           child: Text(Localization.of(context)!.translate("qr_item_delete")!),
