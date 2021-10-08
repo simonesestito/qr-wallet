@@ -28,7 +28,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       recoverLostData();
-      InterstitialAdLoader.showAdIfAvailable(context);
+      InterstitialAdLoader.loadAd(context);
     });
   }
 
