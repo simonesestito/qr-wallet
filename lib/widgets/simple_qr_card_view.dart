@@ -20,6 +20,8 @@ abstract class QrCardView<T extends SimpleQr> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.none,
+      margin: const EdgeInsets.only(bottom: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Globals.borderRadius),
         side: BorderSide(width: Globals.borderWidth, color: Color(0xffaaaaaa)),

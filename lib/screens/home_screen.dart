@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Container(
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 48),
+                padding: const EdgeInsets.only(bottom: 18),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
