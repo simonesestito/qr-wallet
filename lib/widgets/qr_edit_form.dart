@@ -30,7 +30,8 @@ class QrEditForm extends StatelessWidget {
             Navigator.pop(context);
           }),
       SizedBox.fromSize(
-          size: Size.fromHeight(MediaQuery.of(context).viewInsets.bottom)),
+        size: Size.fromHeight(MediaQuery.of(context).viewInsets.bottom),
+      ),
     ]);
   }
 }

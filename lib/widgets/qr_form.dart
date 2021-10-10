@@ -119,6 +119,7 @@ class _QrFormState extends State<QrForm> {
             padding: const EdgeInsets.all(16),
             child: ButtonWide(
               text: Localization.of(context)!.translate('save')!,
+              padding: 8,
               action: () async {
                 if (_formKey.currentState?.validate() == true) {
                   StandardDialogs.showSnackbar(
