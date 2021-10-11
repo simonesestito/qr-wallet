@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:provider/provider.dart';
+import 'package:qrwallet/lang/locales.dart';
 import 'package:qrwallet/screens/home_screen.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 
@@ -41,10 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: APP_NAME,
-      supportedLocales: [
-        const Locale('en', 'US'), // Default locale, since it's the first one
-        const Locale('it', 'IT'),
-      ],
+      supportedLocales: LOCALES,
       localizationsDelegates: [
         GlobalCupertinoLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

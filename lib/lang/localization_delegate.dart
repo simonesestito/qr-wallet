@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:qrwallet/lang/locales.dart';
 
 import './localization.dart';
 
@@ -11,8 +12,8 @@ class LocalizationDelegate extends LocalizationsDelegate<Localization> {
 
   @override
   bool isSupported(Locale locale) {
-    // Include all of your supported language codes here
-    return ['en', 'it'].contains(locale.languageCode);
+    return LOCALES
+        .any((appLocale) => appLocale.languageCode == locale.languageCode);
   }
 
   @override
