@@ -12,6 +12,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
+import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
@@ -135,6 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Build the placeholder
   Widget buildEmptyView(BuildContext context) {
+    InterstitialAdLoader.loadAd(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
