@@ -4,7 +4,8 @@
   "description": "Translate the string JSON files and Play Store listing using Cloud Translate API",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "screenshot": "node src/screenshot.js"
   },
   "keywords": [],
   "author": "",
