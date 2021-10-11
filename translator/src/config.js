@@ -16,7 +16,7 @@ module.exports = readFromGlobals('../lib/lang/locales.dart', 'en', 'it')
             },
         ],
         cacheFile: './translations_cache.json',
-        defaultLanguage: 'en',
+        defaultLanguage: { lang: 'en', fullLang: 'en-US' },
         languages: languages,
         translator: translate,
     }
@@ -36,7 +36,11 @@ async function readFromGlobals(localesFile, ...ignoredLanguages) {
     const file = (await fs.readFile(localesFile)).toString();
     const regex = /const Locale\('([a-z]*)',\s'([A-Z]*)'\)/g;
     const matches = [...file.matchAll(regex)];
-    return matches.map(match => match[1])
-        .filter(lang => ignoredLanguages.indexOf(lang) == -1);
+    return matches
+        .map(match => ({
+            lang: match[1],
+            fullLang: match[1] + '-' + match[2],
+        }))
+        .filter(({ lang }) => ignoredLanguages.indexOf(lang) == -1);
 }
 

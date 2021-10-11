@@ -83,8 +83,7 @@ flutter:
     - assets/images/author_back.jpg
     - assets/images/author_front.jpg
     # Supported languages
-    - assets/languages/it.json
-    - assets/languages/en.json
+    - assets/languages/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

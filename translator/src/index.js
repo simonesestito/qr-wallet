@@ -15,7 +15,8 @@ async function main() {
         const cached = cache[sourceKey] ?? {};
         const old = cached['old'] ?? {};
         
-        for (const lang of config.languages) {
+        for (const langDetails of config.languages) {
+            const { lang, fullLang } = langDetails;
             const toTranslate = new Set();
             const output = {};
 
@@ -45,7 +46,7 @@ async function main() {
             // Translate input in this language
             const diff = await config.translator(
                 stringsMap,
-                config.defaultLanguage,
+                config.defaultLanguage.lang,
                 lang
             );
             Object.entries(diff).forEach(([k,v]) => output[k] = v);
@@ -54,11 +55,11 @@ async function main() {
                 Object.keys(output).length ==
                     Object.keys(input).length
                 ? {}
-                : await source.loadInput(lang)
+                : await source.loadInput(langDetails)
             ).filter(([k,v]) => Object.keys(output).indexOf(k) == -1)
             .forEach(([k,v]) => output[k] = v);
 
-            await source.writeOutput(lang, output);
+            await source.writeOutput(langDetails, output);
             cached[lang] = Object.keys(output);
         }
 
@@ -70,10 +71,7 @@ async function main() {
     }
 
     // Write updated cache
-    await writeJson(
-        config.cacheFile,
-        cache
-    );
+    await writeJson(config.cacheFile, cache);
 }
 
 main().catch(console.log);

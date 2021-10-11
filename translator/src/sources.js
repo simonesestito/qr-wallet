@@ -6,19 +6,16 @@ class FileSource {
         this.directory = directory;
     }
 
-    async loadInput(language) {
-        return readJson(`./${this.directory}/${language}.json`);
+    async loadInput({ lang }) {
+        return readJson(`./${this.directory}/${lang}.json`);
     }
 
     get cacheKey() {
         return `file:${this.directory}`;
     }
 
-    async writeOutput(language, strings) {
-        return writeJson(
-            `${this.directory}/${language}.json`,
-            strings,
-        );
+    async writeOutput({ lang }, strings) {
+        return writeJson(`${this.directory}/${lang}.json`, strings);
     }
 
     async finalize() { }
