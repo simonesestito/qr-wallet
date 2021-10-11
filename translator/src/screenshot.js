@@ -64,7 +64,12 @@ async function mkdir(dir) {
 
     await mkdir('screenshots');
 
-    for (const { lang } of config.languages.slice(26)) {
+    const allLanguages = [
+        { lang: 'it', fullLang: 'it-IT' },
+        { lang: 'en', fullLang: 'en-US' },
+        ...config.languages
+    ];
+    for (const { lang } of allLanguages) {
         await mkdir(`screenshots/${lang}`);
         for (const theme of [ 'light', 'dark' ]) {
             await mkdir(`screenshots/${lang}/${theme}`);

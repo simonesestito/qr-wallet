@@ -21,7 +21,6 @@ const LOCALES = [
   const Locale('fr', 'FR'),
   const Locale('el', 'GR'),
   const Locale('hu', 'HU'),
-  const Locale('ga', 'IE'), // FIXME for screenshots
   const Locale('lv', 'LV'),
   const Locale('lt', 'LT'),
   const Locale('pl', 'PL'),
@@ -33,6 +32,5 @@ const LOCALES = [
   const Locale('ja', 'JP'),
   const Locale('is', 'IS'),
   const Locale('ca', 'ES'),
-  const Locale('ar', 'SA'), // FIXME for screenshots
   const Locale('th', 'TH'),
 ];
