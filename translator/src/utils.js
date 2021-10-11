@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+const fs = require('fs').promises; //require('fs/promises');
 
 async function readJson(file) {
     return fs.readFile(file)

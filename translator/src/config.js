@@ -1,6 +1,6 @@
-const { FileSource } = require('./sources');
+const { FileSource, PlayListingSource } = require('./sources');
 const translate = require('./translator');
-const fs = require('fs/promises');
+const fs = require('fs').promises; //require('fs/promises');
 
 module.exports = readFromGlobals('../lib/lang/locales.dart', 'en', 'it')
     .then(languages => deepFreeze({
@@ -14,6 +14,10 @@ module.exports = readFromGlobals('../lib/lang/locales.dart', 'en', 'it')
                     'author_front',
                 ],
             },
+            {
+                source: new PlayListingSource(),
+                nonTranslatable: [ 'title' ],
+            },
         ],
         cacheFile: './translations_cache.json',
         defaultLanguage: { lang: 'en', fullLang: 'en-US' },
@@ -24,7 +28,7 @@ module.exports = readFromGlobals('../lib/lang/locales.dart', 'en', 'it')
 
 function deepFreeze(obj) {
     Object.freeze(obj);
-    if (typeof obj === 'object') {
+    if (typeof obj === 'object' && obj.constructor == Object) {
         Object.getOwnPropertyNames(obj)
             .map(k => obj[k])
             .forEach(deepFreeze);

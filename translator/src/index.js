@@ -12,8 +12,8 @@ async function main() {
             config.defaultLanguage
         );
         Object.freeze(input);
-        const cached = cache[sourceKey] ?? {};
-        const old = cached['old'] ?? {};
+        const cached = cache[sourceKey] || {};
+        const old = cached['old'] || {};
         
         for (const langDetails of config.languages) {
             const { lang, fullLang } = langDetails;
@@ -26,7 +26,7 @@ async function main() {
                 .forEach(([k, v]) => toTranslate.add(k));
 
             // New strings for this lang
-            const langCache = cached[lang] ?? [];
+            const langCache = cached[lang] || [];
             Object.keys(input)
                 .filter(k => langCache.indexOf(k) == -1)
                 .forEach(k => toTranslate.add(k));
@@ -47,7 +47,8 @@ async function main() {
             const diff = await config.translator(
                 stringsMap,
                 config.defaultLanguage.lang,
-                lang
+                lang,
+                source.format
             );
             Object.entries(diff).forEach(([k,v]) => output[k] = v);
 

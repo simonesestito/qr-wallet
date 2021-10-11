@@ -1126,5 +1126,147 @@
       "in_app_purchase_pending",
       "in_app_purchase_success"
     ]
+  },
+  "play_listing": {
+    "de": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "es": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "bg": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "hr": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "cs": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "da": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "nb": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "nl": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "et": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "fi": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "fr": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "el": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "hu": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "ga": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "lv": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "lt": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "pl": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "pt": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "ro": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "sk": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "sv": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "zh": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "ja": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "is": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "ca": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "ar": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "th": [
+      "title",
+      "fullDescription",
+      "shortDescription"
+    ],
+    "old": {
+      "title": "QRWallet - Green Pass, tickets",
+      "fullDescription": "<h2><b>Introduction 👋</b></h2>\nQRWallet is a simple app, created to manage any QR Code in a simple and effective way.\nThe app features the automatic dark/light theme. Support and updates are guaranteed!\n  \n<h2><b>Why should i use <font color=\"#1A753F\">QRWallet</font>?😕</b></h2>\nWell, this app is free, simple to use, and allow you to show your green pass or other ticket in just a second. Moreover, the app is continuously improved and updated, also following the requests and feedbacks from the users.\n\n<h2><b>Features 🎟️</b></h2>\n◾ Add a QR starting from a picture, by taking a picture or by selecting a valid PDF file\n◾ Easily delete, share or edit every QR\n◾ Extreme ease of use and simplicity\n◾ Light and dark themes (Android 10 automatic dark mode supported)\n◾ A lot more soon..",
+      "shortDescription": "A quick repository for your QR Codes, like Green Passes and tickets"
+    }
   }
 }
