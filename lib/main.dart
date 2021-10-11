@@ -31,7 +31,7 @@ void main() {
       child: StreamProvider(
         create: (_) => InAppBroadcast.of(context).isUserPremium,
         initialData: PremiumStatus.UNKNOWN,
-        child: ScreenshotInstrument(),
+        child: MyApp(),
       ),
     ),
   ));
