@@ -22,9 +22,16 @@ class QrBackgroundImage extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(Globals.borderRadius),
-      child: QrImage(
-        data: data,
-        backgroundColor: Color(backgroundColor),
+      child: Container(
+        color: Color(backgroundColor),
+        child: Column(
+          children: [
+            // FIXME: Horizontal padding, possibly not as ugly as this one
+            SizedBox(height: Globals.borderRadius),
+            QrImage(data: data), // Test data for max byte --> "a" * 2953),
+            SizedBox(height: Globals.borderRadius),
+          ],
+        ),
       ),
     );
   }
