@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart' as scanner;
 import 'package:qrwallet/utils/globals.dart';
@@ -35,14 +36,19 @@ class QrBackgroundImage extends StatelessWidget {
       colorScheme.onBackground.value,
     );
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(Globals.borderRadius),
-      child: BarcodeWidget(
-        padding: const EdgeInsets.all(4),
-        barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
-        data: data,
-        backgroundColor: Color(backgroundColor),
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return SizedBox.square(
+        dimension: constraints.maxWidth,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(Globals.borderRadius),
+          child: BarcodeWidget(
+            padding: const EdgeInsets.all(Globals.borderRadius),
+            barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
+            data: data,
+            backgroundColor: Color(backgroundColor),
+          ),
+        ),
+      );
+    });
   }
 }
