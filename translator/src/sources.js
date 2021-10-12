@@ -28,17 +28,24 @@ class FileSource {
 const PLAY_BASE_URL = 'https://androidpublisher.googleapis.com/androidpublisher/v3/applications/com.exos.qrwallet/edits';
 
 class PlayListingSource {
-    async loadInput({ fullLang }) {
+    async loadInput({ lang, fullLang }) {
         await this.initEdit();
-        const response = await client.request({
-            url: `${PLAY_BASE_URL}/${this.editId}/listings/${fullLang}`,
-            method: 'GET',
-        });
-        return {
-            title: response.data.title,
-            fullDescription: response.data.fullDescription,
-            shortDescription: response.data.shortDescription,
+
+        const tryLanguage = async (langCode) => {
+            const response = await client.request({
+                url: `${PLAY_BASE_URL}/${this.editId}/listings/${langCode}`,
+                method: 'GET',
+            });
+            return {
+                title: response.data.title,
+                fullDescription: response.data.fullDescription,
+                shortDescription: response.data.shortDescription,
+            };
         };
+
+        return tryLanguage(fullLang)
+            .catch(() => tryLanguage(lang))
+            .then(r => { console.log(r); return r; });
     }
 
     get cacheKey() {

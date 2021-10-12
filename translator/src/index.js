@@ -16,7 +16,7 @@ async function main() {
         const old = cached['old'] || {};
         
         for (const langDetails of config.languages) {
-            const { lang, fullLang } = langDetails;
+            const { lang } = langDetails;
             const toTranslate = new Set();
             const output = {};
 
