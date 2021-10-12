@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart' as scanner;
 import 'package:qrwallet/utils/globals.dart';
 
 ///
@@ -10,13 +10,25 @@ import 'package:qrwallet/utils/globals.dart';
 ///
 class QrBackgroundImage extends StatelessWidget {
   final String data;
-  final BarcodeFormat format;
+  final scanner.BarcodeFormat format;
+
+  static final barcodeFormatMap =
+      Map<scanner.BarcodeFormat, Barcode>.unmodifiable({
+    scanner.BarcodeFormat.qrcode: Barcode.qrCode(),
+    scanner.BarcodeFormat.aztec: Barcode.aztec(),
+    scanner.BarcodeFormat.code39: Barcode.code39(),
+    scanner.BarcodeFormat.code93: Barcode.code93(),
+    scanner.BarcodeFormat.code128: Barcode.code128(),
+    scanner.BarcodeFormat.dataMatrix: Barcode.dataMatrix(),
+    scanner.BarcodeFormat.ean8: Barcode.ean8(),
+    scanner.BarcodeFormat.ean13: Barcode.ean13(),
+    scanner.BarcodeFormat.itf: Barcode.itf(),
+  });
 
   const QrBackgroundImage(this.data, this.format, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(format.toString() + " - " + data);
     final colorScheme = Theme.of(context).colorScheme;
     final backgroundColor = max(
       colorScheme.background.value,
@@ -25,13 +37,11 @@ class QrBackgroundImage extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(Globals.borderRadius),
-      child: Container(
-        color: Color(backgroundColor),
+      child: BarcodeWidget(
         padding: const EdgeInsets.all(4),
-        child: QrImage(
-          data: data,
-          gapless: false,
-        ),
+        barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
+        data: data,
+        backgroundColor: Color(backgroundColor),
       ),
     );
   }

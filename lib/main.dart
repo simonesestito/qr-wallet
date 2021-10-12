@@ -9,9 +9,7 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/locales.dart';
 import 'package:qrwallet/screens/home_screen.dart';
-import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
-import 'package:udp/udp.dart';
 
 import 'lang/localization.dart';
 import 'models/data.dart';
@@ -274,6 +272,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/*
 class ScreenshotInstrument extends StatefulWidget {
   const ScreenshotInstrument({Key? key}) : super(key: key);
 
@@ -334,3 +333,4 @@ class _ScreenshotInstrumentState extends State<ScreenshotInstrument> {
     }
   }
 }
+*/

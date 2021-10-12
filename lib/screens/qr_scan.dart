@@ -8,6 +8,7 @@ import 'package:qrwallet/screens/post_qr_form.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
+import 'package:qrwallet/widgets/qr_background_image.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 
 class QrScanWidget extends StatefulWidget {
@@ -110,10 +111,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
     // Ensure the Scanner view is properly sized after rotation (the app won't rotate tho)
     return QRView(
       key: qrKey,
-      formatsAllowed: [
-        BarcodeFormat.qrcode,
-        BarcodeFormat.aztec,
-      ],
+      formatsAllowed: QrBackgroundImage.barcodeFormatMap.keys.toList(),
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
         borderColor: Theme.of(context).colorScheme.secondary,
