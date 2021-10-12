@@ -45,7 +45,7 @@ class PlayListingSource {
 
         return tryLanguage(fullLang)
             .catch(() => tryLanguage(lang))
-            .then(r => { console.log(r); return r; });
+            .then(r => { console.log(`Fetching Google Play listing (${fullLang})`); return r; });
     }
 
     get cacheKey() {
@@ -75,7 +75,7 @@ class PlayListingSource {
 
         await tryLanguage(fullLang)
             .catch(() => tryLanguage(lang))
-            .catch(err => console.log(err.errors[0].message));
+            .catch(err => console.log(err.errors));
     }
 
     async finalize() {
