@@ -61,26 +61,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void didChangeDependencies() async {
-    // TODO Never triggered atm
-    if (_showReviewBadge) {
-      _showReviewBadge = false;
-      SharedPreferences sp = await SharedPreferences.getInstance();
-      // Update the count or show the review dialog
-      var timesOpened = sp.getInt('times_opened') ?? 0;
-      var firstLaunchTime = sp.getInt('first_launch_time') ?? 0;
-      var dontShowAgain = sp.getBool('dont_show_again') ?? false;
-      if (!dontShowAgain &&
-          timesOpened >= Globals.launchesToReview &&
-          DateTime.now().millisecondsSinceEpoch >=
-              firstLaunchTime +
-                  Globals.daysBeforeReview * 24 * 60 * 60 * 1000) {
-        showAppModalBottomSheet(
-            context: context, builder: () => ReviewBuyApp());
-      } else {
-        sp.setInt('times_opened', timesOpened + 1);
-        if (firstLaunchTime == 0)
-          sp.setInt('first_launch_time', DateTime.now().millisecondsSinceEpoch);
-      }
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    // Update the count or show the review dialog
+    var timesOpened = sp.getInt('times_opened') ?? 0;
+    var firstLaunchTime = sp.getInt('first_launch_time') ?? 0;
+    var dontShowAgain = sp.getBool('dont_show_again') ?? false;
+    if (!dontShowAgain &&
+        timesOpened >= Globals.launchesToReview &&
+        DateTime.now().millisecondsSinceEpoch >=
+            firstLaunchTime + Globals.daysBeforeReview * 24 * 60 * 60 * 1000) {
+      // Conditions fullfilled
+      _showReviewBadge = true;
+    } else {
+      sp.setInt('times_opened', timesOpened + 1);
+      if (firstLaunchTime == 0)
+        sp.setInt('first_launch_time', DateTime.now().millisecondsSinceEpoch);
     }
     super.didChangeDependencies();
   }
@@ -108,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              // TODO Re-enable when settings is complete
+              backBtnBadge: true, // TODO logic
               backBtn: true,
               backBtnCustomIcon: Icons.settings_outlined,
               backBtnCustomAction: () {

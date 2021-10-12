@@ -74,7 +74,7 @@ class StandardDialogs {
         ),
         title: Text(
           Localization.of(context)!.translate('camera_qr_dialog_title')!,
-          style: Theme.of(context).textTheme.subtitle2,
+          style: Theme.of(context).textTheme.headline6,
         ),
         content: Text(
           Localization.of(context)!.translate('camera_qr_dialog_description')!,
@@ -83,12 +83,17 @@ class StandardDialogs {
         actions: [
           TextButton(
               style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Globals.borderRadius),
+                  ),
+                ),
                 overlayColor: MaterialStateProperty.all(
                     Theme.of(context).primaryColor.withOpacity(0.2)),
               ),
               child: Text(
-                'OK',
-                style: TextStyle(color: Theme.of(context).accentColor),
+                Localization.of(context)!.translate('ok')!,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
               onPressed: () => Navigator.of(context, rootNavigator: true).pop())
         ],

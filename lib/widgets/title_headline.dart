@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:qrwallet/utils/globals.dart';
 
 // The top header of each screen. It supports a back button and an action button, just like the appbar
 class TitleHeadline extends StatelessWidget {
@@ -7,6 +8,8 @@ class TitleHeadline extends StatelessWidget {
   final bool backBtn;
   final IconData? backBtnCustomIcon;
   final VoidCallback? backBtnCustomAction;
+  final bool backBtnBadge;
+  final bool trailingBtnBadge;
   final IconData? trailingBtn;
   final VoidCallback? trailingBtnAction;
 
@@ -15,6 +18,8 @@ class TitleHeadline extends StatelessWidget {
     this.backBtn = false,
     this.backBtnCustomIcon,
     this.backBtnCustomAction,
+    this.backBtnBadge = false,
+    this.trailingBtnBadge = false,
     this.trailingBtn,
     this.trailingBtnAction,
   });
@@ -50,19 +55,39 @@ class TitleHeadline extends StatelessWidget {
           Row(
             children: [
               backBtn
-                  ? IconButton(
-                      icon: backBtnCustomIcon != null
-                          ? Icon(
-                              backBtnCustomIcon,
-                              color: Theme.of(context).primaryColor,
-                            )
-                          : Icon(
-                              Icons.arrow_back,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                      onPressed: backBtnCustomAction != null
-                          ? backBtnCustomAction
-                          : () => Navigator.of(context).pop(),
+                  ? Stack(
+                      children: [
+                        IconButton(
+                          icon: backBtnCustomIcon != null
+                              ? Icon(
+                                  backBtnCustomIcon,
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              : Icon(
+                                  Icons.arrow_back,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                          onPressed: backBtnCustomAction != null
+                              ? backBtnCustomAction
+                              : () => Navigator.of(context).pop(),
+                        ),
+                        backBtnBadge
+                            ? Container(
+                                width: 52,
+                                height: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  width: Globals.badgeSize,
+                                  height: Globals.badgeSize,
+                                  decoration: new BoxDecoration(
+                                    color: Theme.of(context).colorScheme.error,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
                     )
                   : Container(),
               // Makes the row match the height of the title, avoid misaligns
@@ -70,14 +95,34 @@ class TitleHeadline extends StatelessWidget {
                 child: Container(),
               ),
               trailingBtn != null
-                  ? IconButton(
-                      icon: Icon(
-                        trailingBtn,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: trailingBtnAction,
+                  ? Stack(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            trailingBtn,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: trailingBtnAction,
+                        ),
+                        trailingBtnBadge
+                            ? Container(
+                                width: 52,
+                                height: double.infinity,
+                                padding: const EdgeInsets.all(12),
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  width: Globals.badgeSize,
+                                  height: Globals.badgeSize,
+                                  decoration: new BoxDecoration(
+                                    color: Theme.of(context).colorScheme.error,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
                     )
-                  : Container(),
+                  : const SizedBox(),
             ],
           ),
         ],

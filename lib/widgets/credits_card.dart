@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CreditsCard extends StatelessWidget {
   final String description;
-  final String url;
+  final String? cardUrl;
   final Image image;
   final String? github;
   final String? playStore;
@@ -19,7 +19,7 @@ class CreditsCard extends StatelessWidget {
 
   CreditsCard({
     required this.description,
-    required this.url,
+    this.cardUrl,
     required this.image,
     this.github,
     this.playStore,
@@ -44,7 +44,7 @@ class CreditsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 24),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Globals.borderRadius),
       ),
@@ -55,23 +55,28 @@ class CreditsCard extends StatelessWidget {
         highlightColor:
             rippleColor != null ? Theme.of(context).splashColor : rippleColor,
         borderRadius: BorderRadius.circular(Globals.borderRadius),
-        onTap: () {
-          // Open the required site
-          _launchURL(url);
-        },
+        onTap: cardUrl != null
+            ? () {
+                // Open the required site
+                _launchURL(cardUrl!);
+              }
+            : null,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 description,
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Row(
                 children: [
+                  const SizedBox(width: 12),
                   CircleAvatar(
                     radius: Globals.avatarRadius + 4,
                     backgroundColor: Theme.of(context).colorScheme.onSurface,
@@ -79,6 +84,16 @@ class CreditsCard extends StatelessWidget {
                       child: ClipOval(child: image),
                       radius: Globals.avatarRadius,
                     ),
+                  ),
+                  Flexible(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(Globals.borderRadius),
+                      child: Container(
+                        height: 4,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    fit: FlexFit.tight,
                   ),
                   ..._renderLinks(context)
                 ],

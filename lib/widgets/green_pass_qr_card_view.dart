@@ -101,6 +101,15 @@ class GreenPassQrView extends StatelessWidget {
       alignment: WrapAlignment.spaceEvenly,
       children: [
         TextButton.icon(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Globals.borderRadius),
+              ),
+            ),
+            overlayColor: MaterialStateProperty.all(
+                Theme.of(context).primaryColor.withOpacity(0.2)),
+          ),
           onPressed: () {
             showAppModalBottomSheet(
               context: context,
@@ -115,6 +124,15 @@ class GreenPassQrView extends StatelessWidget {
               .toUpperCase()),
         ),
         TextButton.icon(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(Globals.borderRadius),
+              ),
+            ),
+            overlayColor: MaterialStateProperty.all(
+                Theme.of(context).primaryColor.withOpacity(0.2)),
+          ),
           onPressed: () {
             showAppModalBottomSheet(
               context: context,
