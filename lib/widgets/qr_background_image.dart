@@ -24,13 +24,10 @@ class QrBackgroundImage extends StatelessWidget {
       borderRadius: BorderRadius.circular(Globals.borderRadius),
       child: Container(
         color: Color(backgroundColor),
-        child: Column(
-          children: [
-            // FIXME: Horizontal padding, possibly not as ugly as this one
-            SizedBox(height: Globals.borderRadius),
-            QrImage(data: data), // Test data for max byte --> "a" * 2953),
-            SizedBox(height: Globals.borderRadius),
-          ],
+        padding: const EdgeInsets.all(4),
+        child: QrImage(
+          data: data,
+          gapless: false,
         ),
       ),
     );

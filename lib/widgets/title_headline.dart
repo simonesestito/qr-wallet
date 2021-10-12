@@ -22,8 +22,7 @@ class TitleHeadline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // TODO Check if something is clipped
-      height: 48,
+      height: 52,
       padding: const EdgeInsets.only(
         top: 4,
         left: 8,

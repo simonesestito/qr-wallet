@@ -167,11 +167,11 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Color(0xff1A753F),
         // Main colors
         colorScheme: ColorScheme(
-          primary: Color(0xff1A753F),
-          primaryVariant: Color(0xff0A652F),
-          secondary: Color(0xff2ECB6D),
-          secondaryVariant: Color(0xff3EDB7D),
-          surface: Color(0xff1A753F),
+          primary: Color(0xff3A955F),
+          primaryVariant: Color(0xff1A753F),
+          secondary: Color(0xff4EEB8D),
+          secondaryVariant: Color(0xff5EFB9D),
+          surface: Color(0xff414141),
           background: Color(0xff313131),
           error: Color(0xffB2753F),
           onPrimary: Color(0xffeeeeee),
@@ -184,7 +184,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: Color(0xff313131),
         scaffoldBackgroundColor: Color(0xff313131),
         textSelectionTheme:
-            TextSelectionThemeData(cursorColor: Color(0xff1A753F)),
+            TextSelectionThemeData(cursorColor: Color(0xff3A955F)),
         textTheme: ThemeData.dark().textTheme.copyWith(
               bodyText1: TextStyle(
                 fontSize: 16,

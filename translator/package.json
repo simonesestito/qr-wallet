@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "google-auth-library": "^7.10.0"
+    "google-auth-library": "^7.10.0",
+    "package.json": "^2.0.1"
   }
 }

@@ -13,9 +13,11 @@ import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
+import 'package:qrwallet/widgets/review_buy_app.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'new_pass_dialog.dart';
 
@@ -37,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
   Runnable? _disposeInAppSubscription;
+  bool _showReviewBadge = false;
 
   @override
   void initState() {
@@ -54,6 +57,32 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    // TODO Never triggered atm
+    if (_showReviewBadge) {
+      _showReviewBadge = false;
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      // Update the count or show the review dialog
+      var timesOpened = sp.getInt('times_opened') ?? 0;
+      var firstLaunchTime = sp.getInt('first_launch_time') ?? 0;
+      var dontShowAgain = sp.getBool('dont_show_again') ?? false;
+      if (!dontShowAgain &&
+          timesOpened >= Globals.launchesToReview &&
+          DateTime.now().millisecondsSinceEpoch >=
+              firstLaunchTime +
+                  Globals.daysBeforeReview * 24 * 60 * 60 * 1000) {
+        showAppModalBottomSheet(
+            context: context, builder: () => ReviewBuyApp());
+      } else {
+        sp.setInt('times_opened', timesOpened + 1);
+        if (firstLaunchTime == 0)
+          sp.setInt('first_launch_time', DateTime.now().millisecondsSinceEpoch);
+      }
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -79,21 +108,12 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              backBtn: userStatus == PremiumStatus.BASIC,
-              backBtnCustomIcon: CustomIcons.ads_off,
-              backBtnCustomAction: () async {
-                final products =
-                    await InAppBroadcast.of(context).productDetails;
-                InAppPurchase.instance.buyNonConsumable(
-                  purchaseParam: PurchaseParam(productDetails: products.first),
-                );
-              },
               // TODO Re-enable when settings is complete
-              // backBtn: true,
-              // backBtnCustomIcon: Icons.settings_outlined,
-              // backBtnCustomAction: () {
-              //   Navigator.of(context).pushNamed('/settings');
-              // },
+              backBtn: true,
+              backBtnCustomIcon: Icons.settings_outlined,
+              backBtnCustomAction: () {
+                Navigator.of(context).pushNamed('/settings');
+              },
             ),
             _buildAdBanner(userStatus),
             Expanded(
@@ -110,12 +130,48 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.qr_code_2_rounded),
-        onPressed: () => showAppModalBottomSheet(
-          context: context,
-          builder: () => NewPassDialog(),
-        ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          userStatus == PremiumStatus.BASIC
+              ? FloatingActionButton(
+                  child: Icon(
+                    CustomIcons.ads_off,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  heroTag: 'no_ads_fab',
+                  mini: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Globals.borderRadius / 1.5),
+                  ),
+                  onPressed: () async {
+                    final products =
+                        await InAppBroadcast.of(context).productDetails;
+                    InAppPurchase.instance.buyNonConsumable(
+                      purchaseParam:
+                          PurchaseParam(productDetails: products.first),
+                    );
+                  })
+              : const SizedBox(),
+          userStatus == PremiumStatus.BASIC
+              ? const SizedBox(height: 8)
+              : const SizedBox(),
+          FloatingActionButton(
+            child: Icon(Icons.qr_code_2_rounded),
+            heroTag: 'new_qr_fab',
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Globals.borderRadius),
+            ),
+            onPressed: () => showAppModalBottomSheet(
+              context: context,
+              builder: () => NewPassDialog(),
+            ),
+          ),
+        ],
       ),
     );
   }

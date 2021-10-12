@@ -40,5 +40,9 @@
   "qr_duplicate_message": "Hai già inserito questo codice QR",
   "in_app_purchase_error": "Acquisto fallito, per favore riprova.",
   "in_app_purchase_pending": "Il tuo acquisto è in elaborazione, torna tra poco",
-  "in_app_purchase_success": "Urrà, niente più pubblicità!"
+  "in_app_purchase_success": "Urrà, niente più pubblicità!",
+  "review": "Recensione",
+  "remove_ads": "Rimuovi Ads",
+  "support_developers_title": "Supportaci!",
+  "support_developers_description": "Puoi supportarci semplicemente spendendo il prezzo di un caffè per rimuovere le pubblicità. Se lo hai già fatto, puoi recensire l'app facendoci sapere le tue impressioni ed eventuali consigli. Grazie in anticipo!"
 }

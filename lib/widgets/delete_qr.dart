@@ -24,8 +24,12 @@ class DeleteQr extends StatelessWidget {
         TitleHeadline(
           title: Localization.of(context)!.translate("qr_item_delete")!,
         ),
-        Text(
-          Localization.of(context)!.translate("qr_item_delete_confirmation")!,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            Localization.of(context)!.translate("qr_item_delete_confirmation")!,
+            textAlign: TextAlign.center,
+          ),
         ),
         const SizedBox(height: 16),
         Row(
@@ -36,7 +40,7 @@ class DeleteQr extends StatelessWidget {
               action: () => Navigator.pop(context),
               padding: 8,
               icon: Icons.cancel_outlined,
-              text: Localization.of(context)!.translate("cancel_action")!,
+              text: Localization.of(context)!.translate('cancel_action')!,
             ),
             ButtonWide(
               action: () async {
@@ -49,7 +53,7 @@ class DeleteQr extends StatelessWidget {
               },
               padding: 8,
               icon: Icons.delete_outline_rounded,
-              text: Localization.of(context)!.translate("qr_item_delete")!,
+              text: Localization.of(context)!.translate('qr_item_delete')!,
             ),
             const SizedBox(width: 8),
           ],
