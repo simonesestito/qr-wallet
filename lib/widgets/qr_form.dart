@@ -30,8 +30,13 @@ class _QrFormState extends State<QrForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     _nameController.text = widget.inputData.name ?? '';
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
