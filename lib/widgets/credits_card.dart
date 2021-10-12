@@ -47,8 +47,9 @@ class CreditsCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Globals.borderRadius),
+        side: BorderSide(width: Globals.borderWidth, color: Color(0xffaaaaaa)),
       ),
-      elevation: 4,
+      elevation: 0,
       child: InkWell(
         splashColor:
             rippleColor != null ? Theme.of(context).splashColor : rippleColor,
@@ -73,7 +74,6 @@ class CreditsCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline6,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 8),
               Row(
                 children: [
                   const SizedBox(width: 12),
