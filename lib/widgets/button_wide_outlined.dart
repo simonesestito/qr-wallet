@@ -16,50 +16,48 @@ class ButtonWideOutlined extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      fit: FlexFit.tight,
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: padding,
-          right: padding,
-          top: 6,
-          bottom: 6,
-        ),
-        child: OutlinedButton(
-          style: OutlinedButton.styleFrom(
-            side: BorderSide(
-                width: Globals.borderWidth, color: Color(0xffaaaaaa)),
-            primary: Theme.of(context).colorScheme.secondary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Globals.borderRadius),
-            ),
-            minimumSize: Size(96, 44),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: padding,
+        right: padding,
+        top: 6,
+        bottom: 6,
+      ),
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side:
+              BorderSide(width: Globals.borderWidth, color: Color(0xffaaaaaa)),
+          primary: Theme.of(context).colorScheme.secondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Globals.borderRadius),
           ),
-          onPressed: action,
-          child: icon == null
-              ? Text(
-                  text.toUpperCase(),
-                  style: Theme.of(context).textTheme.button?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      icon,
+          minimumSize: Size(96, 44),
+        ),
+        onPressed: action,
+        child: icon == null
+            ? Text(
+                text.toUpperCase(),
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.button?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      text.toUpperCase(),
-                      style: Theme.of(context).textTheme.button?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                    )
-                  ],
-                ),
-        ),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    text.toUpperCase(),
+                    style: Theme.of(context).textTheme.button?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  )
+                ],
+              ),
       ),
     );
   }

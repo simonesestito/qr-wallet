@@ -39,6 +39,8 @@ class _PostQrFormState extends State<PostQrForm> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
           children: [
             TitleHeadline(
               title: Localization.of(context)!.translate('qr_found')!,
@@ -53,7 +55,7 @@ class _PostQrFormState extends State<PostQrForm> {
                 child: Container(
                   decoration: BoxDecoration(
                     color:
-                        Theme.of(context).colorScheme.onSurface.withOpacity(.1),
+                    Theme.of(context).colorScheme.onSurface.withOpacity(.1),
                     border: Border.all(
                       color: Theme.of(context).colorScheme.onSurface,
                       width: Globals.borderWidth * 2,
