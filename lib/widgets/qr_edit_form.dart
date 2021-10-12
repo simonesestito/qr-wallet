@@ -22,7 +22,7 @@ class QrEditForm extends StatelessWidget {
         title: Localization.of(context)!.translate("qr_item_rename")!,
       ),
       QrForm(
-          inputData: QrFormData(name: qr.alias),
+          inputData: QrFormData(name: qr.alias, format: qr.format),
           onSave: (data) async {
             await context
                 .read<QrListData>()

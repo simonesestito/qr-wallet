@@ -1,36 +1,48 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SimpleQr {
   final String alias;
   final String qrData;
+  final BarcodeFormat format;
 
   SimpleQr({
     required this.alias,
     required this.qrData,
+    required this.format,
   });
 
   factory SimpleQr.fromMap(Map<dynamic, dynamic> data) => SimpleQr(
         alias: data['alias']!,
         qrData: data['qrData']!,
+        format: BarcodeFormat.values.firstWhere(
+          (format) => describeEnum(format) == data['format'],
+          orElse: () => BarcodeFormat.qrcode,
+        ),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() =>
+      {
         'alias': alias,
         'qrData': qrData,
+        'format': describeEnum(format),
       };
 
   SimpleQr copyWith({
     String? alias,
     String? qrData,
+    BarcodeFormat? format,
   }) {
     return SimpleQr(
       alias: alias ?? this.alias,
       qrData: qrData ?? this.qrData,
+      format: format ?? this.format,
     );
   }
 }
@@ -42,7 +54,7 @@ class GreenPass extends SimpleQr {
     required String alias,
     required String qrData,
     required this.greenPassData,
-  }) : super(alias: alias, qrData: qrData);
+  }) : super(alias: alias, qrData: qrData, format: BarcodeFormat.qrcode);
 
   factory GreenPass.fromMap(Map<dynamic, dynamic> data) => GreenPass(
         alias: data['alias']!,
@@ -57,10 +69,12 @@ class GreenPass extends SimpleQr {
         'greenPassData': greenPassData.toMap(),
       };
 
+  @override
   GreenPass copyWith({
     String? alias,
     String? qrData,
     GreenPassData? passData,
+    BarcodeFormat? format, // Ignored as it's always QR code
   }) {
     return GreenPass(
       alias: alias ?? this.alias,

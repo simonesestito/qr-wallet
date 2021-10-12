@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
@@ -16,8 +17,13 @@ import 'package:qrwallet/widgets/title_headline.dart';
 ///
 class PostQrForm extends StatefulWidget {
   final String qrData;
+  final BarcodeFormat format;
 
-  PostQrForm({required this.qrData, Key? key}) : super(key: key);
+  PostQrForm({
+    required this.qrData,
+    required this.format,
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<PostQrForm> createState() => _PostQrFormState();
@@ -55,7 +61,7 @@ class _PostQrFormState extends State<PostQrForm> {
                     borderRadius: BorderRadius.circular(Globals.borderRadius),
                   ),
                   padding: const EdgeInsets.all(20),
-                  child: QrBackgroundImage(widget.qrData),
+                  child: QrBackgroundImage(widget.qrData, widget.format),
                 ),
               ),
             ),
@@ -107,13 +113,18 @@ class _PostQrFormState extends State<PostQrForm> {
     return QrForm(
         inputData: QrFormData(
           name: passData?.displayDescription ?? '',
+          format: widget.format,
         ),
         onSave: (data) async {
           await context.read<QrListData>().addQr(
-                passData == null
-                    ? SimpleQr(alias: data.name, qrData: widget.qrData)
+            passData == null
+                    ? SimpleQr(
+                        alias: data.name!,
+                        qrData: widget.qrData,
+                        format: widget.format,
+                      )
                     : GreenPass(
-                        alias: data.name,
+                        alias: data.name!,
                         qrData: widget.qrData,
                         greenPassData: passData,
                       ),

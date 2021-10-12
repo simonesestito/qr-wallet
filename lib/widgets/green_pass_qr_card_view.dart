@@ -67,7 +67,7 @@ class GreenPassQrView extends StatelessWidget {
         style: Theme.of(context).textTheme.headline6,
         textAlign: TextAlign.center,
       ),
-      QrBackgroundImage(pass.qrData),
+      QrBackgroundImage(pass.qrData, pass.format),
     ];
   }
 

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qrwallet/utils/globals.dart';
 
@@ -9,11 +10,13 @@ import 'package:qrwallet/utils/globals.dart';
 ///
 class QrBackgroundImage extends StatelessWidget {
   final String data;
+  final BarcodeFormat format;
 
-  const QrBackgroundImage(this.data, {Key? key}) : super(key: key);
+  const QrBackgroundImage(this.data, this.format, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print(format.toString() + " - " + data);
     final colorScheme = Theme.of(context).colorScheme;
     final backgroundColor = max(
       colorScheme.background.value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
@@ -11,11 +12,11 @@ import 'button_wide.dart';
 ///
 class QrForm extends StatefulWidget {
   final PassFormOnSave onSave;
-  final QrFormData? inputData;
+  final QrFormData inputData;
 
   QrForm({
     required this.onSave,
-    this.inputData,
+    required this.inputData,
     Key? key,
   }) : super(key: key);
 
@@ -30,7 +31,7 @@ class _QrFormState extends State<QrForm> {
 
   @override
   Widget build(BuildContext context) {
-    _nameController.text = widget.inputData?.name ?? '';
+    _nameController.text = widget.inputData.name ?? '';
     return Form(
       key: _formKey,
       child: Column(
@@ -126,7 +127,10 @@ class _QrFormState extends State<QrForm> {
                     context,
                     Localization.of(context)!.translate('item_saved')!,
                   );
-                  widget.onSave(QrFormData(name: _nameController.text));
+                  widget.onSave(QrFormData(
+                    name: _nameController.text,
+                    format: widget.inputData.format,
+                  ));
                 }
               },
               icon: Icons.save_outlined,
@@ -141,7 +145,8 @@ class _QrFormState extends State<QrForm> {
 typedef PassFormOnSave = Future<void> Function(QrFormData);
 
 class QrFormData {
-  final String name;
+  final String? name;
+  final BarcodeFormat format;
 
-  QrFormData({required this.name});
+  QrFormData({this.name, required this.format});
 }

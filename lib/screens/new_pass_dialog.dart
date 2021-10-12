@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:printing/printing.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/screens/post_qr_form.dart';
@@ -117,7 +118,12 @@ class _NewPassDialogState extends State<NewPassDialog> {
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => PostQrForm(qrData: qrContent)),
+      MaterialPageRoute(
+          builder: (_) => PostQrForm(
+                qrData: qrContent,
+                format: BarcodeFormat
+                    .qrcode, // Only one supported format from gallery/PDF
+              )),
     );
 
     return true;

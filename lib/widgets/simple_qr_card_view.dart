@@ -73,7 +73,7 @@ class SimpleQrView extends StatelessWidget {
         ),
         Padding(
           padding: qrPadding,
-          child: QrBackgroundImage(qr.qrData),
+          child: QrBackgroundImage(qr.qrData, qr.format),
         ),
         Wrap(
           direction: Axis.horizontal,

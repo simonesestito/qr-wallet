@@ -110,14 +110,18 @@ class _QrScanWidgetState extends State<QrScanWidget> {
     // Ensure the Scanner view is properly sized after rotation (the app won't rotate tho)
     return QRView(
       key: qrKey,
-      formatsAllowed: [BarcodeFormat.qrcode],
+      formatsAllowed: [
+        BarcodeFormat.qrcode,
+        BarcodeFormat.aztec,
+      ],
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Theme.of(context).colorScheme.secondary,
-          borderRadius: Globals.borderRadius,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
+        borderColor: Theme.of(context).colorScheme.secondary,
+        borderRadius: Globals.borderRadius,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: scanArea,
+      ),
       // Define what happens when the permission is not granted
       onPermissionSet: (ctrl, granted) {
         if (!granted) {
@@ -135,7 +139,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
       await this._qrViewController?.pauseCamera();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => PostQrForm(qrData: scan.code),
+          builder: (_) => PostQrForm(qrData: scan.code, format: scan.format),
         ),
       );
     });
