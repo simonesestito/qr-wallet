@@ -8,20 +8,21 @@ import 'package:printing/printing.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
 import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/widgets/post_qr_form.dart';
 import 'package:qrwallet/screens/qr_scan_screen.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
 import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
 
-class NewPassDialog extends StatefulWidget {
-  const NewPassDialog({Key? key}) : super(key: key);
+class NewQR extends StatefulWidget {
+  const NewQR({Key? key}) : super(key: key);
 
   @override
-  _NewPassDialogState createState() => _NewPassDialogState();
+  _NewQRState createState() => _NewQRState();
 }
 
-class _NewPassDialogState extends State<NewPassDialog> {
+class _NewQRState extends State<NewQR> {
   final _imagePicker = ImagePicker();
 
   @override
@@ -41,7 +42,13 @@ class _NewPassDialogState extends State<NewPassDialog> {
         subtitle: Text(
             Localization.of(context)!.translate('take_photo_description')!),
         isThreeLine: true,
-        leading: Icon(Icons.camera_alt),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          child: Icon(Icons.camera_alt),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Globals.borderRadius),
+              color: Theme.of(context).colorScheme.error),
+        ),
         onTap: () => Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => QrScanWidget())),
       ),
@@ -51,7 +58,13 @@ class _NewPassDialogState extends State<NewPassDialog> {
         subtitle: Text(
             Localization.of(context)!.translate('pick_photo_description')!),
         isThreeLine: true,
-        leading: Icon(Icons.photo),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          child: Icon(Icons.photo),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Globals.borderRadius),
+              color: Theme.of(context).colorScheme.primary),
+        ),
         onTap: () async {
           final photo = await _imagePicker.pickImage(
             source: ImageSource.gallery,
@@ -73,7 +86,13 @@ class _NewPassDialogState extends State<NewPassDialog> {
         subtitle: Text(Localization.of(context)!
             .translate('extract_from_pdf_description')!),
         isThreeLine: true,
-        leading: Icon(Icons.picture_as_pdf),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          child: Icon(Icons.picture_as_pdf),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Globals.borderRadius),
+              color: Theme.of(context).colorScheme.primaryVariant),
+        ),
         onTap: () async {
           final fileResult = await FilePicker.platform.pickFiles(
             allowMultiple: false,
