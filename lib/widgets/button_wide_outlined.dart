@@ -52,6 +52,7 @@ class ButtonWideOutlined extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     text.toUpperCase(),
+                    textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.button?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),

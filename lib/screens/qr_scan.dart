@@ -50,21 +50,23 @@ class _QrScanWidgetState extends State<QrScanWidget> {
                   StandardDialogs.showQrInfoDialog(context),
             ),
             Expanded(
-              flex: 15,
+              flex: 32,
               child: _buildQrView(context),
             ),
             Expanded(
               flex: 1,
-              child: Center(
-                child: Text(
-                    result.isNotEmpty
-                        ? result
-                        : Localization.of(context)!.translate('scan_a_code')!,
-                    style: Theme.of(context).textTheme.headline6),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.background,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(Globals.borderRadius),
+                    topRight: Radius.circular(Globals.borderRadius),
+                  ),
+                ),
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 4,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

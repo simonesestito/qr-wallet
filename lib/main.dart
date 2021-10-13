@@ -19,6 +19,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Lock the phone in portrait mode in every screen
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   MobileAds.instance.initialize();
 
   if (defaultTargetPlatform == TargetPlatform.android) {
