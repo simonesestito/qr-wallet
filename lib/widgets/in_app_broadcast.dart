@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:qrwallet/models/free_purchases_status.dart';
 import 'package:qrwallet/utils/completable_future.dart';
 import 'package:qrwallet/utils/google_play_verification.dart';
 
@@ -14,9 +15,11 @@ import 'package:qrwallet/utils/google_play_verification.dart';
 /// - [false]: User is Basic
 /// - [null]: Don't force a status
 ///
-const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = false;
+const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = null;
 
 class InAppBroadcast extends InheritedWidget {
+  static const REMOVE_ADS_SKU = 'remove_ads';
+
   final Map<InAppEvent, List<Runnable>> _inAppListeners = Map.fromEntries(
     InAppEvent.values.map((e) => MapEntry(e, List.empty(growable: true))),
   );
@@ -35,10 +38,8 @@ class InAppBroadcast extends InheritedWidget {
     return () => _inAppListeners[type]!.remove(runnable);
   }
 
-  Runnable listenForEvents(
-    List<InAppEvent> types,
-    Callback callback,
-  ) {
+  Runnable listenForEvents(List<InAppEvent> types,
+      Callback callback,) {
     final cancelActions = List<Runnable>.empty(growable: true);
     for (InAppEvent type in types) {
       cancelActions.add(listenForEvent(type, () => callback(type)));
@@ -56,6 +57,11 @@ class InAppBroadcast extends InheritedWidget {
   Stream<PremiumStatus> get isUserPremium =>
       _inAppDataKey.currentState!._isUserPremium.stream
           .map((event) => event ? PremiumStatus.PREMIUM : PremiumStatus.BASIC);
+
+  Future<void> refreshStatus() async {
+    _inAppDataKey.currentState!._productDetails = null;
+    await _inAppDataKey.currentState!.productDetails;
+  }
 
   @override
   bool updateShouldNotify(InAppBroadcast oldWidget) => false;
@@ -118,6 +124,14 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
   @override
   void initState() {
     super.initState();
+    FreePurchasesStatus.instance
+        .getFreePurchaseStatus(InAppBroadcast.REMOVE_ADS_SKU)
+        .then((isFreePeriod) {
+      if (isFreePeriod) {
+        _isUserPremium.add(true);
+      }
+    });
+
     _subscription = InAppPurchase.instance.purchaseStream.listen(
       _listenToPurchaseUpdated,
       onDone: () => _subscription?.cancel(),
@@ -131,7 +145,7 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
   Future<List<ProductDetails>> _loadProductDetails() async {
     await InAppPurchase.instance.isAvailable();
     final details = await InAppPurchase.instance.queryProductDetails({
-      'remove_ads',
+      InAppBroadcast.REMOVE_ADS_SKU,
     });
     await InAppPurchase.instance.restorePurchases();
     return details.productDetails;
@@ -152,6 +166,13 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
     if (kDebugMode && DEBUG_FORCE_PREMIUM_ADS_STATUS != null) {
       eventEmitted = true;
       _isUserPremium.add(DEBUG_FORCE_PREMIUM_ADS_STATUS!);
+    }
+
+    final isFreePeriod = await FreePurchasesStatus.instance
+        .getFreePurchaseStatus(InAppBroadcast.REMOVE_ADS_SKU);
+    if (isFreePeriod) {
+      eventEmitted = true;
+      _isUserPremium.add(true);
     }
 
     for (PurchaseDetails purchase in purchases) {

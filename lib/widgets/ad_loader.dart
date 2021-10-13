@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:qrwallet/models/free_purchases_status.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 
 abstract class AdLoader<T extends AdWithoutView> {
@@ -40,14 +41,13 @@ abstract class AdLoader<T extends AdWithoutView> {
       _loadedAd?.dispose();
       _loadedAd = null;
       adCompleter.complete();
-    });
+    }, context);
     return adCompleter.future;
   }
 
-  void _showAd(void Function() onComplete);
+  void _showAd(void Function() onComplete, BuildContext context);
 
-  void _loadAdUnit(void Function(T) onSuccess,
-      void Function(AdError) onError);
+  void _loadAdUnit(void Function(T) onSuccess, void Function(AdError) onError);
 }
 
 class InterstitialAdLoader extends AdLoader<InterstitialAd> {
@@ -69,7 +69,7 @@ class InterstitialAdLoader extends AdLoader<InterstitialAd> {
   }
 
   @override
-  void _showAd(void Function() onComplete) {
+  void _showAd(void Function() onComplete, BuildContext context) {
     _loadedAd?.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (_) => onComplete(),
       onAdFailedToShowFullScreenContent: (ad, error) {
@@ -84,8 +84,7 @@ class InterstitialAdLoader extends AdLoader<InterstitialAd> {
 class RewardedAdLoader extends AdLoader<RewardedAd> {
   static final RewardedAdLoader instance = RewardedAdLoader._();
 
-  // TODO: Real ad unit ID
-  RewardedAdLoader._() : super('ca-app-pub-3940256099942544/5224354917');
+  RewardedAdLoader._() : super('ca-app-pub-3883344461454437/7228011576');
 
   @override
   void _loadAdUnit(void Function(RewardedAd ad) onSuccess,
@@ -98,7 +97,6 @@ class RewardedAdLoader extends AdLoader<RewardedAd> {
           onSuccess(ad);
         },
         onAdFailedToLoad: (err) {
-          // FIXME: Doesn't load
           onError(err);
         },
       ),
@@ -106,7 +104,7 @@ class RewardedAdLoader extends AdLoader<RewardedAd> {
   }
 
   @override
-  void _showAd(void Function() onComplete) {
+  void _showAd(void Function() onComplete, BuildContext context) {
     _loadedAd?.fullScreenContentCallback = FullScreenContentCallback(
       onAdDismissedFullScreenContent: (_) => onComplete(),
       onAdFailedToShowFullScreenContent: (ad, error) {
@@ -114,8 +112,11 @@ class RewardedAdLoader extends AdLoader<RewardedAd> {
         onComplete();
       },
     );
-    _loadedAd?.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
-      // TODO: Add encrypted millis to shared prefs
+    _loadedAd?.show(
+        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
+      await FreePurchasesStatus.instance
+          .addFreePurchase(reward.type, Duration(days: reward.amount.toInt()));
+      await InAppBroadcast.of(context).refreshStatus();
     });
   }
 }
