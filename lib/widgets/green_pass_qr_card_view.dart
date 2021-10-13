@@ -6,7 +6,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/expanded_scroll_column.dart';
-import 'package:qrwallet/widgets/TextWithIcon.dart';
+import 'package:qrwallet/widgets/text_with_icon.dart';
 
 import 'delete_qr.dart';
 import 'qr_background_image.dart';
