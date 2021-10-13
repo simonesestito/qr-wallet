@@ -14,6 +14,7 @@ async function main() {
         Object.freeze(input);
         const cached = cache[sourceKey] || {};
         const old = cached['old'] || {};
+        let translated = false;
         
         for (const langDetails of config.languages) {
             const { lang } = langDetails;
@@ -38,6 +39,7 @@ async function main() {
                     toTranslate.delete(key);
                 });
 
+            translated = translated | toTranslate.size > 0;
             const stringsMap = Object.fromEntries(
                 Object.entries(input)
                     .filter(([k,v]) => toTranslate.has(k))
@@ -64,7 +66,8 @@ async function main() {
             cached[lang] = Object.keys(output);
         }
 
-        await source.finalize();
+        if (translated)
+            await source.finalize();
 
         // Update defaultLanguage cache
         cached['old'] = input;

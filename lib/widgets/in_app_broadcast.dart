@@ -15,7 +15,7 @@ import 'package:qrwallet/utils/google_play_verification.dart';
 /// - [false]: User is Basic
 /// - [null]: Don't force a status
 ///
-const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = null;
+const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = false;
 
 class InAppBroadcast extends InheritedWidget {
   static const REMOVE_ADS_SKU = 'remove_ads';
@@ -38,8 +38,10 @@ class InAppBroadcast extends InheritedWidget {
     return () => _inAppListeners[type]!.remove(runnable);
   }
 
-  Runnable listenForEvents(List<InAppEvent> types,
-      Callback callback,) {
+  Runnable listenForEvents(
+    List<InAppEvent> types,
+    Callback callback,
+  ) {
     final cancelActions = List<Runnable>.empty(growable: true);
     for (InAppEvent type in types) {
       cancelActions.add(listenForEvent(type, () => callback(type)));
@@ -127,6 +129,8 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
     FreePurchasesStatus.instance
         .getFreePurchaseStatus(InAppBroadcast.REMOVE_ADS_SKU)
         .then((isFreePeriod) {
+      if (kDebugMode && DEBUG_FORCE_PREMIUM_ADS_STATUS == false) return;
+
       if (isFreePeriod) {
         _isUserPremium.add(true);
       }
@@ -170,7 +174,7 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
 
     final isFreePeriod = await FreePurchasesStatus.instance
         .getFreePurchaseStatus(InAppBroadcast.REMOVE_ADS_SKU);
-    if (isFreePeriod) {
+    if (!eventEmitted && isFreePeriod) {
       eventEmitted = true;
       _isUserPremium.add(true);
     }

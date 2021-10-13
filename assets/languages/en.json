@@ -47,6 +47,7 @@
   "support_developers_description": "You can support us spending the price of a coffee to remove the advertisements. If you did already, simply review the app and let us know your impressions and advices. Thanks in advance!",
   "ok": "OK",
   "remove_ads_title": "Remove Ads",
-  "remove_ads_description": "To remove the ads, you can both offer us a coffee, or watch a video to obtain one week of ad-free experience. Remember that we put a lot of efforts in this app! Whatever you decide, thank you!",
-  "reward_ad": "Watch"
+  "remove_ads_description": "You can watch a video to remove ads for a week, or buy us a coffee. Thank you a lot!",
+  "remove_ads_button": "Remove forever",
+  "reward_ad": "Watch a video"
 }

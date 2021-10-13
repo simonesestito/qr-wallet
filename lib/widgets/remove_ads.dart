@@ -34,10 +34,9 @@ class RemoveAdsBottomSheet extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          alignment: WrapAlignment.center,
           children: [
-            const SizedBox(width: 8),
             ButtonWideOutlined(
               action: () async {
                 final success =
@@ -61,9 +60,8 @@ class RemoveAdsBottomSheet extends StatelessWidget {
               },
               padding: 8,
               icon: CustomIcons.ads_off,
-              text: Localization.of(context)!.translate('remove_ads')!,
+              text: Localization.of(context)!.translate('remove_ads_button')!,
             ),
-            const SizedBox(width: 8),
           ],
         ),
         const SizedBox(height: 16),
