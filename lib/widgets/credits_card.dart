@@ -87,7 +87,10 @@ class CreditsCard extends StatelessWidget {
                   ),
                   Flexible(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(Globals.borderRadius),
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(Globals.borderRadius),
+                        topRight: Radius.circular(Globals.borderRadius),
+                      ),
                       child: Container(
                         height: 4,
                         color: Theme.of(context).colorScheme.onSurface,

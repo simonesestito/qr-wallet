@@ -51,18 +51,36 @@ class _QrScanWidgetState extends State<QrScanWidget> {
             ),
             Expanded(
               flex: 32,
-              child: _buildQrView(context),
-            ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.background,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(Globals.borderRadius),
-                    topRight: Radius.circular(Globals.borderRadius),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  _buildQrView(context),
+                  Container(
+                    width: double.infinity,
+                    height: Globals.borderRadius,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(Globals.borderRadius),
+                        topRight: Radius.circular(Globals.borderRadius),
+                      ),
+                    ),
                   ),
-                ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      width: double.infinity,
+                      height: Globals.borderRadius,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(Globals.borderRadius),
+                          bottomRight: Radius.circular(Globals.borderRadius),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
