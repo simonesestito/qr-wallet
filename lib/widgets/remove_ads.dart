@@ -13,8 +13,8 @@ import 'bottomsheet_container.dart';
 import 'in_app_broadcast.dart';
 import 'title_headline.dart';
 
-class ReviewBuyApp extends StatelessWidget {
-  const ReviewBuyApp({
+class RemoveAds extends StatelessWidget {
+  const RemoveAds({
     Key? key,
   }) : super(key: key);
 
@@ -23,14 +23,12 @@ class ReviewBuyApp extends StatelessWidget {
     return BottomSheetContainer(
       children: [
         TitleHeadline(
-          title:
-              Localization.of(context)!.translate('support_developers_title')!,
+          title: Localization.of(context)!.translate('remove_ads_title')!,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            Localization.of(context)!
-                .translate('support_developers_description')!,
+            Localization.of(context)!.translate('remove_ads_description')!,
             textAlign: TextAlign.center,
           ),
         ),
@@ -41,31 +39,26 @@ class ReviewBuyApp extends StatelessWidget {
             const SizedBox(width: 8),
             ButtonWideOutlined(
               action: () async {
-                if (await canLaunch(Globals.appUrl)) {
-                  await launch(Globals.appUrl);
-                }
+                // TODO Start reward ad
                 Navigator.pop(context);
               },
               padding: 8,
-              icon: Icons.star_border_rounded,
-              text: Localization.of(context)!.translate('review')!,
+              icon: Icons.ondemand_video_rounded,
+              text: Localization.of(context)!.translate('reward_ad')!,
             ),
-            context.watch<PremiumStatus>() == PremiumStatus.BASIC
-                ? ButtonWide(
-                    action: () async {
-                      final products =
-                          await InAppBroadcast.of(context).productDetails;
-                      InAppPurchase.instance.buyNonConsumable(
-                        purchaseParam:
-                            PurchaseParam(productDetails: products.first),
-                      );
-                      Navigator.pop(context);
-                    },
-                    padding: 8,
-                    icon: CustomIcons.ads_off,
-                    text: Localization.of(context)!.translate('remove_ads')!,
-                  )
-                : const SizedBox(),
+            ButtonWide(
+              action: () async {
+                final products =
+                    await InAppBroadcast.of(context).productDetails;
+                InAppPurchase.instance.buyNonConsumable(
+                  purchaseParam: PurchaseParam(productDetails: products.first),
+                );
+                Navigator.pop(context);
+              },
+              padding: 8,
+              icon: CustomIcons.ads_off,
+              text: Localization.of(context)!.translate('remove_ads')!,
+            ),
             const SizedBox(width: 8),
           ],
         ),

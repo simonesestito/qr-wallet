@@ -13,7 +13,6 @@ import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
-import 'package:qrwallet/widgets/review_buy_app.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
@@ -40,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool? _maxBrightClicked; // Click on the button
   Runnable? _disposeInAppSubscription;
   bool _showReviewBadge = false;
+  SharedPreferences? sp;
 
   @override
   void initState() {
@@ -61,21 +61,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void didChangeDependencies() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp = await SharedPreferences.getInstance();
     // Update the count or show the review dialog
-    var timesOpened = sp.getInt('times_opened') ?? 0;
-    var firstLaunchTime = sp.getInt('first_launch_time') ?? 0;
-    var dontShowAgain = sp.getBool('dont_show_again') ?? false;
+    var timesOpened = sp!.getInt('times_opened') ?? 0;
+    var firstLaunchTime = sp!.getInt('first_launch_time') ?? 0;
+    var dontShowAgain = sp!.getBool('dont_show_again') ?? false;
     if (!dontShowAgain &&
         timesOpened >= Globals.launchesToReview &&
         DateTime.now().millisecondsSinceEpoch >=
             firstLaunchTime + Globals.daysBeforeReview * 24 * 60 * 60 * 1000) {
       // Conditions fullfilled
-      _showReviewBadge = true;
+      setState(() {
+        _showReviewBadge = true;
+      });
     } else {
-      sp.setInt('times_opened', timesOpened + 1);
+      sp!.setInt('times_opened', timesOpened + 1);
       if (firstLaunchTime == 0)
-        sp.setInt('first_launch_time', DateTime.now().millisecondsSinceEpoch);
+        sp!.setInt('first_launch_time', DateTime.now().millisecondsSinceEpoch);
     }
     super.didChangeDependencies();
   }
@@ -114,8 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnCustomAction: () {
                 Navigator.of(context).pushNamed(
                   '/settings',
-                  arguments: {'showReviewSheet': true},
+                  arguments: {'showReviewSheet': _showReviewBadge},
                 );
+                // The rate dialog is displayed a single time, no matter what
+                sp!.setBool('dont_show_again', true);
+                setState(() {
+                  _showReviewBadge = false;
+                });
               },
             ),
             _buildAdBanner(userStatus),
@@ -152,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         BorderRadius.circular(Globals.borderRadius / 1.5),
                   ),
                   onPressed: () async {
+                    // TODO open a bottomsheet containing remove_ads.dart
                     await RewardedAdLoader.instance.showAdIfAvailable(context);
                     final products =
                         await InAppBroadcast.of(context).productDetails;
