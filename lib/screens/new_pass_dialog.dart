@@ -12,7 +12,7 @@ import 'package:qrwallet/screens/post_qr_form.dart';
 import 'package:qrwallet/screens/qr_scan.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
+import 'package:qrwallet/widgets/ad_loader.dart';
 
 class NewPassDialog extends StatefulWidget {
   const NewPassDialog({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class _NewPassDialogState extends State<NewPassDialog> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       recoverLostData();
-      InterstitialAdLoader.loadAd(context);
+      InterstitialAdLoader.instance.loadAd(context);
     });
   }
 
