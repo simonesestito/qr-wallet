@@ -10,9 +10,9 @@ import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/custom_icons.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
+import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
-import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
 import 'package:qrwallet/widgets/review_buy_app.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
@@ -82,8 +82,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // FIXME: Remove Rewarded Ad Loading here
+    Future.delayed(Duration(seconds: 1), () {
+      RewardedAdLoader.instance.loadAd(context);
+    });
+
     final userStatus = context.watch<PremiumStatus>();
-    final passList = context.watch<QrListData>().passes;
+    final passList = context
+        .watch<QrListData>()
+        .passes;
 
     final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
     if (_maxBright)
@@ -118,8 +125,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
-                        ? buildSingleQR(passList.first)
-                        : buildList(passList),
+                    ? buildSingleQR(passList.first)
+                    : buildList(passList),
               ),
             ),
           ],
@@ -132,25 +139,28 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           userStatus == PremiumStatus.BASIC
               ? FloatingActionButton(
-                  child: Icon(
-                    CustomIcons.ads_off,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  heroTag: 'no_ads_fab',
-                  mini: true,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  shape: RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(Globals.borderRadius / 1.5),
-                  ),
-                  onPressed: () async {
-                    final products =
-                        await InAppBroadcast.of(context).productDetails;
-                    InAppPurchase.instance.buyNonConsumable(
-                      purchaseParam:
-                          PurchaseParam(productDetails: products.first),
-                    );
-                  })
+              child: Icon(
+                CustomIcons.ads_off,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              heroTag: 'no_ads_fab',
+              mini: true,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                BorderRadius.circular(Globals.borderRadius / 1.5),
+              ),
+              onPressed: () async {
+                await RewardedAdLoader.instance.showAdIfAvailable(context);
+                final products =
+                await InAppBroadcast
+                    .of(context)
+                    .productDetails;
+                InAppPurchase.instance.buyNonConsumable(
+                  purchaseParam:
+                  PurchaseParam(productDetails: products.first),
+                );
+              })
               : const SizedBox(),
           userStatus == PremiumStatus.BASIC
               ? const SizedBox(height: 8)
@@ -187,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Build the placeholder
   Widget buildEmptyView(BuildContext context) {
-    InterstitialAdLoader.loadAd(context);
+    InterstitialAdLoader.instance.loadAd(context);
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +206,12 @@ class _HomeScreenState extends State<HomeScreen> {
           'assets/images/no_qr_placeholder.png',
           height: 96,
           alignment: Alignment.center,
-          color: Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.4),
+          color: Theme
+              .of(context)
+              .textTheme
+              .bodyText2!
+              .color!
+              .withOpacity(0.4),
         ),
         const SizedBox(height: 20),
         Padding(

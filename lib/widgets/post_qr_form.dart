@@ -7,7 +7,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/utils.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
-import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
+import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/qr_background_image.dart';
 import 'package:qrwallet/widgets/qr_form.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
@@ -99,10 +99,10 @@ class _PostQrFormState extends State<PostQrForm> {
       // --> Spacer(),
       ButtonWideOutlined(
         action: () async {
-          await InterstitialAdLoader.showAdIfAvailable(context);
+          await InterstitialAdLoader.instance.showAdIfAvailable(context);
           Navigator.popUntil(
             context,
-            (route) => route.isFirst,
+                (route) => route.isFirst,
           );
         },
         text: Localization.of(context)!.translate("cancel_action")!,
@@ -131,7 +131,7 @@ class _PostQrFormState extends State<PostQrForm> {
                         greenPassData: passData,
                       ),
               );
-          await InterstitialAdLoader.showAdIfAvailable(context);
+          await InterstitialAdLoader.instance.showAdIfAvailable(context);
           Navigator.popUntil(
             context,
             (route) => route.isFirst,

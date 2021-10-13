@@ -13,7 +13,7 @@ import 'package:qrwallet/widgets/post_qr_form.dart';
 import 'package:qrwallet/screens/qr_scan_screen.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/widgets/interstitial_ad_loader.dart';
+import 'package:qrwallet/widgets/ad_loader.dart';
 
 class NewQR extends StatefulWidget {
   const NewQR({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _NewQRState extends State<NewQR> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       recoverLostData();
-      InterstitialAdLoader.loadAd(context);
+      InterstitialAdLoader.instance.loadAd(context);
     });
   }
 

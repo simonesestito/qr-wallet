@@ -8,6 +8,14 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:qrwallet/utils/completable_future.dart';
 import 'package:qrwallet/utils/google_play_verification.dart';
 
+///
+/// Force ads status on debug builds:
+/// - [true]: User is Premium
+/// - [false]: User is Basic
+/// - [null]: Don't force a status
+///
+const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = false;
+
 class InAppBroadcast extends InheritedWidget {
   final Map<InAppEvent, List<Runnable>> _inAppListeners = Map.fromEntries(
     InAppEvent.values.map((e) => MapEntry(e, List.empty(growable: true))),
@@ -140,6 +148,12 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
 
   void _listenToPurchaseUpdated(List<PurchaseDetails> purchases) async {
     var eventEmitted = false;
+
+    if (kDebugMode && DEBUG_FORCE_PREMIUM_ADS_STATUS != null) {
+      eventEmitted = true;
+      _isUserPremium.add(DEBUG_FORCE_PREMIUM_ADS_STATUS!);
+    }
+
     for (PurchaseDetails purchase in purchases) {
       if (purchase.status == PurchaseStatus.error) {
         // Error purchase
@@ -167,8 +181,10 @@ class _InAppBroadcastDataState extends State<_InAppBroadcastData> {
           }
         }
 
-        eventEmitted = true;
-        _isUserPremium.add(isValid);
+        if (!eventEmitted && isValid) {
+          eventEmitted = true;
+          _isUserPremium.add(true);
+        }
 
         if (!isValid)
           InAppBroadcast.of(context).emitEventType(InAppEvent.ERROR);
