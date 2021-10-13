@@ -29,18 +29,18 @@ abstract class AdLoader<T extends AdWithoutView> {
     });
   }
 
-  Future<void> showAdIfAvailable(BuildContext context) {
+  Future<bool> showAdIfAvailable(BuildContext context) {
     if (_loadedAd == null ||
         context.read<PremiumStatus>() != PremiumStatus.BASIC) {
       // If PremiumStatus is UNKNOWN, don't show ad
-      return Future.value();
+      return Future.value(false);
     }
 
-    final adCompleter = Completer();
+    final adCompleter = Completer<bool>();
     _showAd(() {
       _loadedAd?.dispose();
       _loadedAd = null;
-      adCompleter.complete();
+      adCompleter.complete(true);
     }, context);
     return adCompleter.future;
   }

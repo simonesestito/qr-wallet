@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
@@ -13,6 +12,7 @@ import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/green_pass_qr_card_view.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
+import 'package:qrwallet/widgets/remove_ads.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
@@ -84,11 +84,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // FIXME: Remove Rewarded Ad Loading here
-    Future.delayed(Duration(seconds: 1), () {
-      RewardedAdLoader.instance.loadAd(context);
-    });
-
     final userStatus = context.watch<PremiumStatus>();
     final passList = context.watch<QrListData>().passes;
 
@@ -159,14 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         BorderRadius.circular(Globals.borderRadius / 1.5),
                   ),
                   onPressed: () async {
-                    // TODO open a bottomsheet containing remove_ads.dart
-                    await RewardedAdLoader.instance.showAdIfAvailable(context);
-                    final products =
-                        await InAppBroadcast.of(context).productDetails;
-                    InAppPurchase.instance.buyNonConsumable(
-                      purchaseParam:
-                          PurchaseParam(productDetails: products.first),
-                    );
+                    showAppModalBottomSheet(
+                        context: context,
+                        builder: () {
+                          return RemoveAdsBottomSheet();
+                        });
                   })
               : const SizedBox(),
           userStatus == PremiumStatus.BASIC

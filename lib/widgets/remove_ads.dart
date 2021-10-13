@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:provider/src/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/utils/custom_icons.dart';
-import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/widgets/button_wide.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import 'ad_loader.dart';
 import 'bottomsheet_container.dart';
 import 'in_app_broadcast.dart';
 import 'title_headline.dart';
 
-class RemoveAds extends StatelessWidget {
-  const RemoveAds({
+class RemoveAdsBottomSheet extends StatelessWidget {
+  const RemoveAdsBottomSheet({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      RewardedAdLoader.instance.loadAd(context);
+    });
+
     return BottomSheetContainer(
       children: [
         TitleHeadline(
@@ -39,8 +40,11 @@ class RemoveAds extends StatelessWidget {
             const SizedBox(width: 8),
             ButtonWideOutlined(
               action: () async {
-                // TODO Start reward ad
-                Navigator.pop(context);
+                final success =
+                    await RewardedAdLoader.instance.showAdIfAvailable(context);
+                if (success) {
+                  Navigator.pop(context);
+                }
               },
               padding: 8,
               icon: Icons.ondemand_video_rounded,
@@ -50,7 +54,7 @@ class RemoveAds extends StatelessWidget {
               action: () async {
                 final products =
                     await InAppBroadcast.of(context).productDetails;
-                InAppPurchase.instance.buyNonConsumable(
+                await InAppPurchase.instance.buyNonConsumable(
                   purchaseParam: PurchaseParam(productDetails: products.first),
                 );
                 Navigator.pop(context);
