@@ -15,8 +15,10 @@ import 'lang/localization.dart';
 import 'models/data.dart';
 import 'screens/settings_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // Lock the phone in portrait mode in every screen
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   MobileAds.instance.initialize();
 
   if (defaultTargetPlatform == TargetPlatform.android) {
