@@ -88,9 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     final userStatus = context.watch<PremiumStatus>();
-    final passList = context
-        .watch<QrListData>()
-        .passes;
+    final passList = context.watch<QrListData>().passes;
 
     final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
     if (_maxBright)
@@ -110,11 +108,14 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              backBtnBadge: true, // TODO logic
+              backBtnBadge: _showReviewBadge,
               backBtn: true,
               backBtnCustomIcon: Icons.settings_outlined,
               backBtnCustomAction: () {
-                Navigator.of(context).pushNamed('/settings');
+                Navigator.of(context).pushNamed(
+                  '/settings',
+                  arguments: {'showReviewSheet': true},
+                );
               },
             ),
             _buildAdBanner(userStatus),
@@ -125,8 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
-                    ? buildSingleQR(passList.first)
-                    : buildList(passList),
+                        ? buildSingleQR(passList.first)
+                        : buildList(passList),
               ),
             ),
           ],
@@ -139,28 +140,26 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           userStatus == PremiumStatus.BASIC
               ? FloatingActionButton(
-              child: Icon(
-                CustomIcons.ads_off,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              heroTag: 'no_ads_fab',
-              mini: true,
-              backgroundColor: Theme.of(context).colorScheme.surface,
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                BorderRadius.circular(Globals.borderRadius / 1.5),
-              ),
-              onPressed: () async {
-                await RewardedAdLoader.instance.showAdIfAvailable(context);
-                final products =
-                await InAppBroadcast
-                    .of(context)
-                    .productDetails;
-                InAppPurchase.instance.buyNonConsumable(
-                  purchaseParam:
-                  PurchaseParam(productDetails: products.first),
-                );
-              })
+                  child: Icon(
+                    CustomIcons.ads_off,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  heroTag: 'no_ads_fab',
+                  mini: true,
+                  backgroundColor: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(Globals.borderRadius / 1.5),
+                  ),
+                  onPressed: () async {
+                    await RewardedAdLoader.instance.showAdIfAvailable(context);
+                    final products =
+                        await InAppBroadcast.of(context).productDetails;
+                    InAppPurchase.instance.buyNonConsumable(
+                      purchaseParam:
+                          PurchaseParam(productDetails: products.first),
+                    );
+                  })
               : const SizedBox(),
           userStatus == PremiumStatus.BASIC
               ? const SizedBox(height: 8)
@@ -206,12 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'assets/images/no_qr_placeholder.png',
           height: 96,
           alignment: Alignment.center,
-          color: Theme
-              .of(context)
-              .textTheme
-              .bodyText2!
-              .color!
-              .withOpacity(0.4),
+          color: Theme.of(context).textTheme.bodyText2!.color!.withOpacity(0.4),
         ),
         const SizedBox(height: 20),
         Padding(

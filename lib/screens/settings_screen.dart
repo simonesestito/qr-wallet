@@ -2,13 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/utils/globals.dart';
+import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/credits_card.dart';
+import 'package:qrwallet/widgets/review_buy_app.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
-  const SettingsScreen({Key? key}) : super(key: key);
+  const SettingsScreen({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      final arguments = ModalRoute.of(context)?.settings.arguments as Map?;
+      // Open the review dialog if specified
+      if (arguments != null && arguments['showReviewSheet']) {
+        showAppModalBottomSheet(
+          context: context,
+          builder: () => ReviewBuyApp(),
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +40,7 @@ class SettingsScreen extends StatelessWidget {
       future: PackageInfo.fromPlatform(),
       builder: (context, data) {
         final appVersion = data.data?.version ?? '';
+
         return Scaffold(
           body: SafeArea(
             child: Column(
