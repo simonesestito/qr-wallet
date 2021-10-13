@@ -19,7 +19,7 @@ import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'new_pass_dialog.dart';
+import '../widgets/new_pass_dialog.dart';
 
 class HomeScreen extends StatefulWidget with RouteAware {
   const HomeScreen({Key? key}) : super(key: key);

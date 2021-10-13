@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/screens/post_qr_form.dart';
+import 'package:qrwallet/widgets/post_qr_form.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
