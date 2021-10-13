@@ -44,7 +44,10 @@ class _NewQRState extends State<NewQR> {
         isThreeLine: true,
         leading: Container(
           padding: const EdgeInsets.all(8),
-          child: Icon(Icons.camera_alt),
+          child: Icon(
+            Icons.camera_alt,
+            color: Colors.white,
+          ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Globals.borderRadius),
               color: Theme.of(context).colorScheme.error),
@@ -60,7 +63,10 @@ class _NewQRState extends State<NewQR> {
         isThreeLine: true,
         leading: Container(
           padding: const EdgeInsets.all(8),
-          child: Icon(Icons.photo),
+          child: Icon(
+            Icons.photo,
+            color: Colors.white,
+          ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Globals.borderRadius),
               color: Theme.of(context).colorScheme.primary),
@@ -88,7 +94,10 @@ class _NewQRState extends State<NewQR> {
         isThreeLine: true,
         leading: Container(
           padding: const EdgeInsets.all(8),
-          child: Icon(Icons.picture_as_pdf),
+          child: Icon(
+            Icons.picture_as_pdf,
+            color: Colors.white,
+          ),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Globals.borderRadius),
               color: Theme.of(context).colorScheme.primaryVariant),

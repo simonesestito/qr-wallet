@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class TextWithIcon extends StatelessWidget {
   final IconData icon;
+  final double? padding;
   final String text;
 
   TextWithIcon({
     required this.icon,
+    this.padding,
     required this.text,
   });
 
@@ -17,7 +19,7 @@ class TextWithIcon extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon),
-        const SizedBox(width: 4),
+        padding != null ? const SizedBox(width: 4) : SizedBox(width: padding),
         Expanded(
             child: Text(
           text,

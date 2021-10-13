@@ -6,7 +6,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/expanded_scroll_column.dart';
-import 'package:qrwallet/widgets/text_double_weight.dart';
+import 'package:qrwallet/widgets/TextWithIcon.dart';
 
 import 'delete_qr.dart';
 import 'qr_background_image.dart';
@@ -64,7 +64,7 @@ class GreenPassQrView extends StatelessWidget {
     return [
       Text(
         pass.alias,
-        style: Theme.of(context).textTheme.headline6,
+        style: Theme.of(context).textTheme.headline5,
         textAlign: TextAlign.center,
       ),
       QrBackgroundImage(pass.qrData, pass.format),
@@ -72,26 +72,35 @@ class GreenPassQrView extends StatelessWidget {
   }
 
   Widget _buildPassDetails(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        TextWithIcon(
-          icon: Icons.person,
-          text: '${pass.greenPassData.name} ${pass.greenPassData.surname}',
-        ),
-        const SizedBox(height: 6),
-        TextWithIcon(
-          icon: Icons.event_available,
-          text: '${pass.greenPassData.issueDate}',
-        ),
-        const SizedBox(height: 6),
-        TextWithIcon(
-          icon: Icons.receipt_long,
-          text: Localization.of(context)!.translate(
-            pass.greenPassData.type.translationKey,
-          )!,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextWithIcon(
+            icon: Icons.person,
+            padding: 8,
+            text: '${pass.greenPassData.name} ${pass.greenPassData.surname}',
+          ),
+          const SizedBox(height: 6),
+          TextWithIcon(
+            icon: Icons.event_available,
+            padding: 8,
+            text: '${pass.greenPassData.issueDate}',
+          ),
+          const SizedBox(height: 6),
+          TextWithIcon(
+            icon: Icons.receipt_long,
+            padding: 8,
+            text: Localization.of(context)!.translate(
+              pass.greenPassData.type.translationKey,
+            )!,
+          ),
+        ],
+      ),
     );
   }
 
