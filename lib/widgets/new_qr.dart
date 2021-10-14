@@ -8,12 +8,12 @@ import 'package:printing/printing.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/utils/globals.dart';
-import 'package:qrwallet/widgets/post_qr_form.dart';
 import 'package:qrwallet/screens/qr_scan_screen.dart';
+import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
-import 'package:qrwallet/widgets/bottomsheet_container.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
+import 'package:qrwallet/widgets/bottomsheet_container.dart';
+import 'package:qrwallet/widgets/post_qr_form.dart';
 
 class NewQR extends StatefulWidget {
   const NewQR({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class NewQR extends StatefulWidget {
 
 class _NewQRState extends State<NewQR> {
   final _imagePicker = ImagePicker();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -36,6 +37,15 @@ class _NewQRState extends State<NewQR> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return BottomSheetContainer(children: [
+        SizedBox(
+          height: 400,
+          child: Center(child: CircularProgressIndicator()),
+        ),
+      ]);
+    }
+
     return BottomSheetContainer(children: [
       ListTile(
         title: Text(Localization.of(context)!.translate('take_photo_title')!),
@@ -111,7 +121,18 @@ class _NewQRState extends State<NewQR> {
           final fileResultPath = fileResult?.files.single.path;
 
           if (fileResultPath != null) {
-            await _handlePdfFile(fileResultPath);
+            setState(() {
+              _isLoading = true;
+            });
+            final success =
+                await _handlePdfFile(fileResultPath).catchError((err) => false);
+            if (!success) {
+              StandardDialogs.showSnackbar(
+                context,
+                Localization.of(context)!.translate('no_qr_found')!,
+              );
+              Navigator.pop(context);
+            }
           }
         },
       ),
@@ -157,7 +178,7 @@ class _NewQRState extends State<NewQR> {
     return true;
   }
 
-  Future<void> _handlePdfFile(String pdfFile) async {
+  Future<bool> _handlePdfFile(String pdfFile) async {
     final tempDir = await getTemporaryDirectory();
     final tempFile = await File(tempDir.path + '/temp_img.tmp.png').create();
 
@@ -166,13 +187,17 @@ class _NewQRState extends State<NewQR> {
       dpi: 140,
     );
 
-    await for (final docPage in docPages) {
-      final docPageBytes = await docPage.toPng();
-      await tempFile.writeAsBytes(docPageBytes, flush: true);
-      final successResult = await _handleImageFile(tempFile.path);
-      if (successResult) break;
+    try {
+      await for (final docPage in docPages) {
+        final docPageBytes = await docPage.toPng();
+        await tempFile.writeAsBytes(docPageBytes, flush: true);
+        final successResult = await _handleImageFile(tempFile.path);
+        if (successResult) return true;
+      }
+    } finally {
+      await tempFile.delete();
     }
 
-    await tempFile.delete();
+    return false;
   }
 }
