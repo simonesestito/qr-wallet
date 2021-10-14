@@ -33,9 +33,11 @@ class FreePurchasesStatus {
 
   Future<int> _getCurrentMillis() async {
     try {
-      final response = await http.get(Uri.parse(
-        'https://currentmillis.com/time/minutes-since-unix-epoch.php',
-      ));
+      final response = await http
+          .get(Uri.parse(
+            'https://currentmillis.com/time/minutes-since-unix-epoch.php',
+          ))
+          .timeout(Duration(seconds: 2));
       final minutesSinceEpoch = int.parse(response.body);
       return minutesSinceEpoch * 60 * 1000;
     } catch (err) {
@@ -74,12 +76,12 @@ class FreePurchasesStatus {
       millis = millis ~/ 128;
     }
 
-    final encryptedBytes = _aesCbcEncrypt(timeParts);
+    final encryptedBytes = _aesCbcEncrypt(timeParts.reversed);
     final encryptedValue = base64Encode(encryptedBytes);
     await sharedPrefs.setString(key, encryptedValue);
   }
 
-  Uint8List _aesCbcEncrypt(List<int> plainText) {
+  Uint8List _aesCbcEncrypt(Iterable<int> plainText) {
     // Create a CBC block cipher with AES, and initialize with key and IV
     final key = base64Decode(AES_KEY);
     final iv = base64Decode(AES_IV);

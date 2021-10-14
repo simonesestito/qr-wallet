@@ -105,18 +105,28 @@ class RewardedAdLoader extends AdLoader<RewardedAd> {
 
   @override
   void _showAd(void Function() onComplete, BuildContext context) {
+    RewardItem? reward;
     _loadedAd?.fullScreenContentCallback = FullScreenContentCallback(
-      onAdDismissedFullScreenContent: (_) => onComplete(),
+      onAdDismissedFullScreenContent: (_) async {
+        if (reward != null) {
+          await FreePurchasesStatus.instance.addFreePurchase(
+            reward!.type,
+            Duration(days: reward!.amount.toInt()),
+          );
+          InAppBroadcast.of(context).emitEventType(InAppEvent.SUCCESS);
+          await InAppBroadcast.of(context).refreshStatus();
+        }
+        onComplete();
+      },
       onAdFailedToShowFullScreenContent: (ad, error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
         onComplete();
       },
     );
     _loadedAd?.show(
-        onUserEarnedReward: (RewardedAd ad, RewardItem reward) async {
-      await FreePurchasesStatus.instance
-          .addFreePurchase(reward.type, Duration(days: reward.amount.toInt()));
-      await InAppBroadcast.of(context).refreshStatus();
-    });
+      onUserEarnedReward: (RewardedAd ad, RewardItem earnedReward) async {
+        reward = earnedReward;
+      },
+    );
   }
 }

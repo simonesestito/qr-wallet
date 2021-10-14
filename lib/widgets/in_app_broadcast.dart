@@ -15,7 +15,7 @@ import 'package:qrwallet/utils/google_play_verification.dart';
 /// - [false]: User is Basic
 /// - [null]: Don't force a status
 ///
-const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = false;
+const bool? DEBUG_FORCE_PREMIUM_ADS_STATUS = null;
 
 class InAppBroadcast extends InheritedWidget {
   static const REMOVE_ADS_SKU = 'remove_ads';
