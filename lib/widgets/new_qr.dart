@@ -13,7 +13,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/widgets/post_qr_form.dart';
+import 'package:qrwallet/screens/post_qr_screen.dart';
 
 class NewQR extends StatefulWidget {
   const NewQR({Key? key}) : super(key: key);
@@ -168,11 +168,12 @@ class _NewQRState extends State<NewQR> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-          builder: (_) => PostQrForm(
-                qrData: qrContent,
-                format: BarcodeFormat
-                    .qrcode, // Only one supported format from gallery/PDF
-              )),
+        builder: (_) => PostQrScreen(
+          qrData: qrContent,
+          format: BarcodeFormat
+              .qrcode, // Only one supported format from gallery/PDF
+        ),
+      ),
     );
 
     return true;

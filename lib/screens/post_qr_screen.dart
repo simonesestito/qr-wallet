@@ -15,21 +15,21 @@ import 'package:qrwallet/widgets/title_headline.dart';
 ///
 /// The screen shown after a new QR has been scanned successfully.
 ///
-class PostQrForm extends StatefulWidget {
+class PostQrScreen extends StatefulWidget {
   final String qrData;
   final BarcodeFormat format;
 
-  PostQrForm({
+  PostQrScreen({
     required this.qrData,
     required this.format,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<PostQrForm> createState() => _PostQrFormState();
+  State<PostQrScreen> createState() => _PostQrScreenState();
 }
 
-class _PostQrFormState extends State<PostQrForm> {
+class _PostQrScreenState extends State<PostQrScreen> {
   @override
   Widget build(BuildContext context) {
     final duplicatePass = context
@@ -55,7 +55,7 @@ class _PostQrFormState extends State<PostQrForm> {
                 child: Container(
                   decoration: BoxDecoration(
                     color:
-                    Theme.of(context).colorScheme.onSurface.withOpacity(.1),
+                        Theme.of(context).colorScheme.onSurface.withOpacity(.1),
                     border: Border.all(
                       color: Theme.of(context).colorScheme.onSurface,
                       width: Globals.borderWidth * 2,
@@ -83,13 +83,16 @@ class _PostQrFormState extends State<PostQrForm> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Globals.borderRadius),
-            color: Theme.of(context).colorScheme.secondary.withOpacity(.2),
+            color: Theme.of(context).colorScheme.secondary.withOpacity(.1),
           ),
           padding: const EdgeInsets.all(12),
           child: Column(children: [
             Text(
               Localization.of(context)!.translate("qr_duplicate_message")!,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
             ),
             Text(pass.alias),
           ]),
@@ -102,7 +105,7 @@ class _PostQrFormState extends State<PostQrForm> {
           await InterstitialAdLoader.instance.showAdIfAvailable(context);
           Navigator.popUntil(
             context,
-                (route) => route.isFirst,
+            (route) => route.isFirst,
           );
         },
         text: Localization.of(context)!.translate("cancel_action")!,
@@ -119,7 +122,7 @@ class _PostQrFormState extends State<PostQrForm> {
         ),
         onSave: (data) async {
           await context.read<QrListData>().addQr(
-            passData == null
+                passData == null
                     ? SimpleQr(
                         alias: data.name!,
                         qrData: widget.qrData,

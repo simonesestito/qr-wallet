@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/widgets/post_qr_form.dart';
+import 'package:qrwallet/screens/post_qr_screen.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
@@ -157,7 +157,7 @@ class _QrScanWidgetState extends State<QrScanWidget> {
       await this._qrViewController?.pauseCamera();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => PostQrForm(qrData: scan.code, format: scan.format),
+          builder: (_) => PostQrScreen(qrData: scan.code, format: scan.format),
         ),
       );
     });

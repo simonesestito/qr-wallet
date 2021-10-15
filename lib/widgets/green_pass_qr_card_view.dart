@@ -74,27 +74,30 @@ class GreenPassQrView extends StatelessWidget {
   Widget _buildPassDetails(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
+        left: 12,
+        right: 12,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextWithIcon(
             icon: Icons.person,
-            padding: 8,
+            asChip: true,
+            padding: 6,
             text: '${pass.greenPassData.name} ${pass.greenPassData.surname}',
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 2),
           TextWithIcon(
             icon: Icons.event_available,
-            padding: 8,
+            asChip: true,
+            padding: 6,
             text: '${pass.greenPassData.issueDate}',
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 2),
           TextWithIcon(
             icon: Icons.receipt_long,
-            padding: 8,
+            asChip: true,
+            padding: 6,
             text: Localization.of(context)!.translate(
               pass.greenPassData.type.translationKey,
             )!,
@@ -107,7 +110,7 @@ class GreenPassQrView extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     return Wrap(
       direction: Axis.horizontal,
-      alignment: WrapAlignment.spaceEvenly,
+      alignment: WrapAlignment.center,
       children: [
         TextButton.icon(
           style: ButtonStyle(
@@ -132,6 +135,7 @@ class GreenPassQrView extends StatelessWidget {
               )!
               .toUpperCase()),
         ),
+        const SizedBox(width: 4),
         TextButton.icon(
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
