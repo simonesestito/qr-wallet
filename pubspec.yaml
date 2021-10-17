@@ -50,6 +50,7 @@ dependencies:
   pointycastle: ^3.3.4
   http: ^0.13.4
   receive_sharing_intent: ^1.4.5
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
 import 'package:qrwallet/utils/globals.dart';
@@ -91,7 +92,7 @@ class GreenPassQrView extends StatelessWidget {
             icon: Icons.event_available,
             asChip: true,
             padding: 8,
-            text: '${pass.greenPassData.issueDate}',
+            text: _formatDate(pass.greenPassData.issueDate, context),
           ),
           const SizedBox(height: 2),
           TextWithIcon(
@@ -105,6 +106,20 @@ class GreenPassQrView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _formatDate(DateTime date, BuildContext context) {
+    final offset = DateTime.now().timeZoneOffset;
+    final localDate = date.add(offset);
+
+    final locale = Localizations.localeOf(context).toLanguageTag();
+    final day = DateFormat.yMEd(locale).format(localDate);
+    if (date.hour == 0 && date.minute == 0 && date.second == 0) {
+      return day;
+    }
+
+    final hour = DateFormat.Hm(locale).format(localDate);
+    return "$day $hour";
   }
 
   Widget _buildActionButtons(BuildContext context) {

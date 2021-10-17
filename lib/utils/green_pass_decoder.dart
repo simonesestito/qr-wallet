@@ -38,7 +38,7 @@ class GreenPassDecoder {
     return GreenPassData(
       name: data['nam']['gn'].toString().capitalizeWords(),
       surname: data['nam']['fn'].toString().capitalizeWords(),
-      issueDate: issueDate,
+      issueDate: DateTime.parse(issueDate),
       type: passType,
     );
   }
@@ -56,7 +56,7 @@ class GreenPassDecoder {
 class GreenPassData {
   final String name;
   final String surname;
-  final String issueDate;
+  final DateTime issueDate;
   final GreenPassType type;
 
   GreenPassData({
@@ -69,15 +69,16 @@ class GreenPassData {
   factory GreenPassData.fromMap(Map<dynamic, dynamic> data) => GreenPassData(
         name: data['name'],
         surname: data['surname'],
-        issueDate: data['issueDate'],
+        issueDate: DateTime.parse(data['issueDate']),
         type: GreenPassType.values
             .firstWhere((e) => describeEnum(e) == data['type']),
       );
 
-  Map<String, String> toMap() => {
+  Map<String, String> toMap() =>
+      {
         'name': name,
         'surname': surname,
-        'issueDate': issueDate,
+        'issueDate': issueDate.toIso8601String(),
         'type': describeEnum(type),
       };
 
