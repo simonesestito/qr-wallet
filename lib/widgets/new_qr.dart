@@ -8,12 +8,12 @@ import 'package:printing/printing.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
 import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/screens/post_qr_screen.dart';
 import 'package:qrwallet/screens/qr_scan_screen.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/screens/post_qr_screen.dart';
 
 class NewQR extends StatefulWidget {
   const NewQR({Key? key}) : super(key: key);
@@ -125,7 +125,10 @@ class _NewQRState extends State<NewQR> {
               _isLoading = true;
             });
             final success =
-                await _handlePdfFile(fileResultPath).catchError((err) => false);
+                await _handlePdfFile(fileResultPath).catchError((err) {
+              print(err);
+              return false;
+            });
             if (!success) {
               StandardDialogs.showSnackbar(
                 context,
@@ -185,7 +188,7 @@ class _NewQRState extends State<NewQR> {
 
     final docPages = Printing.raster(
       await File(pdfFile).readAsBytes(),
-      dpi: 140,
+      dpi: 220,
     );
 
     try {
