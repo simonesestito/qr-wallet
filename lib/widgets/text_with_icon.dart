@@ -22,7 +22,9 @@ class TextWithIcon extends StatelessWidget {
           ? null
           : BoxDecoration(
               borderRadius: BorderRadius.circular(Globals.borderRadius),
-              color: Theme.of(context).colorScheme.secondary.withOpacity(.1),
+              border: Border.all(
+                color: Theme.of(context).colorScheme.secondary.withOpacity(.4),
+              ),
             ),
       margin: !asChip
           ? null

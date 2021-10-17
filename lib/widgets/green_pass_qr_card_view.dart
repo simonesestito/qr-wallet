@@ -83,21 +83,21 @@ class GreenPassQrView extends StatelessWidget {
           TextWithIcon(
             icon: Icons.person,
             asChip: true,
-            padding: 6,
+            padding: 8,
             text: '${pass.greenPassData.name} ${pass.greenPassData.surname}',
           ),
           const SizedBox(height: 2),
           TextWithIcon(
             icon: Icons.event_available,
             asChip: true,
-            padding: 6,
+            padding: 8,
             text: '${pass.greenPassData.issueDate}',
           ),
           const SizedBox(height: 2),
           TextWithIcon(
             icon: Icons.receipt_long,
             asChip: true,
-            padding: 6,
+            padding: 8,
             text: Localization.of(context)!.translate(
               pass.greenPassData.type.translationKey,
             )!,
