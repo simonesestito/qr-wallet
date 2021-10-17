@@ -16,7 +16,12 @@ import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
 
 class NewQR extends StatefulWidget {
-  const NewQR({Key? key}) : super(key: key);
+  final String? selectedFilePath;
+
+  const NewQR({
+    Key? key,
+    this.selectedFilePath,
+  }) : super(key: key);
 
   @override
   _NewQRState createState() => _NewQRState();
@@ -30,8 +35,24 @@ class _NewQRState extends State<NewQR> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      recoverLostData();
       InterstitialAdLoader.instance.loadAd(context);
+
+      if (widget.selectedFilePath == null) {
+        recoverLostData();
+      } else {
+        setState(() {
+          _isLoading = true;
+        });
+        Future.delayed(
+          Duration(seconds: 2), // Wait a bit until an ad is loaded
+          () {
+            if (widget.selectedFilePath?.endsWith(".pdf") == true)
+              handlePdfFileUi(widget.selectedFilePath, context);
+            else
+              handleImageFileUi(widget.selectedFilePath, context);
+          },
+        );
+      }
     });
   }
 
@@ -85,14 +106,7 @@ class _NewQRState extends State<NewQR> {
           final photo = await _imagePicker.pickImage(
             source: ImageSource.gallery,
           );
-
-          if (photo != null && !await _handleImageFile(photo.path)) {
-            StandardDialogs.showSnackbar(
-              context,
-              Localization.of(context)!.translate('no_qr_found')!,
-            );
-            Navigator.pop(context);
-          }
+          handleImageFileUi(photo?.path, context);
         },
       ),
       const Divider(height: 1),
@@ -118,25 +132,7 @@ class _NewQRState extends State<NewQR> {
             allowedExtensions: ["pdf"],
             type: FileType.custom,
           );
-          final fileResultPath = fileResult?.files.single.path;
-
-          if (fileResultPath != null) {
-            setState(() {
-              _isLoading = true;
-            });
-            final success =
-                await _handlePdfFile(fileResultPath).catchError((err) {
-              print(err);
-              return false;
-            });
-            if (!success) {
-              StandardDialogs.showSnackbar(
-                context,
-                Localization.of(context)!.translate('no_qr_found')!,
-              );
-              Navigator.pop(context);
-            }
-          }
+          handlePdfFileUi(fileResult?.files.single.path, context);
         },
       ),
     ]);
@@ -156,6 +152,17 @@ class _NewQRState extends State<NewQR> {
       _handleImageFile(response.files!.first.path);
     } else {
       print(response.exception);
+    }
+  }
+
+  Future<void> handleImageFileUi(
+      String? imagePath, BuildContext context) async {
+    if (imagePath != null && !await _handleImageFile(imagePath)) {
+      StandardDialogs.showSnackbar(
+        context,
+        Localization.of(context)!.translate('no_qr_found')!,
+      );
+      Navigator.pop(context);
     }
   }
 
@@ -180,6 +187,27 @@ class _NewQRState extends State<NewQR> {
     );
 
     return true;
+  }
+
+  Future<void> handlePdfFileUi(String? pdfFile, BuildContext context) async {
+    if (pdfFile != null) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final success = await _handlePdfFile(pdfFile).catchError((err) {
+        print(err);
+        return false;
+      });
+
+      if (!success) {
+        StandardDialogs.showSnackbar(
+          context,
+          Localization.of(context)!.translate('no_qr_found')!,
+        );
+        Navigator.pop(context);
+      }
+    }
   }
 
   Future<bool> _handlePdfFile(String pdfFile) async {

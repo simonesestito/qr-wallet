@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -15,6 +16,7 @@ import 'package:qrwallet/widgets/in_app_broadcast.dart';
 import 'package:qrwallet/widgets/remove_ads.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
+import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'package:screen/screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Runnable? _disposeInAppSubscription;
   bool _showReviewBadge = false;
   SharedPreferences? sp;
+  StreamSubscription? _fileSharingStreamSubscription;
 
   @override
   void initState() {
@@ -54,9 +57,26 @@ class _HomeScreenState extends State<HomeScreen> {
           Localization.of(context)!.translate(event.translationKey)!,
         );
       });
+
+      _fileSharingStreamSubscription =
+          ReceiveSharingIntent.getMediaStream().listen(_handleFileSharing);
+      ReceiveSharingIntent.getInitialMedia().then(_handleFileSharing);
     });
 
     super.initState();
+  }
+
+  void _handleFileSharing(List<SharedMediaFile> sharedFiles) async {
+    if (sharedFiles.isEmpty) return;
+
+    final file = sharedFiles.first.path;
+    print('>>>> SHARED FILE: $file');
+    showAppModalBottomSheet(
+      context: context,
+      builder: () => NewQR(
+        selectedFilePath: file,
+      ),
+    );
   }
 
   @override
@@ -262,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _bannerAd.dispose();
     _disposeInAppSubscription?.call();
+    _fileSharingStreamSubscription?.cancel();
     super.dispose();
   }
 }
