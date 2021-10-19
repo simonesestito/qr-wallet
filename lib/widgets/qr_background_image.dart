@@ -14,7 +14,7 @@ class QrBackgroundImage extends StatelessWidget {
   final scanner.BarcodeFormat format;
 
   static final barcodeFormatMap =
-      Map<scanner.BarcodeFormat, Barcode>.unmodifiable({
+  Map<scanner.BarcodeFormat, Barcode>.unmodifiable({
     scanner.BarcodeFormat.qrcode: Barcode.qrCode(),
     scanner.BarcodeFormat.aztec: Barcode.aztec(),
     scanner.BarcodeFormat.code39: Barcode.code39(),
@@ -36,19 +36,17 @@ class QrBackgroundImage extends StatelessWidget {
       colorScheme.onBackground.value,
     );
 
-    return LayoutBuilder(builder: (context, constraints) {
-      return SizedBox.square(
-        dimension: constraints.maxWidth,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(Globals.borderRadius),
-          child: BarcodeWidget(
-            padding: const EdgeInsets.all(Globals.borderRadius),
-            barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
-            data: data,
-            backgroundColor: Color(backgroundColor),
-          ),
+    return AspectRatio(
+      aspectRatio: 1,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(Globals.borderRadius),
+        child: BarcodeWidget(
+          padding: const EdgeInsets.all(Globals.borderRadius),
+          barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
+          data: data,
+          backgroundColor: Color(backgroundColor),
         ),
-      );
-    });
+      ),
+    );
   }
 }
