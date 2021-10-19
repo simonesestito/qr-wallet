@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/screens/full_screen_qr.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
@@ -49,14 +50,22 @@ class GreenPassQrView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: qrPadding,
-      child: ExpandedScrollColumn(
-        children: [
-          ..._buildQrHeader(context),
-          _buildPassDetails(context),
-          _buildActionButtons(context),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => FullScreenQR(qr: pass)),
+        );
+      },
+      child: Padding(
+        padding: qrPadding,
+        child: ExpandedScrollColumn(
+          children: [
+            ..._buildQrHeader(context),
+            _buildPassDetails(context),
+            _buildActionButtons(context),
+          ],
+        ),
       ),
     );
   }
@@ -68,7 +77,10 @@ class GreenPassQrView extends StatelessWidget {
         style: Theme.of(context).textTheme.headline5,
         textAlign: TextAlign.center,
       ),
-      QrBackgroundImage(pass.qrData, pass.format),
+      Hero(
+        tag: pass.qrData,
+        child: QrBackgroundImage(pass.qrData, pass.format),
+      ),
     ];
   }
 

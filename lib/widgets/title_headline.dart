@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:qrwallet/utils/globals.dart';
 
 // The top header of each screen. It supports a back button and an action button, just like the appbar
@@ -41,7 +41,7 @@ class TitleHeadline extends StatelessWidget {
                 ? const EdgeInsets.symmetric(horizontal: 8)
                 : const EdgeInsets.symmetric(horizontal: 42),
             alignment: Alignment.center,
-            // Fittedbox resizes the text on overflow, useful for small screens
+            // Fitted box resizes the text on overflow, useful for small screens
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(

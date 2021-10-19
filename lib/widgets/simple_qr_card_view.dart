@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/screens/full_screen_qr.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/qr_edit_form.dart';
@@ -58,76 +59,87 @@ class SimpleQrView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: qrPadding,
-          child: Text(
-            qr.alias,
-            style: Theme.of(context).textTheme.headline5,
-            textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => FullScreenQR(qr: qr)),
+        );
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: qrPadding,
+            child: Text(
+              qr.alias,
+              style: Theme.of(context).textTheme.headline5,
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
-        Padding(
-          padding: qrPadding,
-          child: QrBackgroundImage(qr.qrData, qr.format),
-        ),
-        Wrap(
-          direction: Axis.horizontal,
-          alignment: WrapAlignment.spaceEvenly,
-          children: [
-            TextButton.icon(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Globals.borderRadius),
-                  ),
-                ),
-                overlayColor: MaterialStateProperty.all(
-                    Theme.of(context).primaryColor.withOpacity(0.2)),
-              ),
-              onPressed: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  builder: () => DeleteQr(qr: qr),
-                );
-              },
-              icon: Icon(Icons.delete),
-              label: Text(Localization.of(context)!
-                  .translate(
-                    "qr_item_delete",
-                  )!
-                  .toUpperCase()),
+          Padding(
+            padding: qrPadding,
+            child: Hero(
+              tag: qr.qrData,
+              child: QrBackgroundImage(qr.qrData, qr.format),
             ),
-            TextButton.icon(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Globals.borderRadius),
+          ),
+          Wrap(
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.spaceEvenly,
+            children: [
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(Globals.borderRadius),
+                    ),
                   ),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).primaryColor.withOpacity(0.2)),
                 ),
-                overlayColor: MaterialStateProperty.all(
-                    Theme.of(context).primaryColor.withOpacity(0.2)),
+                onPressed: () {
+                  showAppModalBottomSheet(
+                    context: context,
+                    builder: () => DeleteQr(qr: qr),
+                  );
+                },
+                icon: Icon(Icons.delete),
+                label: Text(Localization.of(context)!
+                    .translate(
+                      "qr_item_delete",
+                    )!
+                    .toUpperCase()),
               ),
-              onPressed: () {
-                showAppModalBottomSheet(
-                  context: context,
-                  builder: () => QrEditForm(qr: qr),
-                );
-              },
-              icon: Icon(Icons.edit),
-              label: Text(Localization.of(context)!
-                  .translate(
-                    "qr_item_rename",
-                  )!
-                  .toUpperCase()),
-            ),
-          ],
-        ),
-      ],
+              TextButton.icon(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(Globals.borderRadius),
+                    ),
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                      Theme.of(context).primaryColor.withOpacity(0.2)),
+                ),
+                onPressed: () {
+                  showAppModalBottomSheet(
+                    context: context,
+                    builder: () => QrEditForm(qr: qr),
+                  );
+                },
+                icon: Icon(Icons.edit),
+                label: Text(Localization.of(context)!
+                    .translate(
+                      "qr_item_rename",
+                    )!
+                    .toUpperCase()),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
