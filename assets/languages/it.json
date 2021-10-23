@@ -7,6 +7,7 @@
   "cancel_action": "Annulla",
   "caution": "Attenzione",
   "no_pass_placeholder": "Premi il bottone qui sotto per aggiungere un QR o codice a barre",
+  "additional_detail_share": "Puoi anche condividere un QR code o codice a barre direttamente da una delle tue app preferite a QRWallet, che lo rileverà automaticamente!",
   "take_photo_title": "Fotocamera",
   "take_photo_description": "Utilizza lo scan da fotocamera\n(es: documento cartaceo)",
   "pick_photo_title": "Apri foto",
@@ -49,5 +50,19 @@
   "remove_ads_title": "Rimuovi pubblicità",
   "remove_ads_description": "Puoi guardare un video e rimuovere le pubblicità per 7 giorni, o offrirci un caffè. Grazie!",
   "remove_ads_button": "Rimuovi per sempre",
-  "reward_ad": "Guarda un video"
+  "reward_ad": "Guarda un video",
+  "customization": "Personalizzazione",
+  "appearance": "Aspetto",
+  "enlarge_central_title": "Allarga card centrale",
+  "enlarge_central_subtitle": "Espande la card al centro della lista",
+  "vertical_orientation_title": "Lista verticale",
+  "vertical_orientation_subtitle": "Cambia l'orientamento della lista a verticale",
+  "single_item_as_card_title": "Forza card",
+  "single_item_as_card_description": "Usa sempre una card, anche se è presente un solo elemento",
+  "auto_max_brightness_title": "Luminosità automatica",
+  "auto_max_brightness_description": "Imposta automaticamente la massima luminosità all'apertura",
+  "infinite_scroll_title": "Scroll infinito",
+  "infinite_scroll_description": "Abilita lo scroll infinito nella lista",
+  "app_theme_title": "Tema app",
+  "app_theme_description": "Scegli tra tema chiaro, scuro o automatico"
 }

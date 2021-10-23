@@ -64,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 SettingsList(
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16),
                   shrinkWrap: true,
                   lightBackgroundColor:
                       Theme.of(context).colorScheme.background,
@@ -72,7 +72,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   physics: BouncingScrollPhysics(),
                   sections: [
                     SettingsSection(
-                      title: Localization.of(context)!.translate('review')!,
+                      title:
+                          Localization.of(context)!.translate('customization')!,
+                      titleTextStyle: Theme.of(context)
+                          .textTheme
+                          .headline6!
+                          .copyWith(
+                              color: Theme.of(context).colorScheme.secondary),
+                      tiles: [
+                        SettingsTile.switchTile(
+                          title: Localization.of(context)!
+                              .translate('enlarge_central_title')!,
+                          subtitle: Localization.of(context)!
+                              .translate('enlarge_central_subtitle')!,
+                          leading: Icon(Icons.zoom_out_map_rounded),
+                          switchValue: false,
+                          onToggle: (bool value) {},
+                        ),
+                        SettingsTile.switchTile(
+                          title: Localization.of(context)!
+                              .translate('list_orientation_title')!,
+                          subtitle: Localization.of(context)!
+                              .translate('list_orientation_subtitle')!,
+                          leading: Icon(Icons.fingerprint),
+                          switchValue: false,
+                          onToggle: (bool value) {},
+                        ),
+                      ],
+                    ),
+                    SettingsSection(
+                      title: Localization.of(context)!.translate('appearance')!,
                       titleTextStyle: Theme.of(context)
                           .textTheme
                           .headline6!
@@ -80,13 +109,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               color: Theme.of(context).colorScheme.secondary),
                       tiles: [
                         SettingsTile(
-                          title: 'Mock 1',
-                          subtitle: 'Mock setting, doesn\'t work',
+                          title: Localization.of(context)!
+                              .translate('customization')!,
+                          subtitle: Localization.of(context)!
+                              .translate('customization')!,
                           leading: Icon(Icons.language),
                           onPressed: (BuildContext context) {},
                         ),
                         SettingsTile.switchTile(
-                          title: 'Mock 2',
+                          title: Localization.of(context)!
+                              .translate('customization')!,
                           leading: Icon(Icons.fingerprint),
                           switchValue: false,
                           onToggle: (bool value) {},
