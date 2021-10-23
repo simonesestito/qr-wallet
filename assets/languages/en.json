@@ -7,6 +7,7 @@
   "cancel_action": "Cancel",
   "caution": "Caution",
   "no_pass_placeholder": "Press the button button below to add a barcode or QR code",
+  "share": "Share",
   "additional_detail_share": "You can also share a QR code or barcode directly from your favorite apps to QRWallet, it will automatically detect it!",
   "take_photo_title": "Camera scan",
   "take_photo_description": "Use the camera\n(eg: papery document)",
@@ -64,5 +65,9 @@
   "infinite_scroll_title": "Infinite scroll",
   "infinite_scroll_description": "Enable the infinite scroll in the list",
   "app_theme_title": "App theme",
-  "app_theme_description": "Choose between light, dark and automatic theme"
+  "app_theme_description": "Choose between light, dark and automatic theme",
+  "app_lock_title": "Lock app",
+  "app_lock_description": "Lock the app using the fingerprint (on supported devices)",
+  "codes_order_title": "Ordering",
+  "codes_order_description": "Choose the default order"
 }

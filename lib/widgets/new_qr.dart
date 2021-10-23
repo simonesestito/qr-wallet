@@ -69,6 +69,24 @@ class _NewQRState extends State<NewQR> {
 
     return BottomSheetContainer(children: [
       ListTile(
+        // Informative text, to inform about the share capability
+        title: Text(Localization.of(context)!.translate('share')!),
+        subtitle: Text(
+            Localization.of(context)!.translate('additional_detail_share')!),
+        enableFeedback: false,
+        isThreeLine: true,
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            Icons.share_outlined,
+            color: Colors.white,
+          ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(Globals.borderRadius),
+              color: Theme.of(context).colorScheme.secondaryVariant),
+        ),
+      ),
+      ListTile(
         title: Text(Localization.of(context)!.translate('take_photo_title')!),
         subtitle: Text(
             Localization.of(context)!.translate('take_photo_description')!),

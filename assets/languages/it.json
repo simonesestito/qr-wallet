@@ -7,6 +7,7 @@
   "cancel_action": "Annulla",
   "caution": "Attenzione",
   "no_pass_placeholder": "Premi il bottone qui sotto per aggiungere un QR o codice a barre",
+  "share": "Condividi",
   "additional_detail_share": "Puoi anche condividere un QR code o codice a barre direttamente da una delle tue app preferite a QRWallet, che lo rileverà automaticamente!",
   "take_photo_title": "Fotocamera",
   "take_photo_description": "Utilizza lo scan da fotocamera\n(es: documento cartaceo)",
@@ -64,5 +65,9 @@
   "infinite_scroll_title": "Scroll infinito",
   "infinite_scroll_description": "Abilita lo scroll infinito nella lista",
   "app_theme_title": "Tema app",
-  "app_theme_description": "Scegli tra tema chiaro, scuro o automatico"
+  "app_theme_description": "Scegli tra tema chiaro, scuro o automatico",
+  "app_lock_title": "Blocca app",
+  "app_lock_description": "Blocca l'app usando l'impronta digitale (su dispositivi supportati)",
+  "codes_order_title": "Ordinamento",
+  "codes_order_description": "Scegli l'ordinamento di default"
 }
