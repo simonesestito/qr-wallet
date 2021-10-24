@@ -59,15 +59,15 @@
   "vertical_orientation_title": "Lista verticale",
   "vertical_orientation_subtitle": "Cambia l'orientamento della lista a verticale",
   "single_item_as_card_title": "Forza card",
-  "single_item_as_card_description": "Usa sempre una card, anche se è presente un solo elemento",
+  "single_item_as_card_subtitle": "Usa sempre una card, anche se è presente un solo elemento",
   "auto_max_brightness_title": "Luminosità automatica",
-  "auto_max_brightness_description": "Imposta automaticamente la massima luminosità all'apertura",
+  "auto_max_brightness_subtitle": "Imposta automaticamente la massima luminosità all'apertura",
   "infinite_scroll_title": "Scroll infinito",
-  "infinite_scroll_description": "Abilita lo scroll infinito nella lista",
+  "infinite_scroll_subtitle": "Abilita lo scroll infinito nella lista",
   "app_theme_title": "Tema app",
-  "app_theme_description": "Scegli tra tema chiaro, scuro o automatico",
+  "app_theme_subtitle": "Scegli tra tema chiaro, scuro o automatico",
   "app_lock_title": "Blocca app",
-  "app_lock_description": "Blocca l'app usando l'impronta digitale (su dispositivi supportati)",
+  "app_lock_subtitle": "Blocca l'app usando l'impronta digitale (su dispositivi supportati)",
   "codes_order_title": "Ordinamento",
-  "codes_order_description": "Scegli l'ordinamento di default"
+  "codes_order_subtitle": "Scegli l'ordinamento di default"
 }

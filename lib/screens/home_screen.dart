@@ -125,21 +125,20 @@ class _HomeScreenState extends State<HomeScreen> {
               trailingBtnAction: () => setState(() {
                 _maxBrightClicked = !_maxBright;
               }),
-              // TODO: Re-enable Settings
-              // backBtnBadge: _showReviewBadge,
-              // backBtn: true,
-              // backBtnCustomIcon: Icons.settings_outlined,
-              // backBtnCustomAction: () {
-              //   Navigator.of(context).pushNamed(
-              //     '/settings',
-              //     arguments: {'showReviewSheet': _showReviewBadge},
-              //   );
-              //   // The rate dialog is displayed a single time, no matter what
-              //   sp!.setBool('dont_show_again', true);
-              //   setState(() {
-              //     _showReviewBadge = false;
-              //   });
-              // },
+              backBtnBadge: _showReviewBadge,
+              backBtn: true,
+              backBtnCustomIcon: Icons.settings_outlined,
+              backBtnCustomAction: () {
+                Navigator.of(context).pushNamed(
+                  '/settings',
+                  arguments: {'showReviewSheet': _showReviewBadge},
+                );
+                // The rate dialog is displayed a single time, no matter what
+                sp!.setBool('dont_show_again', true);
+                setState(() {
+                  _showReviewBadge = false;
+                });
+              },
             ),
             _buildAdBanner(userStatus),
             Expanded(
