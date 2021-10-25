@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qrwallet/lang/localization.dart';
+import 'package:qrwallet/screens/settings_screen.dart';
 
 import 'globals.dart';
 
@@ -99,6 +100,91 @@ class StandardDialogs {
         ],
       ),
     );
+  }
+
+  // Show a dialog to choose the theme // TODO Refactor to generic radio button dialog?
+  static Future<ThemeType> showThemeChoserDialog(BuildContext context) async {
+    var _themeType = ThemeType.auto;
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (BuildContext ctx, StateSetter setState) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Globals.borderRadius),
+          ),
+          title: Text(
+            Localization.of(context)!.translate('app_theme_title')!,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text(Localization.of(context)!.translate('auto')!),
+                leading: Radio<ThemeType>(
+                  value: ThemeType.auto,
+                  groupValue: _themeType,
+                  onChanged: (ThemeType? value) {
+                    if (value != null)
+                      setState(() {
+                        _themeType = value;
+                      });
+                  },
+                ),
+              ),
+              ListTile(
+                title: Text(Localization.of(context)!.translate('dark')!),
+                leading: Radio<ThemeType>(
+                  value: ThemeType.dark,
+                  groupValue: _themeType,
+                  onChanged: (ThemeType? value) {
+                    if (value != null)
+                      setState(() {
+                        _themeType = value;
+                      });
+                  },
+                ),
+              ),
+              ListTile(
+                title: Text(Localization.of(context)!.translate('light')!),
+                leading: Radio<ThemeType>(
+                  value: ThemeType.light,
+                  groupValue: _themeType,
+                  onChanged: (ThemeType? value) {
+                    if (value != null)
+                      setState(() {
+                        _themeType = value;
+                      });
+                  },
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Globals.borderRadius),
+                  ),
+                ),
+                overlayColor: MaterialStateProperty.all(
+                    Theme.of(context).primaryColor.withOpacity(0.2)),
+              ),
+              child: Text(
+                Localization.of(context)!.translate('ok')!,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            )
+          ],
+        ),
+      ),
+    );
+    return _themeType;
   }
 }
 

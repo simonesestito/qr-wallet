@@ -69,5 +69,11 @@
   "app_lock_title": "Lock app",
   "app_lock_subtitle": "Lock the app using the fingerprint (on supported devices)",
   "codes_order_title": "Ordering",
-  "codes_order_subtitle": "Choose the default order"
+  "codes_order_subtitle": "Choose the default order",
+  "light": "Light",
+  "dark": "Dark",
+  "auto": "Auto",
+  "alphabetic": "Alphabetic",
+  "by_type": "By type",
+  "by_date": "By date"
 }

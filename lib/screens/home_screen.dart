@@ -44,6 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
   SharedPreferences? sp;
   StreamSubscription? _fileSharingStreamSubscription;
 
+  // Settings related variables
+  var enlargeCentral = false;
+  var verticalOrientation = false;
+  var singleAsCard = false;
+  var autoMaxBrightness = true;
+  var infiniteScroll = false;
+
   @override
   void initState() {
     Screen.brightness.then((brightness) {
@@ -82,6 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() async {
     sp = await SharedPreferences.getInstance();
+
+    // Fetch settings values
+    enlargeCentral = sp!.getBool('enlarge_central') ?? false;
+    verticalOrientation = sp!.getBool('vertical_orientation') ?? false;
+    autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
+    infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
+    singleAsCard = sp!.getBool('single_as_card') ?? false;
+
     // Update the count or show the review dialog
     var timesOpened = sp!.getInt('times_opened') ?? 0;
     var firstLaunchTime = sp!.getInt('first_launch_time') ?? 0;
@@ -107,7 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final userStatus = context.watch<PremiumStatus>();
     final passList = context.watch<QrListData>().passes;
 
-    final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
+    // Max brightness only if enabled from settings
+    final _maxBright =
+        (_maxBrightClicked ?? passList.isNotEmpty) && autoMaxBrightness;
     if (_maxBright)
       Screen.setBrightness(1);
     else if (_originalBrightness != null)
@@ -240,12 +257,16 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Build the expanded layout for a single item
+  // Build an expanded layout for a single item or a card depending on settings
   Widget buildSingleQR(SimpleQr qr) {
-    if (qr is GreenPass) {
-      return GreenPassQrView(pass: qr);
+    if (singleAsCard)
+      return buildCardForType(qr);
+    else {
+      if (qr is GreenPass) {
+        return GreenPassQrView(pass: qr);
+      }
+      return SimpleQrView(qr: qr);
     }
-    return SimpleQrView(qr: qr);
   }
 
   // Build the list of passes
@@ -261,8 +282,12 @@ class _HomeScreenState extends State<HomeScreen> {
           autoPlay: false,
           initialPage: passList.length - 1,
           reverse: true,
-          enlargeCenterPage: true,
-          enableInfiniteScroll: false,
+          enlargeStrategy:
+              CenterPageEnlargeStrategy.height, // Better performance?
+          scrollDirection:
+              verticalOrientation ? Axis.vertical : Axis.horizontal,
+          enlargeCenterPage: enlargeCentral,
+          enableInfiniteScroll: infiniteScroll,
           scrollPhysics: BouncingScrollPhysics(),
         ),
       );

@@ -69,5 +69,11 @@
   "app_lock_title": "Blocca app",
   "app_lock_subtitle": "Blocca l'app usando l'impronta digitale (su dispositivi supportati)",
   "codes_order_title": "Ordinamento",
-  "codes_order_subtitle": "Scegli l'ordinamento di default"
+  "codes_order_subtitle": "Scegli l'ordinamento di default",
+  "light": "Chiaro",
+  "dark": "Scuro",
+  "auto": "Auto",
+  "alphabetic": "Alfabetico",
+  "by_type": "Per tipo",
+  "by_date": "Per data"
 }
