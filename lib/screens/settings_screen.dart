@@ -10,7 +10,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ThemeType { auto, light, dark }
-enum FilterType { alphabetic, date, type }
+enum OrderType { alphabetic, date, type }
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
@@ -29,9 +29,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var singleAsCard = false;
   var autoMaxBrightness = true;
   var infiniteScroll = false;
-  var codesOrder = 0; //TODO Use enum
+  var codesOrder = OrderType.date;
   //var appLock = false;
-  var appTheme = 0; // TODO Use enum
+  var appTheme = ThemeType.auto;
 
   @override
   void didChangeDependencies() async {
@@ -122,9 +122,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             switchValue: enlargeCentral,
+                            switchActiveColor:
+                                Theme.of(context).colorScheme.secondary,
                             onToggle: (bool value) {
                               setState(() {
                                 enlargeCentral = value;
@@ -147,9 +149,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             switchValue: verticalOrientation,
+                            switchActiveColor:
+                                Theme.of(context).colorScheme.secondary,
                             onToggle: (bool value) {
                               setState(() {
                                 verticalOrientation = value;
@@ -173,9 +177,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             switchValue: singleAsCard,
+                            switchActiveColor:
+                                Theme.of(context).colorScheme.secondary,
                             onToggle: (bool value) {
                               setState(() {
                                 singleAsCard = value;
@@ -198,9 +204,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             switchValue: autoMaxBrightness,
+                            switchActiveColor:
+                                Theme.of(context).colorScheme.secondary,
                             onToggle: (bool value) {
                               setState(() {
                                 autoMaxBrightness = value;
@@ -224,9 +232,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             switchValue: infiniteScroll,
+                            switchActiveColor:
+                                Theme.of(context).colorScheme.secondary,
                             onToggle: (bool value) {
                               setState(() {
                                 infiniteScroll = value;
@@ -249,7 +259,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           //     decoration: BoxDecoration(
                           //         borderRadius: BorderRadius.circular(
                           //             Globals.borderRadius),
-                          //         color: Theme.of(context).colorScheme.error),
+                          //         color: Theme.of(context).colorScheme.primary),
                           //   ),
                           //   onPressed: (BuildContext context) {
                           //     // TODO Open a dialog to choose between date and other criteria
@@ -270,9 +280,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           //     decoration: BoxDecoration(
                           //         borderRadius: BorderRadius.circular(
                           //             Globals.borderRadius),
-                          //         color: Theme.of(context).colorScheme.error),
+                          //         color: Theme.of(context).colorScheme.primary),
                           //   ),
                           //   switchValue: appLock,
+                          //   switchActiveColor: Theme.of(context).colorScheme.secondary,
                           //   onToggle: (bool value) {},
                           // ),
                         ],
@@ -306,12 +317,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(
                                       Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.error),
+                                  color: Theme.of(context).colorScheme.primary),
                             ),
                             onPressed: (BuildContext context) async {
                               final result =
                                   await StandardDialogs.showThemeChoserDialog(
                                       context);
+                              // TODO Refresh app and set theme
+                              sp!.setInt('app_theme', result.index);
                             },
                           ),
                         ],
