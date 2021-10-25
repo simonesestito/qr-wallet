@@ -63,329 +63,348 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<PackageInfo>(
-      future: PackageInfo.fromPlatform(),
-      builder: (context, data) {
-        final appVersion = data.data?.version ?? '';
+    return WillPopScope(
+      onWillPop: () async {
+        // Always return true, TODO Could be optimized
+        Navigator.of(context).pop(true);
+        return true;
+      },
+      child: FutureBuilder<PackageInfo>(
+        future: PackageInfo.fromPlatform(),
+        builder: (context, data) {
+          final appVersion = data.data?.version ?? '';
 
-        return Scaffold(
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  TitleHeadline(
-                    title: Localization.of(context)!.translate('settings')!,
-                    backBtn: true,
-                    trailingBtn: Icons.article_outlined,
-                    trailingBtnAction: () => showLicensePage(
-                      context: context,
-                      applicationName:
-                          Localization.of(context)!.translate('app_title')!,
-                      applicationVersion: appVersion,
-                      applicationIcon: Container(
-                        padding: const EdgeInsets.all(4),
-                        child: Image.asset(
-                          'assets/images/logo.png',
-                          height: 128,
+          return Scaffold(
+            body: SafeArea(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TitleHeadline(
+                      title: Localization.of(context)!.translate('settings')!,
+                      backBtn: true,
+                      backBtnCustomAction: () {
+                        // Always return true, TODO Could be optimized
+                        Navigator.of(context).pop(true);
+                      },
+                      trailingBtn: Icons.article_outlined,
+                      trailingBtnAction: () => showLicensePage(
+                        context: context,
+                        applicationName:
+                            Localization.of(context)!.translate('app_title')!,
+                        applicationVersion: appVersion,
+                        applicationIcon: Container(
+                          padding: const EdgeInsets.all(4),
+                          child: Image.asset(
+                            'assets/images/logo.png',
+                            height: 128,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SettingsList(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 16),
-                    shrinkWrap: true,
-                    lightBackgroundColor:
-                        Theme.of(context).colorScheme.background,
-                    darkBackgroundColor:
-                        Theme.of(context).colorScheme.background,
-                    physics: BouncingScrollPhysics(),
-                    sections: [
-                      SettingsSection(
-                        titlePadding: const EdgeInsets.only(
-                          top: 16,
-                          left: 16,
-                          bottom: 12,
-                        ),
-                        title: Localization.of(context)!
-                            .translate('customization')!,
-                        titleTextStyle: Theme.of(context)
-                            .textTheme
-                            .headline6!
-                            .copyWith(
-                                color: Theme.of(context).colorScheme.secondary),
-                        tiles: [
-                          SettingsTile.switchTile(
-                            title: Localization.of(context)!
-                                .translate('enlarge_central_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('enlarge_central_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.zoom_out_map_rounded,
-                                color: Colors.white,
-                              ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
-                            ),
-                            switchValue: enlargeCentral,
-                            switchActiveColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onToggle: (bool value) {
-                              setState(() {
-                                enlargeCentral = value;
-                              });
-                              sp!.setBool('enlarge_central', enlargeCentral);
-                            },
+                    SettingsList(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
+                      shrinkWrap: true,
+                      lightBackgroundColor:
+                          Theme.of(context).colorScheme.background,
+                      darkBackgroundColor:
+                          Theme.of(context).colorScheme.background,
+                      physics: BouncingScrollPhysics(),
+                      sections: [
+                        SettingsSection(
+                          titlePadding: const EdgeInsets.only(
+                            top: 16,
+                            left: 16,
+                            bottom: 12,
                           ),
-                          SettingsTile.switchTile(
-                            title: Localization.of(context)!
-                                .translate('vertical_orientation_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('vertical_orientation_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.vertical_align_bottom_rounded,
-                                color: Colors.white,
+                          title: Localization.of(context)!
+                              .translate('customization')!,
+                          titleTextStyle: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                          tiles: [
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('enlarge_central_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('enlarge_central_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.zoom_out_map_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
+                              switchValue: enlargeCentral,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  enlargeCentral = value;
+                                });
+                                sp!.setBool('enlarge_central', enlargeCentral);
+                              },
                             ),
-                            switchValue: verticalOrientation,
-                            switchActiveColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onToggle: (bool value) {
-                              setState(() {
-                                verticalOrientation = value;
-                              });
-                              sp!.setBool(
-                                  'vertical_orientation', verticalOrientation);
-                            },
-                          ),
-                          SettingsTile.switchTile(
-                            title: Localization.of(context)!
-                                .translate('single_item_as_card_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('single_item_as_card_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.featured_play_list_rounded,
-                                color: Colors.white,
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('vertical_orientation_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('vertical_orientation_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.vertical_align_bottom_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
+                              switchValue: verticalOrientation,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  verticalOrientation = value;
+                                });
+                                sp!.setBool('vertical_orientation',
+                                    verticalOrientation);
+                              },
                             ),
-                            switchValue: singleAsCard,
-                            switchActiveColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onToggle: (bool value) {
-                              setState(() {
-                                singleAsCard = value;
-                              });
-                              sp!.setBool('single_as_card', singleAsCard);
-                            },
-                          ),
-                          SettingsTile.switchTile(
-                            title: Localization.of(context)!
-                                .translate('auto_max_brightness_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('auto_max_brightness_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.brightness_7_outlined,
-                                color: Colors.white,
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('single_item_as_card_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('single_item_as_card_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.featured_play_list_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
+                              switchValue: singleAsCard,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  singleAsCard = value;
+                                });
+                                sp!.setBool('single_as_card', singleAsCard);
+                              },
                             ),
-                            switchValue: autoMaxBrightness,
-                            switchActiveColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onToggle: (bool value) {
-                              setState(() {
-                                autoMaxBrightness = value;
-                              });
-                              sp!.setBool(
-                                  'auto_max_brightness', autoMaxBrightness);
-                            },
-                          ),
-                          SettingsTile.switchTile(
-                            title: Localization.of(context)!
-                                .translate('infinite_scroll_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('infinite_scroll_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.compare_arrows_rounded,
-                                color: Colors.white,
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('auto_max_brightness_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('auto_max_brightness_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.brightness_7_outlined,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
+                              switchValue: autoMaxBrightness,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  autoMaxBrightness = value;
+                                });
+                                sp!.setBool(
+                                    'auto_max_brightness', autoMaxBrightness);
+                              },
                             ),
-                            switchValue: infiniteScroll,
-                            switchActiveColor:
-                                Theme.of(context).colorScheme.secondary,
-                            onToggle: (bool value) {
-                              setState(() {
-                                infiniteScroll = value;
-                              });
-                              sp!.setBool('infinite_scroll', infiniteScroll);
-                            },
-                          ),
-                          // SettingsTile(
-                          //   title: Localization.of(context)!
-                          //       .translate('codes_order_title')!,
-                          //   subtitle: Localization.of(context)!
-                          //       .translate('codes_order_subtitle')!,
-                          //   subtitleMaxLines: 4,
-                          //   leading: Container(
-                          //     padding: const EdgeInsets.all(8),
-                          //     child: Icon(
-                          //       Icons.sort_rounded,
-                          //       color: Colors.white,
-                          //     ),
-                          //     decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(
-                          //             Globals.borderRadius),
-                          //         color: Theme.of(context).colorScheme.primary),
-                          //   ),
-                          //   onPressed: (BuildContext context) {
-                          //     // TODO Open a dialog to choose between date and other criteria
-                          //   },
-                          // ),
-                          // SettingsTile.switchTile(
-                          //   title: Localization.of(context)!
-                          //       .translate('app_lock_title')!,
-                          //   subtitle: Localization.of(context)!
-                          //       .translate('app_lock_subtitle')!,
-                          //   subtitleMaxLines: 4,
-                          //   leading: Container(
-                          //     padding: const EdgeInsets.all(8),
-                          //     child: Icon(
-                          //       Icons.fingerprint_rounded,
-                          //       color: Colors.white,
-                          //     ),
-                          //     decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(
-                          //             Globals.borderRadius),
-                          //         color: Theme.of(context).colorScheme.primary),
-                          //   ),
-                          //   switchValue: appLock,
-                          //   switchActiveColor: Theme.of(context).colorScheme.secondary,
-                          //   onToggle: (bool value) {},
-                          // ),
-                        ],
-                      ),
-                      SettingsSection(
-                        titlePadding: const EdgeInsets.only(
-                          top: 16,
-                          left: 16,
-                          bottom: 12,
-                        ),
-                        title:
-                            Localization.of(context)!.translate('appearance')!,
-                        titleTextStyle: Theme.of(context)
-                            .textTheme
-                            .headline6!
-                            .copyWith(
-                                color: Theme.of(context).colorScheme.secondary),
-                        tiles: [
-                          SettingsTile(
-                            title: Localization.of(context)!
-                                .translate('app_theme_title')!,
-                            subtitle: Localization.of(context)!
-                                .translate('app_theme_subtitle')!,
-                            subtitleMaxLines: 4,
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Icon(
-                                Icons.color_lens_rounded,
-                                color: Colors.white,
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('infinite_scroll_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('infinite_scroll_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.compare_arrows_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
                               ),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Globals.borderRadius),
-                                  color: Theme.of(context).colorScheme.primary),
+                              switchValue: infiniteScroll,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  infiniteScroll = value;
+                                });
+                                sp!.setBool('infinite_scroll', infiniteScroll);
+                              },
                             ),
-                            onPressed: (BuildContext context) async {
-                              final result =
-                                  await StandardDialogs.showThemeChoserDialog(
-                                      context);
-                              // TODO Refresh app and set theme
-                              sp!.setInt('app_theme', result.index);
-                            },
-                          ),
-                        ],
-                      ),
-                      SettingsSection(
-                        titlePadding: const EdgeInsets.only(
-                          top: 16,
-                          left: 16,
-                          bottom: 12,
-                        ),
-                        title: Localization.of(context)!.translate('credits')!,
-                        titleTextStyle: Theme.of(context)
-                            .textTheme
-                            .headline6!
-                            .copyWith(
-                                color: Theme.of(context).colorScheme.secondary),
-                        tiles: [
-                          // Empty, use a trick to display the credits
-                        ],
-                        subtitlePadding: const EdgeInsets.all(0),
-                        subtitle: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            CreditsCard(
-                              description: Localization.of(context)!
-                                  .translate('author_back')!,
-                              image:
-                                  Image.asset('assets/images/author_back.jpg'),
-                              github: Globals.authorBackGithub,
-                              playStore: Globals.authorBackPlayStore,
-                              site: Globals.authorBackSite,
-                            ),
-                            CreditsCard(
-                              description: Localization.of(context)!
-                                  .translate('author_front')!,
-                              image:
-                                  Image.asset('assets/images/author_front.jpg'),
-                              github: Globals.authorFrontGithub,
-                              playStore: Globals.authorFrontPlayStore,
-                              site: Globals.authorFrontSite,
-                              instagram: Globals.authorFrontInstagram,
-                            ),
+                            // SettingsTile(
+                            //   title: Localization.of(context)!
+                            //       .translate('codes_order_title')!,
+                            //   subtitle: Localization.of(context)!
+                            //       .translate('codes_order_subtitle')!,
+                            //   subtitleMaxLines: 4,
+                            //   leading: Container(
+                            //     padding: const EdgeInsets.all(8),
+                            //     child: Icon(
+                            //       Icons.sort_rounded,
+                            //       color: Colors.white,
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(
+                            //             Globals.borderRadius),
+                            //         color: Theme.of(context).colorScheme.primary),
+                            //   ),
+                            //   onPressed: (BuildContext context) {
+                            //     // TODO Open a dialog to choose between date and other criteria
+                            //   },
+                            // ),
+                            // SettingsTile.switchTile(
+                            //   title: Localization.of(context)!
+                            //       .translate('app_lock_title')!,
+                            //   subtitle: Localization.of(context)!
+                            //       .translate('app_lock_subtitle')!,
+                            //   subtitleMaxLines: 4,
+                            //   leading: Container(
+                            //     padding: const EdgeInsets.all(8),
+                            //     child: Icon(
+                            //       Icons.fingerprint_rounded,
+                            //       color: Colors.white,
+                            //     ),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(
+                            //             Globals.borderRadius),
+                            //         color: Theme.of(context).colorScheme.primary),
+                            //   ),
+                            //   switchValue: appLock,
+                            //   switchActiveColor: Theme.of(context).colorScheme.secondary,
+                            //   onToggle: (bool value) {},
+                            // ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                ],
+                        // SettingsSection(
+                        //   titlePadding: const EdgeInsets.only(
+                        //     top: 16,
+                        //     left: 16,
+                        //     bottom: 12,
+                        //   ),
+                        //   title:
+                        //       Localization.of(context)!.translate('appearance')!,
+                        //   titleTextStyle: Theme.of(context)
+                        //       .textTheme
+                        //       .headline6!
+                        //       .copyWith(
+                        //           color: Theme.of(context).colorScheme.secondary),
+                        //   tiles: [
+                        //     SettingsTile(
+                        //       title: Localization.of(context)!
+                        //           .translate('app_theme_title')!,
+                        //       subtitle: Localization.of(context)!
+                        //           .translate('app_theme_subtitle')!,
+                        //       subtitleMaxLines: 4,
+                        //       leading: Container(
+                        //         padding: const EdgeInsets.all(8),
+                        //         child: Icon(
+                        //           Icons.color_lens_rounded,
+                        //           color: Colors.white,
+                        //         ),
+                        //         decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(
+                        //                 Globals.borderRadius),
+                        //             color: Theme.of(context).colorScheme.primary),
+                        //       ),
+                        //       onPressed: (BuildContext context) async {
+                        //         final result =
+                        //             await StandardDialogs.showThemeChoserDialog(
+                        //                 context);
+                        //         // TODO Refresh app and set theme
+                        //         sp!.setInt('app_theme', result.index);
+                        //       },
+                        //     ),
+                        //   ],
+                        // ),
+                        SettingsSection(
+                          titlePadding: const EdgeInsets.only(
+                            top: 16,
+                            left: 16,
+                            bottom: 12,
+                          ),
+                          title:
+                              Localization.of(context)!.translate('credits')!,
+                          titleTextStyle: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                          tiles: [
+                            // Empty, use a trick to display the credits
+                          ],
+                          subtitlePadding: const EdgeInsets.all(0),
+                          subtitle: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CreditsCard(
+                                description: Localization.of(context)!
+                                    .translate('author_front')!,
+                                image: Image.asset(
+                                    'assets/images/author_front.jpg'),
+                                github: Globals.authorFrontGithub,
+                                playStore: Globals.authorFrontPlayStore,
+                                site: Globals.authorFrontSite,
+                                instagram: Globals.authorFrontInstagram,
+                              ),
+                              CreditsCard(
+                                description: Localization.of(context)!
+                                    .translate('author_back')!,
+                                image: Image.asset(
+                                    'assets/images/author_back.jpg'),
+                                github: Globals.authorBackGithub,
+                                playStore: Globals.authorBackPlayStore,
+                                site: Globals.authorBackSite,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

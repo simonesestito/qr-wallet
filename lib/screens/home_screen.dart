@@ -91,11 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
     sp = await SharedPreferences.getInstance();
 
     // Fetch settings values
-    enlargeCentral = sp!.getBool('enlarge_central') ?? false;
-    verticalOrientation = sp!.getBool('vertical_orientation') ?? false;
-    autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
-    infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
-    singleAsCard = sp!.getBool('single_as_card') ?? false;
+    fetchSettingsValues();
 
     // Update the count or show the review dialog
     var timesOpened = sp!.getInt('times_opened') ?? 0;
@@ -145,11 +141,19 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnBadge: _showReviewBadge,
               backBtn: true,
               backBtnCustomIcon: Icons.settings_outlined,
-              backBtnCustomAction: () {
+              backBtnCustomAction: () async {
                 Navigator.of(context).pushNamed(
                   '/settings',
                   arguments: {'showReviewSheet': _showReviewBadge},
-                );
+                ).then((value) {
+                  // The screen returns true if a setting has changed
+                  if (value != null && value == true) {
+                    // TODO Unefficient, only fetch or return changed values
+                    setState(() {
+                      fetchSettingsValues();
+                    });
+                  }
+                });
                 // The rate dialog is displayed a single time, no matter what
                 sp!.setBool('dont_show_again', true);
                 setState(() {
@@ -278,6 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
         itemCount: passList.length,
         itemBuilder: (context, i, _) => buildCardForType(passList[i]),
         options: CarouselOptions(
+          viewportFraction: .9,
           aspectRatio: max(constraints.biggest.aspectRatio, 9 / 14),
           autoPlay: false,
           initialPage: passList.length - 1,
@@ -300,6 +305,15 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return SimpleQrCardView(qr: qr);
     }
+  }
+
+  // Fetch the values for the settings
+  void fetchSettingsValues() {
+    enlargeCentral = sp!.getBool('enlarge_central') ?? false;
+    verticalOrientation = sp!.getBool('vertical_orientation') ?? false;
+    autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
+    infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
+    singleAsCard = sp!.getBool('single_as_card') ?? false;
   }
 
   @override
