@@ -36,6 +36,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void didChangeDependencies() async {
     sp = await SharedPreferences.getInstance();
+    // Retrieve settings values or assign a default value
+    enlargeCentral = sp!.getBool('enlarge_central') ?? false;
+    verticalOrientation = sp!.getBool('vertical_orientation') ?? false;
+    autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
+    infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
+    singleAsCard = sp!.getBool('single_as_card') ?? false;
+
     super.didChangeDependencies();
   }
 
@@ -329,26 +336,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         ],
                       ),
+                      SettingsSection(
+                        titlePadding: const EdgeInsets.only(
+                          top: 16,
+                          left: 16,
+                          bottom: 12,
+                        ),
+                        title: Localization.of(context)!.translate('credits')!,
+                        titleTextStyle: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(
+                                color: Theme.of(context).colorScheme.secondary),
+                        tiles: [
+                          // Empty, use a trick to display the credits
+                        ],
+                        subtitlePadding: const EdgeInsets.all(0),
+                        subtitle: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CreditsCard(
+                              description: Localization.of(context)!
+                                  .translate('author_back')!,
+                              image:
+                                  Image.asset('assets/images/author_back.jpg'),
+                              github: Globals.authorBackGithub,
+                              playStore: Globals.authorBackPlayStore,
+                              site: Globals.authorBackSite,
+                            ),
+                            CreditsCard(
+                              description: Localization.of(context)!
+                                  .translate('author_front')!,
+                              image:
+                                  Image.asset('assets/images/author_front.jpg'),
+                              github: Globals.authorFrontGithub,
+                              playStore: Globals.authorFrontPlayStore,
+                              site: Globals.authorFrontSite,
+                              instagram: Globals.authorFrontInstagram,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 24),
-                  CreditsCard(
-                    description:
-                        Localization.of(context)!.translate('author_back')!,
-                    image: Image.asset('assets/images/author_back.jpg'),
-                    github: Globals.authorBackGithub,
-                    playStore: Globals.authorBackPlayStore,
-                    site: Globals.authorBackSite,
-                  ),
-                  CreditsCard(
-                    description:
-                        Localization.of(context)!.translate('author_front')!,
-                    image: Image.asset('assets/images/author_front.jpg'),
-                    github: Globals.authorFrontGithub,
-                    playStore: Globals.authorFrontPlayStore,
-                    site: Globals.authorFrontSite,
-                    instagram: Globals.authorFrontInstagram,
-                  ),
+                  const SizedBox(height: 16),
                 ],
               ),
             ),
