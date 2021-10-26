@@ -57,7 +57,8 @@ class _QrScanWidgetState extends State<QrScanWidget> {
                   _buildQrView(context),
                   Container(
                     width: double.infinity,
-                    height: Globals.borderRadius,
+                    // The +2 should solve the black line visible on some devices
+                    height: Globals.borderRadius + 2,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.background,
                       borderRadius: BorderRadius.only(

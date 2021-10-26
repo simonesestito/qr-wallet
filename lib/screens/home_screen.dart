@@ -119,11 +119,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final passList = context.watch<QrListData>().passes;
 
     // Max brightness only if enabled from settings
-    final _maxBright =
-        (_maxBrightClicked ?? passList.isNotEmpty) && autoMaxBrightness;
-    if (_maxBright)
+    final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
+    if (_maxBright && !autoMaxBrightness) {
+      // A little trick to make it work properly
+      autoMaxBrightness = true;
       Screen.setBrightness(1);
-    else if (_originalBrightness != null)
+    } else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
 
     return Scaffold(
@@ -164,8 +165,9 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildAdBanner(userStatus),
             Expanded(
               child: Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(bottom: 18),
+                padding: verticalOrientation
+                    ? const EdgeInsets.all(0)
+                    : const EdgeInsets.only(bottom: 18),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
                     : passList.length == 1
@@ -287,8 +289,6 @@ class _HomeScreenState extends State<HomeScreen> {
           autoPlay: false,
           initialPage: passList.length - 1,
           reverse: true,
-          enlargeStrategy:
-              CenterPageEnlargeStrategy.height, // Better performance?
           scrollDirection:
               verticalOrientation ? Axis.vertical : Axis.horizontal,
           enlargeCenterPage: enlargeCentral,

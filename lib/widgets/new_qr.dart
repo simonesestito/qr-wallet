@@ -86,6 +86,7 @@ class _NewQRState extends State<NewQR> {
               color: Theme.of(context).colorScheme.secondaryVariant),
         ),
       ),
+      const Divider(height: 1),
       ListTile(
         title: Text(Localization.of(context)!.translate('take_photo_title')!),
         subtitle: Text(
