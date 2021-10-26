@@ -9,7 +9,6 @@ import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum ThemeType { auto, light, dark }
 enum OrderType { alphabetic, date, type }
 
 class SettingsScreen extends StatefulWidget {
@@ -31,7 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var infiniteScroll = false;
   var codesOrder = OrderType.date;
   //var appLock = false;
-  var appTheme = ThemeType.auto;
+  var appTheme = ThemeMode.system;
 
   @override
   void didChangeDependencies() async {
@@ -127,34 +126,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           tiles: [
                             SettingsTile.switchTile(
                               title: Localization.of(context)!
-                                  .translate('enlarge_central_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('enlarge_central_subtitle')!,
-                              subtitleMaxLines: 4,
-                              leading: Container(
-                                padding: const EdgeInsets.all(8),
-                                child: Icon(
-                                  Icons.zoom_out_map_rounded,
-                                  color: Colors.white,
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Globals.borderRadius),
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              ),
-                              switchValue: enlargeCentral,
-                              switchActiveColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              onToggle: (bool value) {
-                                setState(() {
-                                  enlargeCentral = value;
-                                });
-                                sp!.setBool('enlarge_central', enlargeCentral);
-                              },
-                            ),
-                            SettingsTile.switchTile(
-                              title: Localization.of(context)!
                                   .translate('vertical_orientation_title')!,
                               subtitle: Localization.of(context)!
                                   .translate('vertical_orientation_subtitle')!,
@@ -182,34 +153,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     verticalOrientation);
                               },
                             ),
-                            SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('single_item_as_card_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('single_item_as_card_subtitle')!,
-                              subtitleMaxLines: 4,
-                              leading: Container(
-                                padding: const EdgeInsets.all(8),
-                                child: Icon(
-                                  Icons.featured_play_list_rounded,
-                                  color: Colors.white,
-                                ),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Globals.borderRadius),
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              ),
-                              switchValue: singleAsCard,
-                              switchActiveColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              onToggle: (bool value) {
-                                setState(() {
-                                  singleAsCard = value;
-                                });
-                                sp!.setBool('single_as_card', singleAsCard);
-                              },
-                            ),
+
                             SettingsTile.switchTile(
                               title: Localization.of(context)!
                                   .translate('auto_max_brightness_title')!,
@@ -311,47 +255,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             // ),
                           ],
                         ),
-                        // SettingsSection(
-                        //   titlePadding: const EdgeInsets.only(
-                        //     top: 16,
-                        //     left: 16,
-                        //     bottom: 12,
-                        //   ),
-                        //   title:
-                        //       Localization.of(context)!.translate('appearance')!,
-                        //   titleTextStyle: Theme.of(context)
-                        //       .textTheme
-                        //       .headline6!
-                        //       .copyWith(
-                        //           color: Theme.of(context).colorScheme.secondary),
-                        //   tiles: [
-                        //     SettingsTile(
-                        //       title: Localization.of(context)!
-                        //           .translate('app_theme_title')!,
-                        //       subtitle: Localization.of(context)!
-                        //           .translate('app_theme_subtitle')!,
-                        //       subtitleMaxLines: 4,
-                        //       leading: Container(
-                        //         padding: const EdgeInsets.all(8),
-                        //         child: Icon(
-                        //           Icons.color_lens_rounded,
-                        //           color: Colors.white,
-                        //         ),
-                        //         decoration: BoxDecoration(
-                        //             borderRadius: BorderRadius.circular(
-                        //                 Globals.borderRadius),
-                        //             color: Theme.of(context).colorScheme.primary),
-                        //       ),
-                        //       onPressed: (BuildContext context) async {
-                        //         final result =
-                        //             await StandardDialogs.showThemeChoserDialog(
-                        //                 context);
-                        //         // TODO Refresh app and set theme
-                        //         sp!.setInt('app_theme', result.index);
-                        //       },
-                        //     ),
-                        //   ],
-                        // ),
+                        SettingsSection(
+                          titlePadding: const EdgeInsets.only(
+                            top: 16,
+                            left: 16,
+                            bottom: 12,
+                          ),
+                          title: Localization.of(context)!
+                              .translate('appearance')!,
+                          titleTextStyle: Theme.of(context)
+                              .textTheme
+                              .headline6!
+                              .copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                          tiles: [
+                            SettingsTile(
+                              title: Localization.of(context)!
+                                  .translate('app_theme_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('app_theme_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.color_lens_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                              onPressed: (BuildContext context) async {
+                                final result =
+                                    await StandardDialogs.showThemeChoserDialog(
+                                        context);
+                                // TODO Refresh app and set theme
+                                sp!.setString('app_theme', result.toString());
+                              },
+                            ),
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('enlarge_central_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('enlarge_central_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.zoom_out_map_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                              switchValue: enlargeCentral,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  enlargeCentral = value;
+                                });
+                                sp!.setBool('enlarge_central', enlargeCentral);
+                              },
+                            ),
+                            SettingsTile.switchTile(
+                              title: Localization.of(context)!
+                                  .translate('single_item_as_card_title')!,
+                              subtitle: Localization.of(context)!
+                                  .translate('single_item_as_card_subtitle')!,
+                              subtitleMaxLines: 4,
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.featured_play_list_rounded,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Globals.borderRadius),
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                              switchValue: singleAsCard,
+                              switchActiveColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              onToggle: (bool value) {
+                                setState(() {
+                                  singleAsCard = value;
+                                });
+                                sp!.setBool('single_as_card', singleAsCard);
+                              },
+                            ),
+                          ],
+                        ),
                         SettingsSection(
                           titlePadding: const EdgeInsets.only(
                             top: 16,

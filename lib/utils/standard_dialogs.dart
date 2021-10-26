@@ -103,8 +103,8 @@ class StandardDialogs {
   }
 
   // Show a dialog to choose the theme // TODO Refactor to generic radio button dialog?
-  static Future<ThemeType> showThemeChoserDialog(BuildContext context) async {
-    var _themeType = ThemeType.auto;
+  static Future<ThemeMode> showThemeChoserDialog(BuildContext context) async {
+    var _themeType = ThemeMode.system;
     await showDialog(
       barrierDismissible: false,
       context: context,
@@ -122,10 +122,12 @@ class StandardDialogs {
             children: [
               ListTile(
                 title: Text(Localization.of(context)!.translate('auto')!),
-                leading: Radio<ThemeType>(
-                  value: ThemeType.auto,
+                leading: Radio<ThemeMode>(
+                  fillColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  value: ThemeMode.system,
                   groupValue: _themeType,
-                  onChanged: (ThemeType? value) {
+                  onChanged: (ThemeMode? value) {
                     if (value != null)
                       setState(() {
                         _themeType = value;
@@ -135,10 +137,12 @@ class StandardDialogs {
               ),
               ListTile(
                 title: Text(Localization.of(context)!.translate('dark')!),
-                leading: Radio<ThemeType>(
-                  value: ThemeType.dark,
+                leading: Radio<ThemeMode>(
+                  fillColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  value: ThemeMode.dark,
                   groupValue: _themeType,
-                  onChanged: (ThemeType? value) {
+                  onChanged: (ThemeMode? value) {
                     if (value != null)
                       setState(() {
                         _themeType = value;
@@ -148,10 +152,12 @@ class StandardDialogs {
               ),
               ListTile(
                 title: Text(Localization.of(context)!.translate('light')!),
-                leading: Radio<ThemeType>(
-                  value: ThemeType.light,
+                leading: Radio<ThemeMode>(
+                  fillColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+                  value: ThemeMode.light,
                   groupValue: _themeType,
-                  onChanged: (ThemeType? value) {
+                  onChanged: (ThemeMode? value) {
                     if (value != null)
                       setState(() {
                         _themeType = value;

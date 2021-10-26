@@ -291,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
           autoPlay: false,
           initialPage: passList.length - 1,
           reverse: true,
+          // TODO Create a fading edge effect on vertical scrolling
           scrollDirection:
               verticalOrientation ? Axis.vertical : Axis.horizontal,
           enlargeCenterPage: enlargeCentral,
