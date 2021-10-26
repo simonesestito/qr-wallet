@@ -40,9 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
   double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
   Runnable? _disposeInAppSubscription;
-  bool _showReviewBadge = false;
+  var _showReviewBadge = false;
   SharedPreferences? sp;
   StreamSubscription? _fileSharingStreamSubscription;
+  var _firstLaunch = true;
 
   // Settings related variables
   var enlargeCentral = false;
@@ -119,10 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final passList = context.watch<QrListData>().passes;
 
     // Max brightness only if enabled from settings
-    final _maxBright = _maxBrightClicked ?? passList.isNotEmpty;
-    if (_maxBright && !autoMaxBrightness) {
-      // A little trick to make it work properly
-      autoMaxBrightness = true;
+    final _maxBright = _maxBrightClicked ??
+        ((!_firstLaunch && passList.isNotEmpty) ||
+            (_firstLaunch && passList.isNotEmpty && autoMaxBrightness));
+    if (_maxBright) {
+      _firstLaunch = false;
       Screen.setBrightness(1);
     } else if (_originalBrightness != null)
       Screen.setBrightness(_originalBrightness);
