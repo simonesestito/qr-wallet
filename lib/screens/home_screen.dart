@@ -168,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Container(
                 padding: verticalOrientation
-                    ? const EdgeInsets.all(0)
+                    ? const EdgeInsets.symmetric(horizontal: 18)
                     : const EdgeInsets.only(bottom: 18),
                 child: passList.isEmpty
                     ? buildEmptyView(context)
