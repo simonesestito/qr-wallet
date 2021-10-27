@@ -8,12 +8,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/locales.dart';
+import 'package:qrwallet/providers/theme_provider.dart';
 import 'package:qrwallet/screens/home_screen.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'lang/localization.dart';
-import 'models/data.dart';
+import 'providers/data.dart';
 import 'screens/settings_screen.dart';
 
 void main() async {
@@ -35,16 +36,25 @@ void main() async {
     InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
   }
 
-  runApp(InAppBroadcast(
-    child: (context) => ChangeNotifierProvider(
-      create: (_) => QrListData(),
-      child: StreamProvider(
-        create: (_) => InAppBroadcast.of(context).isUserPremium,
-        initialData: PremiumStatus.UNKNOWN,
+  runApp(
+    InAppBroadcast(
+      child: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => QrListData(),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => ThemeProvider(appTheme),
+          ),
+          StreamProvider(
+            create: (_) => InAppBroadcast.of(context).isUserPremium,
+            initialData: PremiumStatus.UNKNOWN,
+          ),
+        ],
         child: MyApp(themeMode: appTheme),
       ),
     ),
-  ));
+  );
 }
 
 const APP_NAME = 'QRWallet';

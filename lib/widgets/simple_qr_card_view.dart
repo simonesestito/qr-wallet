@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/models/simple_code.dart';
+import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/screens/full_screen_qr_screen.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
@@ -10,7 +11,7 @@ import 'package:qrwallet/widgets/qr_edit_form.dart';
 import 'delete_qr.dart';
 import 'qr_background_image.dart';
 
-abstract class QrCardView<T extends SimpleQr> extends StatelessWidget {
+abstract class QrCardView<T extends SimpleCode> extends StatelessWidget {
   final T qr;
 
   const QrCardView({
@@ -39,20 +40,20 @@ abstract class QrCardView<T extends SimpleQr> extends StatelessWidget {
   Widget buildInnerView(BuildContext context, T qr);
 }
 
-class SimpleQrCardView extends QrCardView<SimpleQr> {
+class SimpleQrCardView extends QrCardView<SimpleCode> {
   SimpleQrCardView({
-    required SimpleQr qr,
+    required SimpleCode qr,
     Key? key,
   }) : super(key: key, qr: qr);
 
   @override
-  Widget buildInnerView(BuildContext context, SimpleQr qr) {
+  Widget buildInnerView(BuildContext context, SimpleCode qr) {
     return SimpleQrView(qr: qr, qrPadding: const EdgeInsets.all(16));
   }
 }
 
 class SimpleQrView extends StatelessWidget {
-  final SimpleQr qr;
+  final SimpleCode qr;
   final EdgeInsetsGeometry qrPadding;
 
   const SimpleQrView({

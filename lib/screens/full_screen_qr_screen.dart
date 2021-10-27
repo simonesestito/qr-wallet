@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/models/simple_code.dart';
+import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/widgets/qr_background_image.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 
 class FullScreenQR extends StatelessWidget {
-  final SimpleQr qr;
+  final SimpleCode qr;
 
   const FullScreenQR({required this.qr, Key? key}) : super(key: key);
 

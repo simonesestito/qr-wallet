@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/models/green_pass.dart';
+import 'package:qrwallet/models/simple_code.dart';
+import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/utils.dart';
@@ -76,7 +78,7 @@ class _PostQrScreenState extends State<PostQrScreen> {
     );
   }
 
-  List<Widget> buildDuplicateQrMessage(BuildContext context, SimpleQr pass) {
+  List<Widget> buildDuplicateQrMessage(BuildContext context, SimpleCode pass) {
     return [
       Padding(
         padding: const EdgeInsets.all(Globals.buttonPadding),
@@ -123,7 +125,7 @@ class _PostQrScreenState extends State<PostQrScreen> {
         onSave: (data) async {
           await context.read<QrListData>().addQr(
                 passData == null
-                    ? SimpleQr(
+                    ? SimpleCode(
                         alias: data.name!,
                         qrData: widget.qrData,
                         format: widget.format,

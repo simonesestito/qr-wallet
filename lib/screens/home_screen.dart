@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/models/green_pass.dart';
+import 'package:qrwallet/models/simple_code.dart';
+import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/utils/custom_icons.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
@@ -266,7 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build an expanded layout for a single item or a card depending on settings
-  Widget buildSingleQR(SimpleQr qr) {
+  Widget buildSingleQR(SimpleCode qr) {
     if (singleAsCard)
       return buildCardForType(qr);
     else {
@@ -278,7 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Build the list of passes
-  Widget buildList(List<SimpleQr> passList) {
+  Widget buildList(List<SimpleCode> passList) {
     return LayoutBuilder(builder: (context, constraints) {
       return CarouselSlider.builder(
         key: ValueKey(passList.length == 1),
@@ -303,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget buildCardForType(SimpleQr qr) {
+  Widget buildCardForType(SimpleCode qr) {
     if (qr is GreenPass) {
       return GreenPassCardView(pass: qr);
     } else {

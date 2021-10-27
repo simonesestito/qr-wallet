@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:qrwallet/lang/localization.dart';
-import 'package:qrwallet/models/data.dart';
+import 'package:qrwallet/models/simple_code.dart';
+import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/button_wide.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
@@ -10,7 +11,7 @@ import 'bottomsheet_container.dart';
 import 'title_headline.dart';
 
 class DeleteQr extends StatelessWidget {
-  final SimpleQr qr;
+  final SimpleCode qr;
 
   const DeleteQr({
     required this.qr,

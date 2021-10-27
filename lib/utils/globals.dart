@@ -15,11 +15,11 @@ class Globals {
       'https://play.google.com/store/apps/details?id=com.exos.qrwallet';
 
   // Developers sites
-  static const String authorBackGithub = 'https://github.com/simonesestito';
+  static const String authorBackGithub = 'https://www.github.com/simonesestito';
   static const String authorBackPlayStore =
       'https://play.google.com/store/apps/dev?id=6582390767433501974';
   static const String authorBackSite = 'https://simonesestito.com/';
-  static const String authorFrontGithub = 'https://github.com/m-i-n-a-r';
+  static const String authorFrontGithub = 'https://www.github.com/m-i-n-a-r';
   static const String authorFrontPlayStore =
       'https://play.google.com/store/apps/dev?id=7720251761301594831';
   static const String authorFrontSite = 'https://minar.ml/';
