@@ -51,7 +51,7 @@ void main() async {
             initialData: PremiumStatus.UNKNOWN,
           ),
         ],
-        child: MyApp(themeMode: appTheme),
+        child: MyApp(),
       ),
     ),
   );
@@ -92,8 +92,7 @@ class MyApp extends StatelessWidget {
         );
       },
       locale: locale,
-
-      themeMode: themeMode,
+      themeMode: context.watch<ThemeProvider>().currentTheme,
       theme: ThemeData(
         highlightColor: Color(0x2fB2753F),
         // Selection color

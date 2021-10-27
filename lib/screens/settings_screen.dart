@@ -300,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 // Refresh app and set theme using the provider
                                 appTheme = result;
                                 sp!.setString('app_theme', result.toString());
-                                Provider.of<ThemeProvider>(
+                                await Provider.of<ThemeProvider>(
                                   context,
                                   listen: false,
                                 ).toggleTheme(appTheme);
