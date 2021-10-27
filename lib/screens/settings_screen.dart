@@ -41,6 +41,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
     infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
     singleAsCard = sp!.getBool('single_as_card') ?? false;
+    appTheme = ThemeMode.values.firstWhere((element) =>
+        (sp!.getString('app_theme') ?? ThemeMode.system.toString()) ==
+        element.toString());
 
     super.didChangeDependencies();
   }
@@ -291,8 +294,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               onPressed: (BuildContext context) async {
                                 final result =
                                     await StandardDialogs.showThemeChoserDialog(
-                                        context);
+                                        context, appTheme);
                                 // TODO Refresh app and set theme
+                                appTheme = result;
                                 sp!.setString('app_theme', result.toString());
                               },
                             ),

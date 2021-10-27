@@ -25,12 +25,9 @@ void main() async {
   ]);
 
   var sp = await SharedPreferences.getInstance();
-  var themeType = sp.getString('app_theme') ?? ThemeMode.system.toString();
-  var themeMode = themeType == ThemeMode.dark.toString()
-      ? ThemeMode.dark
-      : themeType == ThemeMode.light.toString()
-          ? ThemeMode.dark
-          : ThemeMode.system;
+  var appTheme = ThemeMode.values.firstWhere((element) =>
+      (sp.getString('app_theme') ?? ThemeMode.system.toString()) ==
+      element.toString());
 
   MobileAds.instance.initialize();
 
@@ -44,7 +41,7 @@ void main() async {
       child: StreamProvider(
         create: (_) => InAppBroadcast.of(context).isUserPremium,
         initialData: PremiumStatus.UNKNOWN,
-        child: MyApp(themeMode: themeMode),
+        child: MyApp(themeMode: appTheme),
       ),
     ),
   ));

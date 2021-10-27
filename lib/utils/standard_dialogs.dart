@@ -102,14 +102,23 @@ class StandardDialogs {
     );
   }
 
-  // Show a dialog to choose the theme // TODO Refactor to generic radio button dialog?
-  static Future<ThemeMode> showThemeChoserDialog(BuildContext context) async {
-    var _themeType = ThemeMode.system;
+  // Show a dialog to choose the theme
+  static Future<ThemeMode> showThemeChoserDialog(
+    BuildContext context,
+    ThemeMode appTheme,
+  ) async {
+    var _themeType = appTheme;
     await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (BuildContext ctx, StateSetter setState) => AlertDialog(
+          contentPadding: const EdgeInsets.only(
+            bottom: 16,
+            top: 16,
+            left: 0,
+            right: 0,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Globals.borderRadius),
           ),
@@ -119,8 +128,16 @@ class StandardDialogs {
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
+                onTap: () {
+                  setState(() {
+                    _themeType = ThemeMode.system;
+                  });
+                },
+                minVerticalPadding: 0,
+                visualDensity: VisualDensity.compact,
                 title: Text(Localization.of(context)!.translate('auto')!),
                 leading: Radio<ThemeMode>(
                   fillColor: MaterialStateProperty.all(
@@ -136,6 +153,13 @@ class StandardDialogs {
                 ),
               ),
               ListTile(
+                onTap: () {
+                  setState(() {
+                    _themeType = ThemeMode.dark;
+                  });
+                },
+                minVerticalPadding: 0,
+                visualDensity: VisualDensity.compact,
                 title: Text(Localization.of(context)!.translate('dark')!),
                 leading: Radio<ThemeMode>(
                   fillColor: MaterialStateProperty.all(
@@ -151,6 +175,13 @@ class StandardDialogs {
                 ),
               ),
               ListTile(
+                onTap: () {
+                  setState(() {
+                    _themeType = ThemeMode.light;
+                  });
+                },
+                minVerticalPadding: 0,
+                visualDensity: VisualDensity.compact,
                 title: Text(Localization.of(context)!.translate('light')!),
                 leading: Radio<ThemeMode>(
                   fillColor: MaterialStateProperty.all(
