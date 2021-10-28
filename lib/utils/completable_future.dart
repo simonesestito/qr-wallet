@@ -13,3 +13,18 @@ class CompletableFuture<T> {
     });
   }
 }
+
+typedef FutureSupplier<T> = Future<T> Function();
+
+class LateFuture<T> {
+  final FutureSupplier<T> futureBuilder;
+  bool hasExecuted = false;
+
+  LateFuture(this.futureBuilder);
+
+  void execute() {
+    if (hasExecuted) return;
+    hasExecuted = true;
+    futureBuilder.call().then((value) => print(value));
+  }
+}

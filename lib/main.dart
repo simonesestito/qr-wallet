@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -6,11 +7,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase_android/in_app_purchase_android.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qrwallet/lang/locales.dart';
 import 'package:qrwallet/providers/theme_provider.dart';
 import 'package:qrwallet/screens/home_screen.dart';
+import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/widgets/in_app_broadcast.dart';
+import 'package:qrwallet/widgets/qr_background_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'lang/localization.dart';
@@ -31,6 +35,9 @@ void main() async {
       element.toString());
 
   MobileAds.instance.initialize();
+  await Directory((await Globals.cacheDirectory.future).absolute.path +
+          QrBackgroundImage.QR_IMAGES_SUB_DIR)
+      .create();
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();

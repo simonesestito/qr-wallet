@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:qrwallet/utils/completable_future.dart';
+
 class Globals {
   // Some values (even different in type) to constantly reuse across the app
   static const double borderRadius = 16;
@@ -25,4 +30,8 @@ class Globals {
   static const String authorFrontSite = 'https://minar.ml/';
   static const String authorFrontInstagram =
       'https://www.instagram.com/minar.tastic/';
+
+  static CompletableFuture<Directory> cacheDirectory = CompletableFuture(
+    future: getTemporaryDirectory(),
+  );
 }
