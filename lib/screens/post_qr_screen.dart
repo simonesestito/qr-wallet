@@ -96,7 +96,26 @@ class _PostQrScreenState extends State<PostQrScreen> {
                     color: Theme.of(context).colorScheme.primary,
                   ),
             ),
-            Text(pass.alias),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32,
+                vertical: 12,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(Globals.borderRadius),
+                child: Container(
+                  height: 2,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+            Text(
+              pass.alias,
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+            ),
           ]),
         ),
       ),

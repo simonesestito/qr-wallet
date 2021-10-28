@@ -14,6 +14,7 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
+import 'package:qrwallet/widgets/text_with_icon.dart';
 
 class NewQR extends StatefulWidget {
   final String? selectedFilePath;
@@ -68,25 +69,39 @@ class _NewQRState extends State<NewQR> {
     }
 
     return BottomSheetContainer(children: [
-      ListTile(
-        // Informative text, to inform about the share capability
-        title: Text(Localization.of(context)!.translate('share')!),
-        subtitle: Text(
-            Localization.of(context)!.translate('additional_detail_share')!),
-        enableFeedback: false,
-        isThreeLine: true,
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          child: Icon(
-            Icons.share_outlined,
-            color: Colors.white,
-          ),
+      Padding(
+        padding: const EdgeInsets.only(
+          left: Globals.buttonPadding,
+          right: Globals.buttonPadding,
+          bottom: 8,
+        ),
+        child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(Globals.borderRadius),
-              color: Theme.of(context).colorScheme.secondaryVariant),
+            borderRadius: BorderRadius.circular(Globals.borderRadius),
+            color: Theme.of(context).colorScheme.secondary.withOpacity(.1),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.share_outlined,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                Localization.of(context)!.translate('additional_detail_share')!,
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
-      const Divider(height: 1),
       ListTile(
         title: Text(Localization.of(context)!.translate('take_photo_title')!),
         subtitle: Text(
