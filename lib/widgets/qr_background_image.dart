@@ -37,19 +37,18 @@ class QrBackgroundImage extends StatelessWidget {
   });
 
   QrBackgroundImage(this.data, this.format, {Key? key}) : super(key: key) {
-    postRenderSaving = LateFuture(() => Future.delayed(
-          Duration(milliseconds: 160),
-          _saveRenderedQr,
-        ));
+    postRenderSaving = LateFuture(
+      () => Future.delayed(
+        Duration(milliseconds: 160),
+        _saveRenderedQr,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final backgroundColor = max(
-      colorScheme.background.value,
-      colorScheme.onBackground.value,
-    );
+    // TODO Doesn't work
+    final backgroundColor = Color(0xff00ffff);
 
     return AspectRatio(
       aspectRatio: 1,
@@ -70,7 +69,7 @@ class QrBackgroundImage extends StatelessWidget {
                 padding: const EdgeInsets.all(Globals.borderRadius),
                 barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
                 data: data,
-                backgroundColor: Color(backgroundColor),
+                backgroundColor: backgroundColor,
               ),
             );
           }),
@@ -107,11 +106,11 @@ class QrBackgroundImage extends StatelessWidget {
     try {
       final image = await render.toImage(pixelRatio: 5);
       final bytes = await image.toByteData(format: ImageByteFormat.png);
-      final filePath = await _renderedQrPath();
+      final filePath = _renderedQrPath();
       final pngData = bytes!.buffer.asUint8List();
       await File(filePath).writeAsBytes(pngData, flush: true);
     } catch (err) {
-      print('_saveRenderedQr: Error encountered');
+      print('_saveRenderedQr: error encountered');
       print(err);
     }
   }
