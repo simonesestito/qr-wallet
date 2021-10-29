@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:barcode_widget/barcode_widget.dart';
@@ -10,18 +9,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart' as scanner;
-import 'package:qrwallet/utils/completable_future.dart';
 import 'package:qrwallet/utils/globals.dart';
+import 'package:screenshot/screenshot.dart';
 
 ///
 /// A QrImage with an adaptive (white) background
 ///
-class QrBackgroundImage extends StatelessWidget {
+class QrBackgroundImage extends StatefulWidget {
   static const QR_IMAGES_SUB_DIR = '/qr_codes_render';
   final String data;
   final scanner.BarcodeFormat format;
-  final _repaintKey = GlobalKey();
-  late final LateFuture postRenderSaving;
 
   static final barcodeFormatMap =
       Map<scanner.BarcodeFormat, Barcode>.unmodifiable({
@@ -36,82 +33,73 @@ class QrBackgroundImage extends StatelessWidget {
     scanner.BarcodeFormat.itf: Barcode.itf(),
   });
 
-  QrBackgroundImage(this.data, this.format, {Key? key}) : super(key: key) {
-    postRenderSaving = LateFuture(
-      () => Future.delayed(
-        Duration(milliseconds: 160),
-        _saveRenderedQr,
-      ),
-    );
-  }
+  QrBackgroundImage(this.data, this.format, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // TODO Doesn't work
-    final backgroundColor = Color(0xff00ffff);
+  State<StatefulWidget> createState() => _QrBackgroundImageState();
+}
 
+class _QrBackgroundImageState extends State<QrBackgroundImage> {
+  @override
+  Widget build(BuildContext context) {
+    final qrImagePath = _renderedQrPath();
     return AspectRatio(
       aspectRatio: 1,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(Globals.borderRadius),
-        child: SizedBox.expand(
-          child: Image.file(File(_renderedQrPath()),
-              errorBuilder: (context, err, __) {
-            print('QR code not found in cache: ${_renderedQrPath()}');
-            print('Error:');
-            print(err);
-
-            postRenderSaving.execute();
-
-            return RepaintBoundary(
-              key: _repaintKey,
-              child: BarcodeWidget(
-                padding: const EdgeInsets.all(Globals.borderRadius),
-                barcode: barcodeFormatMap[format] ?? Barcode.qrCode(),
-                data: data,
-                backgroundColor: backgroundColor,
-              ),
-            );
-          }),
-        ),
+        child: qrImagePath.existsSync() && qrImagePath.lengthSync() > 0
+            ? Image.file(
+                qrImagePath,
+                errorBuilder: (context, err, __) {
+                  print('QrBackgroundImage: $err');
+                  return _renderAndDisplayEmpty(qrImagePath);
+                },
+              )
+            : _renderAndDisplayEmpty(qrImagePath),
       ),
     );
+  }
+
+  Widget _renderAndDisplayEmpty(File qrImagePath) {
+    final backgroundColor = Color(0xfff5f5f5);
+    // FIXME: Background color is only used when first rendering.
+    //        If theme is changed, cache must be invalidated to
+    //        perform a rendering again and save the updated image in cache.
+
+    ScreenshotController()
+        .captureFromWidget(
+          AspectRatio(
+            aspectRatio: 1,
+            child: BarcodeWidget(
+              barcode: QrBackgroundImage.barcodeFormatMap[widget.format] ??
+                  Barcode.qrCode(),
+              data: widget.data,
+              backgroundColor: backgroundColor,
+              style: const TextStyle(color: Colors.black),
+              padding: const EdgeInsets.all(Globals.borderRadius),
+            ),
+          ),
+          delay: Duration(milliseconds: 100),
+          pixelRatio: 4,
+          context: context,
+        )
+        .then(
+          (pngData) => qrImagePath.writeAsBytes(pngData, flush: true),
+        )
+        .then((_) => setState(() {}));
+
+    return Container();
   }
 
   ///
   /// Filename for the already rendered QR
   ///
-  String _renderedQrPath() {
-    final dir =
-        Globals.cacheDirectory.cachedResult!.absolute.path + QR_IMAGES_SUB_DIR;
-    final bytesData = Utf8Encoder().convert(data);
+  File _renderedQrPath() {
+    final dir = Globals.cacheDirectory.cachedResult!.absolute.path +
+        QrBackgroundImage.QR_IMAGES_SUB_DIR;
+    final bytesData = Utf8Encoder().convert(widget.data);
     final hash = md5.convert(bytesData).bytes;
     final filename = hex.encode(hash) + '.png';
-    return dir + '/' + filename;
-  }
-
-  void _saveRenderedQr() async {
-    if (_repaintKey.currentContext == null) {
-      print('_saveRenderedQr: BuildContext is null');
-      return;
-    }
-
-    final RenderRepaintBoundary? render = _repaintKey.currentContext!
-        .findRenderObject() as RenderRepaintBoundary?;
-    if (render == null) {
-      print('_saveRenderedQr: Render Object is null');
-      return;
-    }
-
-    try {
-      final image = await render.toImage(pixelRatio: 5);
-      final bytes = await image.toByteData(format: ImageByteFormat.png);
-      final filePath = _renderedQrPath();
-      final pngData = bytes!.buffer.asUint8List();
-      await File(filePath).writeAsBytes(pngData, flush: true);
-    } catch (err) {
-      print('_saveRenderedQr: error encountered');
-      print(err);
-    }
+    return File(dir + '/' + filename);
   }
 }

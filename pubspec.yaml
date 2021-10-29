@@ -51,6 +51,7 @@ dependencies:
   http: ^0.13.4
   receive_sharing_intent: ^1.4.5
   intl: ^0.17.0
+  screenshot: ^1.2.3
 
 dev_dependencies:
   flutter_test:
