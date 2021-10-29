@@ -22,19 +22,14 @@ class FullScreenQR extends StatelessWidget {
               ),
               Expanded(
                 child: Center(
-                  // TODO Test or remove
-                  child: InteractiveViewer(
-                    minScale: 0.1,
-                    maxScale: 1.2,
                     child: Hero(
                       tag: qr.qrData,
                       child: QrBackgroundImage(qr.qrData, qr.format),
                     ),
-                  ),
                 ),
               ),
             ],
-            // TODO Share button
+            // TODO Share button, maybe
           ),
         ),
       ),
