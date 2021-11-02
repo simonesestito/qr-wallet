@@ -76,5 +76,6 @@
   "auto": "Auto",
   "alphabetic": "Alfabetico",
   "by_type": "Per tipo",
-  "by_date": "Per data"
+  "by_date": "Per data",
+  "open_link_tooltip": "Apri link"
 }

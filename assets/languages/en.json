@@ -76,5 +76,6 @@
   "auto": "Auto",
   "alphabetic": "Alphabetic",
   "by_type": "By type",
-  "by_date": "By date"
+  "by_date": "By date",
+  "open_link_tooltip": "Open link"
 }
