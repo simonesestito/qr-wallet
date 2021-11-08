@@ -12,8 +12,8 @@ import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/button_wide_outlined.dart';
 import 'package:qrwallet/widgets/qr_background_image.dart';
 import 'package:qrwallet/widgets/qr_form.dart';
+import 'package:qrwallet/widgets/qr_open_link.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 ///
 /// The screen shown after a new QR has been scanned successfully.
@@ -73,12 +73,7 @@ class _PostQrScreenState extends State<PostQrScreen> {
             ...(duplicatePass == null
                 ? [buildAddQrForm(context)]
                 : buildDuplicateQrMessage(context, duplicatePass)),
-            if (widget.qrData.isHttpUrl())
-              ButtonWideOutlined(
-                action: () => launch(widget.qrData),
-                text: Localization.of(context)!.translate("open_link_tooltip")!,
-                icon: Icons.open_in_new,
-              ),
+            WideOpenButton(url: widget.qrData),
           ],
         ),
       ),

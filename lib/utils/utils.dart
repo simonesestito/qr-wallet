@@ -11,11 +11,6 @@ extension StringExtension on String {
   String capitalizeWords() {
     return this.split(" ").map((s) => s.capitalize()).join(" ");
   }
-
-  bool isHttpUrl() {
-    if (!startsWith("http")) return false;
-    return Uri.tryParse(this)?.hasAbsolutePath == true;
-  }
 }
 
 extension ListExtension<E> on List<E> {

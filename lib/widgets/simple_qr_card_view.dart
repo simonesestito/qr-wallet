@@ -5,9 +5,8 @@ import 'package:qrwallet/models/simple_code.dart';
 import 'package:qrwallet/screens/full_screen_qr_screen.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
-import 'package:qrwallet/utils/utils.dart';
 import 'package:qrwallet/widgets/qr_edit_form.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:qrwallet/widgets/qr_open_link.dart';
 
 import 'delete_qr.dart';
 import 'qr_background_image.dart';
@@ -74,17 +73,10 @@ class SimpleQrView extends StatelessWidget {
       },
       child: Stack(
         children: [
-          if (qr.qrData.isHttpUrl())
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                padding: EdgeInsets.all(Globals.buttonPadding),
-                icon: Icon(Icons.open_in_new),
-                tooltip:
-                    Localization.of(context)!.translate("open_link_tooltip")!,
-                onPressed: () => launch(qr.qrData),
-              ),
-            ),
+          Align(
+            alignment: Alignment.topRight,
+            child: MiniOpenButton(url: qr.qrData),
+          ),
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
