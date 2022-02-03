@@ -9,6 +9,7 @@ import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/green_pass.dart';
 import 'package:qrwallet/models/simple_code.dart';
 import 'package:qrwallet/providers/data.dart';
+import 'package:qrwallet/screens/settings_screen.dart';
 import 'package:qrwallet/utils/custom_icons.dart';
 import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
@@ -148,18 +149,16 @@ class _HomeScreenState extends State<HomeScreen> {
               backBtnCustomIcon: Icons.settings_outlined,
               backBtnCustomAction: () async {
                 Navigator.of(context).pushNamed(
-                  '/settings',
+                  SettingsScreen.routeName,
                   arguments: {'showReviewSheet': _showReviewBadge},
                 ).then((value) {
                   // The screen returns true if a setting has changed
-                  if (value != null && value == true) {
-                    // TODO Unefficient, only fetch or return changed values
-                    setState(() {
-                      fetchSettingsValues();
-                    });
+                  if (value == true) {
+                    // TODO Inefficient, only fetch or return changed values
+                    setState(fetchSettingsValues);
                   }
                 });
-                // The rate dialog is displayed a single time, no matter what
+                // The rate dialog is displayed once, no matter what
                 sp!.setBool('dont_show_again', true);
                 setState(() {
                   _showReviewBadge = false;

@@ -15,6 +15,7 @@ enum OrderType { alphabetic, date, type }
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/settings';
+
   const SettingsScreen({
     Key? key,
   }) : super(key: key);
@@ -31,6 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   var autoMaxBrightness = true;
   var infiniteScroll = false;
   var codesOrder = OrderType.date;
+
   //var appLock = false;
   var appTheme = ThemeMode.system;
 
@@ -106,35 +108,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                     SettingsList(
-                      contentPadding: const EdgeInsets.symmetric(vertical: 16),
                       shrinkWrap: true,
-                      lightBackgroundColor:
-                          Theme.of(context).colorScheme.background,
-                      darkBackgroundColor:
-                          Theme.of(context).colorScheme.background,
+                      lightTheme: SettingsThemeData(
+                        settingsListBackground:
+                            Theme.of(context).colorScheme.background,
+                      ),
+                      darkTheme: SettingsThemeData(
+                        settingsListBackground:
+                            Theme.of(context).colorScheme.background,
+                      ),
                       physics: BouncingScrollPhysics(),
                       sections: [
                         SettingsSection(
-                          titlePadding: const EdgeInsets.only(
-                            top: 16,
-                            left: 16,
-                            bottom: 12,
+                          title: Text(
+                            Localization.of(context)!
+                                .translate('customization')!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
                           ),
-                          title: Localization.of(context)!
-                              .translate('customization')!,
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
                           tiles: [
                             SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('vertical_orientation_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('vertical_orientation_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(
+                                Localization.of(context)!
+                                    .translate('vertical_orientation_title')!,
+                              ),
+                              description: Text(
+                                Localization.of(context)!.translate(
+                                    'vertical_orientation_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -147,8 +154,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               ),
-                              switchValue: verticalOrientation,
-                              switchActiveColor:
+                              initialValue: verticalOrientation,
+                              activeSwitchColor:
                                   Theme.of(context).colorScheme.secondary,
                               onToggle: (bool value) {
                                 setState(() {
@@ -158,13 +165,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     verticalOrientation);
                               },
                             ),
-
                             SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('auto_max_brightness_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('auto_max_brightness_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(
+                                Localization.of(context)!
+                                    .translate('auto_max_brightness_title')!,
+                              ),
+                              description: Text(
+                                Localization.of(context)!
+                                    .translate('auto_max_brightness_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -177,8 +187,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               ),
-                              switchValue: autoMaxBrightness,
-                              switchActiveColor:
+                              initialValue: autoMaxBrightness,
+                              activeSwitchColor:
                                   Theme.of(context).colorScheme.secondary,
                               onToggle: (bool value) {
                                 setState(() {
@@ -189,11 +199,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                             ),
                             SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('infinite_scroll_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('infinite_scroll_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(
+                                Localization.of(context)!
+                                    .translate('infinite_scroll_title')!,
+                              ),
+                              description: Text(
+                                Localization.of(context)!
+                                    .translate('infinite_scroll_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -206,8 +220,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               ),
-                              switchValue: infiniteScroll,
-                              switchActiveColor:
+                              initialValue: infiniteScroll,
+                              activeSwitchColor:
                                   Theme.of(context).colorScheme.secondary,
                               onToggle: (bool value) {
                                 setState(() {
@@ -261,26 +275,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                         ),
                         SettingsSection(
-                          titlePadding: const EdgeInsets.only(
-                            top: 16,
-                            left: 16,
-                            bottom: 12,
+                          title: Text(
+                            Localization.of(context)!.translate('appearance')!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
                           ),
-                          title: Localization.of(context)!
-                              .translate('appearance')!,
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
                           tiles: [
                             SettingsTile(
-                              title: Localization.of(context)!
-                                  .translate('app_theme_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('app_theme_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(
+                                Localization.of(context)!
+                                    .translate('app_theme_title')!,
+                              ),
+                              description: Text(
+                                Localization.of(context)!
+                                    .translate('app_theme_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -307,11 +322,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                             ),
                             SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('enlarge_central_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('enlarge_central_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(
+                                Localization.of(context)!
+                                    .translate('enlarge_central_title')!,
+                              ),
+                              description: Text(
+                                Localization.of(context)!
+                                    .translate('enlarge_central_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -324,8 +343,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               ),
-                              switchValue: enlargeCentral,
-                              switchActiveColor:
+                              initialValue: enlargeCentral,
+                              activeSwitchColor:
                                   Theme.of(context).colorScheme.secondary,
                               onToggle: (bool value) {
                                 setState(() {
@@ -335,11 +354,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                             ),
                             SettingsTile.switchTile(
-                              title: Localization.of(context)!
-                                  .translate('single_item_as_card_title')!,
-                              subtitle: Localization.of(context)!
-                                  .translate('single_item_as_card_subtitle')!,
-                              subtitleMaxLines: 4,
+                              title: Text(Localization.of(context)!
+                                  .translate('single_item_as_card_title')!),
+                              description: Text(
+                                Localization.of(context)!
+                                    .translate('single_item_as_card_subtitle')!,
+                                maxLines: 4,
+                              ),
                               leading: Container(
                                 padding: const EdgeInsets.all(8),
                                 child: Icon(
@@ -352,8 +373,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     color:
                                         Theme.of(context).colorScheme.primary),
                               ),
-                              switchValue: singleAsCard,
-                              switchActiveColor:
+                              initialValue: singleAsCard,
+                              activeSwitchColor:
                                   Theme.of(context).colorScheme.secondary,
                               onToggle: (bool value) {
                                 setState(() {
@@ -365,26 +386,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ],
                         ),
                         SettingsSection(
-                          titlePadding: const EdgeInsets.only(
-                            top: 16,
-                            left: 16,
-                            bottom: 12,
-                          ),
-                          title:
-                              Localization.of(context)!.translate('credits')!,
-                          titleTextStyle: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
-                          tiles: [
-                            // Empty, use a trick to display the credits
-                          ],
-                          subtitlePadding: const EdgeInsets.all(0),
-                          subtitle: Column(
+                          title: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 12),
+                                  child: Text(
+                                    Localization.of(context)!
+                                        .translate('credits')!,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                  ),
+                                ),
+                              ),
                               CreditsCard(
                                 description: Localization.of(context)!
                                     .translate('author_front')!,
@@ -407,6 +428,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               const SizedBox(height: 16),
                             ],
                           ),
+                          tiles: [],
                         ),
                       ],
                     ),
