@@ -14,7 +14,6 @@ import 'package:qrwallet/utils/globals.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
-import 'package:qrwallet/widgets/text_with_icon.dart';
 import 'package:screenshot/screenshot.dart';
 
 class NewQR extends StatefulWidget {
@@ -141,7 +140,13 @@ class _NewQRState extends State<NewQR> {
           final photo = await _imagePicker.pickImage(
             source: ImageSource.gallery,
           );
-          handleImageFileUi(photo?.path, context);
+          setState(() {
+            _isLoading = true;
+          });
+          await handleImageFileUi(photo?.path, context);
+          setState(() {
+            _isLoading = false;
+          });
         },
       ),
       const Divider(height: 1),
