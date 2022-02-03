@@ -154,11 +154,14 @@ class _QrScanWidgetState extends State<QrScanWidget> {
 
   void _onQRViewCreated(QRViewController controller) {
     this._qrViewController = controller;
-    controller.scannedDataStream.first.then((scan) async {
+    controller.scannedDataStream
+        .where((scan) => scan.code != null)
+        .first
+        .then((scan) async {
       await this._qrViewController?.pauseCamera();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (_) => PostQrScreen(qrData: scan.code, format: scan.format),
+          builder: (_) => PostQrScreen(qrData: scan.code!, format: scan.format),
         ),
       );
     });
