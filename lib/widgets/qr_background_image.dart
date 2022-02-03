@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart' as scanner;
 import 'package:qrwallet/utils/globals.dart';
 import 'package:screenshot/screenshot.dart';

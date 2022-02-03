@@ -15,6 +15,7 @@ import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/ad_loader.dart';
 import 'package:qrwallet/widgets/bottomsheet_container.dart';
 import 'package:qrwallet/widgets/text_with_icon.dart';
+import 'package:screenshot/screenshot.dart';
 
 class NewQR extends StatefulWidget {
   final String? selectedFilePath;
@@ -203,6 +204,16 @@ class _NewQRState extends State<NewQR> {
   Future<bool> _handleImageFile(String imagePath) async {
     final qrContent;
     try {
+      // FIX: Add padding around the given image
+      final imageFile = File.fromUri(Uri.file(imagePath));
+      final paddedImageBytes = await ScreenshotController().captureFromWidget(
+        Padding(
+          padding: EdgeInsets.all(128),
+          child: Image.file(imageFile),
+        ),
+      );
+      await imageFile.writeAsBytes(paddedImageBytes);
+      // Give the padded image to the library
       qrContent = await QrCodeToolsPlugin.decodeFrom(imagePath);
     } catch (err) {
       print(err);
