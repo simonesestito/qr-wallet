@@ -12,10 +12,18 @@ class GreenPass extends SimpleCode {
     required this.greenPassData,
   }) : super(alias: alias, qrData: qrData, format: BarcodeFormat.qrcode);
 
-  factory GreenPass.fromMap(Map<dynamic, dynamic> data) => GreenPass(
-        alias: data['alias']!,
-        qrData: data['qrData']!,
-        greenPassData: GreenPassData.fromMap(data['greenPassData']),
+  factory GreenPass.fromMap(Map<dynamic, dynamic> data,
+          {GreenPassData? passData}) =>
+      GreenPass(
+        alias: data['alias'],
+        qrData: data['qrData'],
+        greenPassData: passData ?? GreenPassData.fromMap(data['greenPassData']),
+      );
+
+  factory GreenPass.fromMapAndDecode(Map<dynamic, dynamic> data) =>
+      GreenPass.fromMap(
+        data,
+        passData: GreenPassDecoder().decode(data['qrData']),
       );
 
   @override

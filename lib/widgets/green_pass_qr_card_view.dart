@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/models/green_pass.dart';
-import 'package:qrwallet/providers/data.dart';
 import 'package:qrwallet/screens/full_screen_qr_screen.dart';
 import 'package:qrwallet/utils/globals.dart';
-import 'package:qrwallet/utils/green_pass_decoder.dart';
 import 'package:qrwallet/utils/standard_dialogs.dart';
 import 'package:qrwallet/widgets/expanded_scroll_column.dart';
 import 'package:qrwallet/widgets/text_with_icon.dart';
@@ -116,9 +114,7 @@ class GreenPassQrView extends StatelessWidget {
             icon: Icons.receipt_long,
             asChip: true,
             padding: 8,
-            text: Localization.of(context)!.translate(
-              pass.greenPassData.type.translationKey,
-            )!,
+            text: pass.greenPassData.displayName(context),
           ),
         ],
       ),

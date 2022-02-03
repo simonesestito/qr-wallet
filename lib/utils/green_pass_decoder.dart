@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:cbor/cbor.dart';
 import 'package:dart_base45/dart_base45.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:qrwallet/lang/localization.dart';
 import 'package:qrwallet/utils/utils.dart';
 
 class GreenPassDecoder {
@@ -17,30 +18,39 @@ class GreenPassDecoder {
 
     final data = cbor.getDecodedData()![0][-260][1] as Map<dynamic, dynamic>;
 
+    String name = data['nam']['gn'].toString().capitalizeWords();
+    String surname = data['nam']['fn'].toString().capitalizeWords();
+
     final String issueDate;
-    final GreenPassType passType;
     if (data.containsKey('v')) {
       // Vaccination
       issueDate = data['v'][0]['dt'];
-      passType = GreenPassType.VACCINATION;
+      return VaccinationGreenPassData(
+        name: name,
+        surname: surname,
+        issueDate: DateTime.parse(issueDate),
+        doses: int.parse(data['v'][0]['dn'].toString()),
+      );
     } else if (data.containsKey('t')) {
       // Test
       issueDate = data['t'][0]['sc'];
-      passType = GreenPassType.TEST;
+      return TestGreenPassData(
+        name: name,
+        surname: surname,
+        issueDate: DateTime.parse(issueDate),
+        isRapid: data['t'][0].containsKey('ma'),
+      );
     } else if (data.containsKey('r')) {
       // Recovery
       issueDate = data['r'][0]['df'];
-      passType = GreenPassType.RECOVERY;
+      return RecoveryGreenPassData(
+        name: name,
+        surname: surname,
+        issueDate: DateTime.parse(issueDate),
+      );
     } else {
       throw Exception("Unknown pass type: ${data.keys.join(", ")}");
     }
-
-    return GreenPassData(
-      name: data['nam']['gn'].toString().capitalizeWords(),
-      surname: data['nam']['fn'].toString().capitalizeWords(),
-      issueDate: DateTime.parse(issueDate),
-      type: passType,
-    );
   }
 
   GreenPassData? tryDecode(String stringData) {
@@ -53,50 +63,141 @@ class GreenPassDecoder {
   }
 }
 
-class GreenPassData {
+abstract class GreenPassData {
   final String name;
   final String surname;
   final DateTime issueDate;
-  final GreenPassType type;
 
   GreenPassData({
     required this.name,
     required this.surname,
     required this.issueDate,
-    required this.type,
   });
 
-  factory GreenPassData.fromMap(Map<dynamic, dynamic> data) => GreenPassData(
-        name: data['name'],
-        surname: data['surname'],
-        issueDate: DateTime.parse(data['issueDate']),
-        type: GreenPassType.values
-            .firstWhere((e) => describeEnum(e) == data['type']),
-      );
+  factory GreenPassData.fromMap(Map<dynamic, dynamic> data) {
+    switch (data['type']) {
+      case VaccinationGreenPassData.typeName:
+        return VaccinationGreenPassData.fromMap(data);
+      case RecoveryGreenPassData.typeName:
+        return RecoveryGreenPassData.fromMap(data);
+      case TestGreenPassData.typeName:
+        return TestGreenPassData.fromMap(data);
+      default:
+        throw ArgumentError('Unknown type while parsing: ${data['type']}');
+    }
+  }
 
-  Map<String, String> toMap() =>
-      {
+  Map<String, String> toMap() => {
         'name': name,
         'surname': surname,
         'issueDate': issueDate.toIso8601String(),
-        'type': describeEnum(type),
+        'type': type,
       };
 
   String get displayDescription => 'Green Pass - $name';
+
+  String get translationKey;
+
+  String get type;
+
+  String displayName(BuildContext context) =>
+      Localization.of(context)!.translate(translationKey)!;
 }
 
-enum GreenPassType {
-  VACCINATION,
-  TEST,
-  RECOVERY,
+class VaccinationGreenPassData extends GreenPassData {
+  static const String typeName = 'VACCINATION';
+  final int doses;
+
+  VaccinationGreenPassData({
+    required String name,
+    required String surname,
+    required DateTime issueDate,
+    required this.doses,
+  }) : super(name: name, surname: surname, issueDate: issueDate);
+
+  factory VaccinationGreenPassData.fromMap(Map<dynamic, dynamic> data) =>
+      VaccinationGreenPassData(
+        name: data['name'],
+        surname: data['surname'],
+        issueDate: DateTime.parse(data['issueDate']),
+        doses: int.parse(data['doses']),
+      );
+
+  @override
+  Map<String, String> toMap() {
+    return super.toMap()
+      ..addAll({
+        'doses': doses.toString(),
+      });
+  }
+
+  @override
+  String get translationKey => 'green_pass_vaccination';
+
+  @override
+  String displayName(BuildContext context) {
+    return super.displayName(context) + " (n. $doses)";
+  }
+
+  @override
+  String get type => typeName;
 }
 
-extension GreenPassToString on GreenPassType {
-  String get translationKey =>
-      {
-        GreenPassType.RECOVERY: 'green_pass_recovery',
-        GreenPassType.TEST: 'green_pass_test',
-        GreenPassType.VACCINATION: 'green_pass_vaccination',
-      }[this] ??
-      'green_pass_unknown';
+class TestGreenPassData extends GreenPassData {
+  final bool isRapid;
+  static const String typeName = 'TEST';
+
+  TestGreenPassData({
+    required String name,
+    required String surname,
+    required DateTime issueDate,
+    required this.isRapid,
+  }) : super(name: name, surname: surname, issueDate: issueDate);
+
+  factory TestGreenPassData.fromMap(Map<dynamic, dynamic> data) =>
+      TestGreenPassData(
+        name: data['name'],
+        surname: data['surname'],
+        issueDate: DateTime.parse(data['issueDate']),
+        isRapid: data['rapid'] == 'true',
+      );
+
+  @override
+  Map<String, String> toMap() {
+    return super.toMap()..addAll({'rapid': isRapid.toString()});
+  }
+
+  @override
+  String get translationKey => 'green_pass_test';
+
+  @override
+  String displayName(BuildContext context) {
+    return super.displayName(context) + " (${isRapid ? 48 : 72}h)";
+  }
+
+  @override
+  String get type => typeName;
+}
+
+class RecoveryGreenPassData extends GreenPassData {
+  static const String typeName = 'RECOVERY';
+
+  RecoveryGreenPassData({
+    required String name,
+    required String surname,
+    required DateTime issueDate,
+  }) : super(name: name, surname: surname, issueDate: issueDate);
+
+  factory RecoveryGreenPassData.fromMap(Map<dynamic, dynamic> data) =>
+      RecoveryGreenPassData(
+        name: data['name'],
+        surname: data['surname'],
+        issueDate: DateTime.parse(data['issueDate']),
+      );
+
+  @override
+  String get translationKey => 'green_pass_recovery';
+
+  @override
+  String get type => typeName;
 }
