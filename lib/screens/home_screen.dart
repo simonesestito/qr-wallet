@@ -45,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   var _showReviewBadge = false;
   SharedPreferences? sp;
   StreamSubscription? _fileSharingStreamSubscription;
-  var _firstLaunch = true;
 
   // Settings related variables
   var enlargeCentral = false;
@@ -116,10 +115,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final passList = context.watch<QrListData>().passes;
 
     // Max brightness only if enabled from settings
-    final _maxBright = _maxBrightClicked ?? autoMaxBrightness;
-    debugPrint('Adjusting brightness: _maxBrightClicked = $_maxBrightClicked, autoMaxBrightness = $autoMaxBrightness, so resulting _maxBright = $_maxBright');
+    final _maxBright = _maxBrightClicked ?? (autoMaxBrightness && passList.isNotEmpty);
+    debugPrint('Adjusting brightness:');
+    debugPrint(' - _maxBrightClicked = $_maxBrightClicked');
+    debugPrint(' - autoMaxBrightness = $autoMaxBrightness');
+    debugPrint(' - QRs are ${passList.length} in size');
+    debugPrint(' --> so resulting _maxBright = $_maxBright');
     if (_maxBright) {
-      _firstLaunch = false;
       ScreenBrightness().setScreenBrightness(1);
     } else {
       ScreenBrightness().resetScreenBrightness();
