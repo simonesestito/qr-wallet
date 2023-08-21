@@ -124,7 +124,7 @@ class RewardedAdLoader extends AdLoader<RewardedAd> {
       },
     );
     _loadedAd?.show(
-      onUserEarnedReward: (RewardedAd ad, RewardItem earnedReward) async {
+      onUserEarnedReward: (AdWithoutView ad, RewardItem earnedReward) {
         reward = earnedReward;
       },
     );

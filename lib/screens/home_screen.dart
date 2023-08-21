@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _originalBrightness = brightness;
     });
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _disposeInAppSubscription = InAppBroadcast.of(context).listenAll((event) {
         StandardDialogs.showSnackbar(
           context,
@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _firstLaunch = false;
       ScreenBrightness().setScreenBrightness(1);
     } else if (_originalBrightness != null) {
-      ScreenBrightness().setScreenBrightness(_originalBrightness);
+      ScreenBrightness().setScreenBrightness(_originalBrightness!);
     }
 
     return Scaffold(
