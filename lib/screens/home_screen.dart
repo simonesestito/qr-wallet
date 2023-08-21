@@ -20,7 +20,7 @@ import 'package:qrwallet/widgets/remove_ads.dart';
 import 'package:qrwallet/widgets/simple_qr_card_view.dart';
 import 'package:qrwallet/widgets/title_headline.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
-import 'package:screen/screen.dart';
+import 'package:screen_brightness/screen_brightness.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/new_qr.dart';
@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    Screen.brightness.then((brightness) {
+    ScreenBrightness().system.then((brightness) {
       _originalBrightness = brightness;
     });
 
@@ -128,9 +128,10 @@ class _HomeScreenState extends State<HomeScreen> {
             (_firstLaunch && passList.isNotEmpty && autoMaxBrightness));
     if (_maxBright) {
       _firstLaunch = false;
-      Screen.setBrightness(1);
-    } else if (_originalBrightness != null)
-      Screen.setBrightness(_originalBrightness);
+      ScreenBrightness().setScreenBrightness(1);
+    } else if (_originalBrightness != null) {
+      ScreenBrightness().setScreenBrightness(_originalBrightness);
+    }
 
     return Scaffold(
       body: SafeArea(
