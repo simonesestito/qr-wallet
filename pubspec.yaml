@@ -39,7 +39,10 @@ dependencies:
   image_picker: ^0.8.4+2
   file_picker: ^4.1.3
   path_provider: ^2.0.5
-  qr_code_tools: ^0.0.7
+  qr_code_tools:
+    git:
+      url: https://github.com/sportalliance/qr_code_tools.git
+      ref: 6a13501596e63bb87144c8832560c660806a3870
   url_launcher: ^6.0.12
   settings_ui: ^2.0.2
   printing: ^5.6.0
@@ -50,7 +53,11 @@ dependencies:
   package_info_plus: ^1.3.0
   pointycastle: ^3.3.4
   http: ^0.13.4
-  receive_sharing_intent: ^1.4.5
+  # Switch back to regular package once https://github.com/KasemJaffer/receive_sharing_intent/issues/256 is resolved
+  receive_sharing_intent:
+    git:
+      url: https://github.com/AyushmanG26/receive_sharing_intent.git
+      ref: abedc3d6d5b80df396e9c300fd1a052cbab08827
   intl: ^0.17.0
   screenshot: ^1.2.3
 
