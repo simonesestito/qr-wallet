@@ -69,6 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ReceiveSharingIntent.getInitialMedia().then(_handleFileSharing);
     });
 
+    // Automatically fetch brightness settings and adjust button if necessary
+    fetchSettingsValues();
+
     super.initState();
   }
 
@@ -87,11 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void didChangeDependencies() async {
-    sp = await SharedPreferences.getInstance();
-
-    // Fetch settings values
-    fetchSettingsValues();
-
     // Update the count or show the review dialog
     var timesOpened = sp!.getInt('times_opened') ?? 0;
     var firstLaunchTime = sp!.getInt('first_launch_time') ?? 0;
@@ -118,9 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final passList = context.watch<QrListData>().passes;
 
     // Max brightness only if enabled from settings
-    final _maxBright = _maxBrightClicked ??
-        ((!_firstLaunch && passList.isNotEmpty) ||
-            (_firstLaunch && passList.isNotEmpty && autoMaxBrightness));
+    final _maxBright = _maxBrightClicked ?? autoMaxBrightness;
+    debugPrint('Adjusting brightness: _maxBrightClicked = $_maxBrightClicked, autoMaxBrightness = $autoMaxBrightness, so resulting _maxBright = $_maxBright');
     if (_maxBright) {
       _firstLaunch = false;
       ScreenBrightness().setScreenBrightness(1);
@@ -151,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // The screen returns true if a setting has changed
                   if (value == true) {
                     // TODO Inefficient, only fetch or return changed values
-                    setState(fetchSettingsValues);
+                    fetchSettingsValues();
                   }
                 });
                 // The rate dialog is displayed once, no matter what
@@ -309,12 +306,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Fetch the values for the settings
-  void fetchSettingsValues() {
-    enlargeCentral = sp!.getBool('enlarge_central') ?? false;
-    verticalOrientation = sp!.getBool('vertical_orientation') ?? false;
-    autoMaxBrightness = sp!.getBool('auto_max_brightness') ?? true;
-    infiniteScroll = sp!.getBool('infinite_scroll') ?? false;
-    singleAsCard = sp!.getBool('single_as_card') ?? false;
+  void fetchSettingsValues() async {
+    SharedPreferences sp = this.sp ?? await SharedPreferences.getInstance();
+    this.sp = sp;
+
+    setState(() {
+      enlargeCentral = sp.getBool('enlarge_central') ?? false;
+      verticalOrientation = sp.getBool('vertical_orientation') ?? false;
+      autoMaxBrightness = sp.getBool('auto_max_brightness') ?? true;
+      infiniteScroll = sp.getBool('infinite_scroll') ?? false;
+      singleAsCard = sp.getBool('single_as_card') ?? false;
+    });
   }
 
   @override
