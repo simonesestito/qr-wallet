@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
     listener: BannerAdListener(),
   );
 
-  double? _originalBrightness;
   bool? _maxBrightClicked; // Click on the button
   Runnable? _disposeInAppSubscription;
   var _showReviewBadge = false;
@@ -57,10 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    ScreenBrightness().system.then((brightness) {
-      _originalBrightness = brightness;
-    });
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _disposeInAppSubscription = InAppBroadcast.of(context).listenAll((event) {
         StandardDialogs.showSnackbar(
@@ -129,8 +124,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_maxBright) {
       _firstLaunch = false;
       ScreenBrightness().setScreenBrightness(1);
-    } else if (_originalBrightness != null) {
-      ScreenBrightness().setScreenBrightness(_originalBrightness!);
+    } else {
+      ScreenBrightness().resetScreenBrightness();
     }
 
     return Scaffold(
